@@ -18,9 +18,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.projectlombok:lombok')
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.4.1'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
     compile('com.h2database:h2')
-    compile group: 'org.apache.poi', name: 'poi', version: '3.9'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
 }
 
 test {
