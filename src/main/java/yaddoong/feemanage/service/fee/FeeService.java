@@ -11,10 +11,19 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+import yaddoong.feemanage.domain.fee.FeeLog;
+import yaddoong.feemanage.domain.fee.FeeLogRepository;
+import yaddoong.feemanage.web.dto.FeeLogSaveDto;
 
+import javax.persistence.Id;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @PropertySource("classpath:application-param.properties")
 @Service
@@ -27,9 +36,10 @@ public class FeeService {
     private String sheetName;
     @Value("message.onefile")
     private String oneFileMessage;
+    private final FeeLogRepository feeLogRepository;
 
 
-    public void save() throws IOException {
+    public void save() throws IOException, ParseException {
 
         // 파일이 저장된 디렉토리
         File dir = new File(path);
@@ -44,26 +54,49 @@ public class FeeService {
                 // xlsx 파일 로드
                 XSSFWorkbook wb = new XSSFWorkbook(fis);
                 XSSFSheet sheet = wb.getSheetAt(0);
+                List<FeeLog> list = new ArrayList<>();
                 for (int i = 11; i <= sheet.getLastRowNum();i++) {
                     Row row = sheet.getRow(i);
-                    System.out.println("행 = " + row.getRowNum());
+                    Date dealDate = null;
+                    String dealContents = null;
+                    String division = null;
+                    int dealPrice = 0;
+                    int dealAfterBalance = 0;
+                    String memo = null;
                     for (int j = 1; j < row.getLastCellNum();j++) {
-
                         Cell cell = row.getCell(j);
-                        if ("".equals(cell.getCellType())) {
-                            continue;
-                        } else {
-                            switch (cell.getColumnIndex()) {
-                                case 1:
-                            }
-                            System.out.println("cell.getStringCellValue() = " + cell.getStringCellValue());
+                        switch (cell.getColumnIndex()) {
+                            case 1:
+                                SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                                dealDate = format.parse(cell.getStringCellValue());
+                                break;
+                            case 2:
+                                division = cell.getStringCellValue();
+                                break;
+                            case 3:
+                                dealPrice = Integer.parseInt(cell.getStringCellValue().replace(",",""));
+                                break;
+                            case 4:
+                                dealAfterBalance = Integer.parseInt(cell.getStringCellValue().replace(",",""));
+                                break;
+                            case 6:
+                                dealContents = cell.getStringCellValue();
+                                break;
+                            case 7:
+                                memo = cell.getStringCellValue();
+                                break;
                         }
-
                     }
+                    list.add(FeeLogSaveDto.builder()
+                            .dealDate(dealDate)
+                            .dealContents(dealContents)
+                            .division(division)
+                            .dealPrice(dealPrice)
+                            .dealAfterBalance(dealAfterBalance)
+                            .memo(memo)
+                            .build().toEntity());
                 }
-                XSSFRow row = sheet.getRow(10);
-
-                System.out.println(row.getCell(1));
+                feeLogRepository.saveAll(list);
             }
         }
     }

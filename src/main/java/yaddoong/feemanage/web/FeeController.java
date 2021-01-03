@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import yaddoong.feemanage.service.fee.FeeService;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 @RequiredArgsConstructor
 @RequestMapping(value = "/fee")
@@ -16,7 +17,7 @@ public class FeeController {
     private final FeeService feeService;
 
     @GetMapping("/save")
-    public void insertFeeLog() throws IOException {
+    public void insertFeeLog() throws IOException, ParseException {
         feeService.save();
     }
 }

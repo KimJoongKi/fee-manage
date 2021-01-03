@@ -1,24 +1,17 @@
-package yaddoong.feemanage.domain.fee;
-
+package yaddoong.feemanage.web.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import yaddoong.feemanage.domain.fee.FeeLog;
 
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import java.util.Date;
 
-@IdClass(FeeLogId.class)
 @Getter
 @NoArgsConstructor
-@Entity
-public class FeeLog {
-
-    @Id
+public class FeeLogSaveDto {
     private Date dealDate;
-    @Id
     private String dealContents;
     private String division;
     private int dealPrice;
@@ -26,7 +19,7 @@ public class FeeLog {
     private String memo;
 
     @Builder
-    public FeeLog(Date dealDate, String dealContents, String division, int dealPrice, int dealAfterBalance, String memo) {
+    public FeeLogSaveDto(Date dealDate, String dealContents, String division, int dealPrice, int dealAfterBalance, String memo) {
         this.dealDate = dealDate;
         this.dealContents = dealContents;
         this.division = division;
@@ -34,4 +27,16 @@ public class FeeLog {
         this.dealAfterBalance = dealAfterBalance;
         this.memo = memo;
     }
+
+    public FeeLog toEntity() {
+        return FeeLog.builder()
+                .dealDate(dealDate)
+                .dealContents(dealContents)
+                .division(division)
+                .dealPrice(dealPrice)
+                .dealAfterBalance(dealAfterBalance)
+                .memo(memo)
+                .build();
+    }
+
 }
