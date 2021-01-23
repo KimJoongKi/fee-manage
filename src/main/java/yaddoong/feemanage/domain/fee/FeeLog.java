@@ -4,6 +4,7 @@ package yaddoong.feemanage.domain.fee;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import yaddoong.feemanage.domain.base.BaseTimeEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,7 +15,7 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @Entity
-public class FeeLog {
+public class FeeLog extends BaseTimeEntity {
 
     @Id
     private Date dealDate;
