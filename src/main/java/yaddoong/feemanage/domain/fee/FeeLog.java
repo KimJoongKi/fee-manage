@@ -15,24 +15,24 @@ import java.util.Date;
 @Getter
 @NoArgsConstructor
 @Entity
-public class FeeLog extends BaseTimeEntity {
+public class FeeLog {
 
     @Id
-    private Date dealDate;
+    private Date date;
     @Id
-    private String dealContents;
+    private String contents;
     private String division;
-    private int dealPrice;
-    private int dealAfterBalance;
+    private int price;
+    private int afterBalance;
     private String memo;
 
     @Builder
-    public FeeLog(Date dealDate, String dealContents, String division, int dealPrice, int dealAfterBalance, String memo) {
-        this.dealDate = dealDate;
-        this.dealContents = dealContents;
+    public FeeLog(Date date, String contents, String division, int price, int afterBalance, String memo) {
+        this.date = date;
+        this.contents = contents;
         this.division = division;
-        this.dealPrice = dealPrice;
-        this.dealAfterBalance = dealAfterBalance;
+        this.price = price;
+        this.afterBalance = afterBalance;
         this.memo = memo;
     }
 }

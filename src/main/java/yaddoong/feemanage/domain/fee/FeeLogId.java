@@ -12,8 +12,8 @@ import java.util.Date;
 public class FeeLogId implements Serializable {
 
     @Id
-    private Date dealDate;
+    private Date date;
     @Id
-    private String dealContents;
+    private String contents;
 
 }

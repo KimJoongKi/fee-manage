@@ -1,7 +1,9 @@
 package yaddoong.feemanage.domain.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.asm.Advice;
 
 @Getter
 @RequiredArgsConstructor
