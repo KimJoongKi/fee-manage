@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import yaddoong.feemanage.domain.fee.FeeFileLog;
+import yaddoong.feemanage.domain.fee.FeeFileLogRepository;
 import yaddoong.feemanage.domain.fee.FeeLog;
 import yaddoong.feemanage.domain.fee.FeeLogRepository;
 import yaddoong.feemanage.web.dto.FeeLogDto;
@@ -32,6 +34,7 @@ public class FeeService {
     @Value("message.onefile")
     private String oneFileMessage;
     private final FeeLogRepository feeLogRepository;
+    private final FeeFileLogRepository feeFileLogRepository;
 
     /**
      * 회비 내역이 담긴 엑셀파일의 정보를 등록한다.
@@ -70,7 +73,7 @@ public class FeeService {
         // 해당 디렉토리에 있는 파일을 모두 가져온다.
         File[] files = dir.listFiles();
 
-        // TODO: 2021-01-24 업로든 된 파일이 존재하지 않을 때 메시지 추가
+        // TODO: 2021-01-23 업로든 된 파일이 존재하지 않을 때 메시지 추가
         if (files.length == 0) {
             System.out.println("파일이 첨부되지 않았을 때 메시지 추가");
             return;
@@ -83,6 +86,11 @@ public class FeeService {
             XSSFSheet sheet = wb.getSheetAt(0);
             List<FeeLog> list = new ArrayList<>();
             feeLogRepository.saveAll(listObjectSet(sheet, list));
+            String fileName = file.getName();
+            feeFileLogRepository.save(FeeFileLog
+                            .builder()
+                            .name(fileName)
+                            .build());
         }
     }
 

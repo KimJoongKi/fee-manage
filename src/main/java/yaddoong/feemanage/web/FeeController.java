@@ -26,6 +26,12 @@ public class FeeController {
         return "fee/saveForm";
     }
 
+    @GetMapping(value = "/list")
+    public String list() {
+        //미납금 + (오늘 날짜 - 오늘 날짜가 15보다 적으면 저번 달 15일 or 이번달 15일)*
+        return "fee/list";
+    }
+
     @PostMapping("/save")
     public String insertFeeLog(@RequestParam("file") MultipartFile file) throws IOException, ParseException {
         feeService.save(file);
