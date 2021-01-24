@@ -7,7 +7,7 @@ import net.bytebuddy.asm.Advice;
 
 @Getter
 @RequiredArgsConstructor
-public enum UserGrade {
+public enum Role {
 
     OWNER("ROLE_ADMIN", "회장"),
     GENERAL("ROLE_GENERAL", "총무"),

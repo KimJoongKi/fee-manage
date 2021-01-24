@@ -1,0 +1,1 @@
+INSERT INTO user values (1, sysdate, sysdate, '1982-05-28', '2012-05-05', '홍길동', 'ROLE_ADMIN', null, 'M', 0);

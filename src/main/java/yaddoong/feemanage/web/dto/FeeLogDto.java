@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import yaddoong.feemanage.domain.fee.FeeLog;
+import yaddoong.feemanage.domain.user.Role;
 
 import javax.persistence.Id;
 import java.util.Date;
