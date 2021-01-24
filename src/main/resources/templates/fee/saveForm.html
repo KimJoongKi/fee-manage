@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+
+    <!-- 등록된 파일 없이 등록 시 안내메시지 추가 -->
+    <form action="/fee/save" enctype="multipart/form-data" method="post">
+        <input type="file" name="file" />
+        <button type="submit" class="btn btn-primary">등록</button>
+    </form>
+    <br/>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>
