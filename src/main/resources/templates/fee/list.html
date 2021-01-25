@@ -4,8 +4,8 @@
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
-    <div>
-        2021년 1월 23일 기준
+    <div th:text="${lastUpdateData}">
+        입.출금 기록 없음
     </div>
     <div>
         <table class="table table-striped">

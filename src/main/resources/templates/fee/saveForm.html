@@ -4,6 +4,7 @@
 <body>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    파일명을 마지막 검색일로 해주세요 (ex. 2021년1월23일.xlsx)
 
     <!-- 등록된 파일 없이 등록 시 안내메시지 추가 -->
     <form action="/fee/save" enctype="multipart/form-data" method="post">
