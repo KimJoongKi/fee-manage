@@ -8,6 +8,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.domain.fee.FeeFileLog;
 import yaddoong.feemanage.domain.fee.FeeFileLogRepository;
@@ -29,10 +30,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeeService {
 
-    @Value("sheet.name")
-    private String sheetName;
-    @Value("message.onefile")
-    private String oneFileMessage;
     private final FeeLogRepository feeLogRepository;
     private final FeeFileLogRepository feeFileLogRepository;
 
@@ -42,6 +39,7 @@ public class FeeService {
      * @throws ParseException
      * @param uploadFile
      */
+    @Transactional
     public void save(MultipartFile uploadFile) throws IOException, ParseException {
 
         String filename = uploadFile.getOriginalFilename();
@@ -61,6 +59,7 @@ public class FeeService {
         File[] deleteFiles = deleteFolder.listFiles();
 
         for (File deleteFile : deleteFiles) {
+            System.out.println("deleteFile = " + deleteFile.getName());
             deleteFile.delete();
         }
 
@@ -85,7 +84,8 @@ public class FeeService {
             XSSFWorkbook wb = new XSSFWorkbook(fis);
             XSSFSheet sheet = wb.getSheetAt(0);
             List<FeeLog> list = new ArrayList<>();
-            feeLogRepository.saveAll(listObjectSet(sheet, list));
+            list = listObjectSet(sheet, list);
+            feeLogRepository.saveAll(list);
             String fileName = file.getName();
             feeFileLogRepository.save(FeeFileLog
                             .builder()

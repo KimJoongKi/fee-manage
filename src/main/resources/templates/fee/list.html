@@ -17,10 +17,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>홍길동</td>
-                <td>1,000,000</td>
-                <td>0</td>
+            <tr th:each="fee : ${fees}">
+                <td th:text="${fee.name}"></td>
+                <td th:text="${fee.price}"></td>
+                <td th:text="${fee.unpaid}"></td>
             </tr>
             <!--tr th:each="member : ${}">
                 <td th:text="${}"></td>

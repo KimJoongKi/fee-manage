@@ -9,14 +9,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import yaddoong.feemanage.domain.fee.FeeFileLog;
-import yaddoong.feemanage.domain.fee.FeeFileLogRepository;
-import yaddoong.feemanage.domain.fee.FeeLog;
+import yaddoong.feemanage.domain.fee.*;
+import yaddoong.feemanage.domain.user.User;
 import yaddoong.feemanage.service.fee.FeeService;
+import yaddoong.feemanage.web.form.UserFeeForm;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Member;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -25,6 +31,7 @@ import java.util.List;
 public class FeeController {
 
     private final FeeService feeService;
+    private final FeeLogRepository feeLogRepository;
     private final FeeFileLogRepository feeFileLogRepository;
 
     @GetMapping(value = "/new")
@@ -46,6 +53,17 @@ public class FeeController {
                         .getName()
                         .replaceAll(".xlsx","") + " 기준");
         //미납금 + (오늘 날짜 - 오늘 날짜가 15보다 적으면 저번 달 15일 or 이번달 15일)*
+        List<UserFeeStatusInterface> list = feeLogRepository.findGroupByName();
+        List<UserFeeForm> feeFormList = new ArrayList<>();
+        for (UserFeeStatusInterface userFeeStatusInterface : list) {
+            UserFeeForm form = new UserFeeForm();
+            form.setName(userFeeStatusInterface.getName());
+            form.setPrice(userFeeStatusInterface.getPrice());
+            form.setUnpaid(userFeeStatusInterface.getUnpaid());
+            feeFormList.add(form);
+        }
+        model.addAttribute("fees", feeFormList);
+
         return "fee/list";
     }
 

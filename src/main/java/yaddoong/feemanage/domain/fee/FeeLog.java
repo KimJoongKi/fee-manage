@@ -5,11 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yaddoong.feemanage.domain.base.BaseTimeEntity;
+import yaddoong.feemanage.domain.user.User;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @IdClass(FeeLogId.class)
 @Getter
