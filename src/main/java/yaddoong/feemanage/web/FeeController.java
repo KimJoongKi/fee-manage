@@ -54,13 +54,13 @@ public class FeeController {
                         .getName()
                         .replaceAll(".xlsx","") + " 기준");
         //미납금 + (오늘 날짜 - 오늘 날짜가 15보다 적으면 저번 달 15일 or 이번달 15일)*
-        List<UserFeeStatusDto> list = feeLogRepository.findGroupByName();
+        List<FeeLogProjection> list = feeLogRepository.findGroupByName();
         List<UserFeeForm> feeFormList = new ArrayList<>();
-        for (UserFeeStatusDto userFeeStatusInterface : list) {
+        for (FeeLogProjection feeLogProjection : list) {
             UserFeeForm form = new UserFeeForm();
-            form.setName(userFeeStatusInterface.getName());
-            form.setPrice(userFeeStatusInterface.getPrice());
-            form.setUnpaid(userFeeStatusInterface.getUnpaid());
+            form.setName(feeLogProjection.getName());
+            form.setPrice(feeLogProjection.getPrice());
+            form.setUnpaid(feeLogProjection.getUnpaid());
             feeFormList.add(form);
         }
         model.addAttribute("fees", feeFormList);

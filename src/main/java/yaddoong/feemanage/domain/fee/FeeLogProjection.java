@@ -1,6 +1,6 @@
 package yaddoong.feemanage.domain.fee;
 
-public interface UserFeeStatusInterface {
+public interface FeeLogProjection {
 
     String getName();
 

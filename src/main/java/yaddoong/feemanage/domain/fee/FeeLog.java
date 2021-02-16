@@ -4,6 +4,7 @@ package yaddoong.feemanage.domain.fee;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JoinColumnOrFormula;
 import yaddoong.feemanage.domain.base.BaseTimeEntity;
 import yaddoong.feemanage.domain.user.User;
 
@@ -27,7 +28,7 @@ public class FeeLog {
     private String memo;
 
     @Builder
-    public FeeLog(Date date, String contents, String division, int price, int afterBalance, String memo) {
+    public FeeLog(Date date, String contents, String division, int price, int afterBalance, String memo, User user) {
         this.date = date;
         this.contents = contents;
         this.division = division;
