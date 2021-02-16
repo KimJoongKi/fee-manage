@@ -1,9 +1,11 @@
 package yaddoong.feemanage.domain.fee;
 
+import yaddoong.feemanage.web.dto.UserFeeStatusDto;
+
 import java.util.List;
 
 public interface FeeLogRepositoryCustom {
 
-    List<UserFeeStatusInterface> findGroupByName();
+    List<UserFeeStatusDto> findGroupByName();
 
 }

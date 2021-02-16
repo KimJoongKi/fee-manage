@@ -6,6 +6,4 @@ import java.util.List;
 
 public interface FeeLogRepository extends JpaRepository<FeeLog, Long> , FeeLogRepositoryCustom {
 
-    List<UserFeeStatusInterface> findGroupByName();
-
 }

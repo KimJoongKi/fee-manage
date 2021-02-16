@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.domain.user.User;
 import yaddoong.feemanage.service.fee.FeeService;
+import yaddoong.feemanage.web.dto.UserFeeStatusDto;
 import yaddoong.feemanage.web.form.UserFeeForm;
 
 import javax.persistence.EntityManager;
@@ -53,9 +54,9 @@ public class FeeController {
                         .getName()
                         .replaceAll(".xlsx","") + " 기준");
         //미납금 + (오늘 날짜 - 오늘 날짜가 15보다 적으면 저번 달 15일 or 이번달 15일)*
-        List<UserFeeStatusInterface> list = feeLogRepository.findGroupByName();
+        List<UserFeeStatusDto> list = feeLogRepository.findGroupByName();
         List<UserFeeForm> feeFormList = new ArrayList<>();
-        for (UserFeeStatusInterface userFeeStatusInterface : list) {
+        for (UserFeeStatusDto userFeeStatusInterface : list) {
             UserFeeForm form = new UserFeeForm();
             form.setName(userFeeStatusInterface.getName());
             form.setPrice(userFeeStatusInterface.getPrice());
