@@ -59,7 +59,6 @@ public class FeeService {
         File[] deleteFiles = deleteFolder.listFiles();
 
         for (File deleteFile : deleteFiles) {
-            System.out.println("deleteFile = " + deleteFile.getName());
             deleteFile.delete();
         }
 
