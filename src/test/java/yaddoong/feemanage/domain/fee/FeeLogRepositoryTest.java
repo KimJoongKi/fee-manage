@@ -10,6 +10,4 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @WebMvcTest(FeeController.class)
 class FeeLogRepositoryTest {
-
-
 }
