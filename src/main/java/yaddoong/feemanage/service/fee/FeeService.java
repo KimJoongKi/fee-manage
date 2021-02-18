@@ -77,6 +77,10 @@ public class FeeService {
             return;
         }
 
+        uploadFileInsertDb(files);
+    }
+
+    private void uploadFileInsertDb(File[] files) throws IOException, ParseException {
         for (File file : files) {
             FileInputStream fis = new FileInputStream(file);
             // xlsx 파일 로드

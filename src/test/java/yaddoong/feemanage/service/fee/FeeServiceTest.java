@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import yaddoong.feemanage.domain.fee.FeeLogRepository;
 
 import java.io.*;
 
@@ -20,15 +21,23 @@ class FeeServiceTest {
     @Autowired
     FeeService feeService;
 
-//    @BeforeAll
-    public void 사전작업() {
+    @Autowired
+    FeeLogRepository feeLogRepository;
+    static String osName = System.getProperty("os.name").toUpperCase();
+    static String testExcelFileName = "2021년1월23일.xlsx";
+    static String originalFilePath = "/mac/path";
+    static String tmpPath = System.getProperty("user.dir") + "\\tmp";
 
-        String property = System.getProperty("os.name");
 
-        System.out.println("property = " + property);
 
-        String originalFilePath = "C:\\tmp\\test\\2021년1월23일.xlsx";
-        String tmpPath = System.getProperty("user.dir") + "\\tmp";
+    @BeforeAll
+    public static void 사전작업() {
+
+        System.out.println("property = " + osName);
+        if(osName.indexOf("WIN") >= 0) {
+            originalFilePath = "C:\\tmp\\test";
+        }
+        originalFilePath += "\\" + testExcelFileName;
         String copyFilePath = tmpPath + "\\2021년1월23일.xlsx";
 
         File originalFile = new File(originalFilePath);
@@ -49,12 +58,10 @@ class FeeServiceTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     @Test
     public void 서비스호출() {
-
     }
 
     @Test
@@ -83,6 +90,22 @@ class FeeServiceTest {
             e.printStackTrace();
         }
 
+
+    }
+
+    @Test
+    public void 디렉토리생성_파일이동() {
+
+        if (!new File(tmpPath).exists()) {
+            try {
+                new File(tmpPath).mkdir();
+            } catch (Exception e) {
+                e.getStackTrace();
+            }
+        }
+
+        boolean exists = new File(tmpPath).exists();
+        assertThat(exists).isTrue();
 
     }
 

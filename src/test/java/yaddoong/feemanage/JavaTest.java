@@ -11,13 +11,10 @@ public class JavaTest {
         String property = System.getProperty("os.name").toUpperCase();
         System.out.println("property = " + property);
 
-        
         if(property.indexOf("WIN") >= 0) {
             System.out.println("윈도우");
             return;
         }
         System.out.println("노윈도우");
-
-        
     }
 }
