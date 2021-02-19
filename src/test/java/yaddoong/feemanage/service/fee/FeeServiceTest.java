@@ -17,9 +17,7 @@ import yaddoong.feemanage.web.dto.FeeLogDto;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -105,6 +103,20 @@ class FeeServiceTest {
                     .name(fileName)
                     .build());
         }
+
+        // 등록은 잘 됐을까요
+        List<FeeLog> all = feeLogRepository.findAll();
+        String contents = all.get(all.size() - 1).getContents();
+        Date date = all.get(all.size() - 1).getDate();
+
+        assertThat(contents).isEqualTo("박지홍");
+        assertThat(date.toString()).isEqualTo("2019-12-09 20:52:02.0");
+
+
+        Optional<FeeFileLog> findFileLog = feeFileLogRepository.findById(1L);
+        String name = findFileLog.get().getName();
+        assertThat(name).isEqualTo("2019년12월11일.xlsx");
+
 
     }
 
