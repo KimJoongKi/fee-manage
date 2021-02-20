@@ -26,12 +26,10 @@ class FeeServiceTest {
 
     @Autowired
     FeeService feeService;
-
     @Autowired
     FeeLogRepository feeLogRepository;
     @Autowired
     FeeFileLogRepository feeFileLogRepository;
-
 
     static String osName = System.getProperty("os.name").toUpperCase();
     static String testExcelFileName = "2019년12월11일.xlsx";
@@ -39,11 +37,8 @@ class FeeServiceTest {
     static String tmpPath = System.getProperty("user.dir") + "/tmp/";
     static String copyFilePath = "";
 
-
-
     @BeforeAll
     public static void 사전작업() {
-
         System.out.println("property = " + osName);
         copyFilePath = tmpPath + testExcelFileName;
         System.out.println("copyFilePath = " + copyFilePath);
@@ -59,7 +54,6 @@ class FeeServiceTest {
             Arrays.stream(deleteFiles)
                     .forEach(file -> file.delete());
         }
-
     }
 
     @Test
@@ -74,6 +68,20 @@ class FeeServiceTest {
 //
 //        파일(originalFilePath, copyFilePath);
 //    }
+
+    @Test
+    public void 회비목록조회테스트() throws Exception {
+
+        디렉토리생성_파일이동및등록();
+        //given
+
+
+
+        //when
+
+        //then
+    }
+
 
     @Test
     public void 디렉토리생성_파일이동및등록() throws IOException, ParseException {
@@ -106,8 +114,10 @@ class FeeServiceTest {
 
         // 등록은 잘 됐을까요
         List<FeeLog> all = feeLogRepository.findAll();
-        String contents = all.get(all.size() - 1).getContents();
-        Date date = all.get(all.size() - 1).getDate();
+        String contents = all.get(all.size() - 1)
+                .getContents();
+        Date date = all.get(all.size() - 1)
+                .getDate();
 
         assertThat(contents).isEqualTo("박지홍");
         assertThat(date.toString()).isEqualTo("2019-12-09 20:52:02.0");
@@ -115,7 +125,7 @@ class FeeServiceTest {
 
         Optional<FeeFileLog> findFileLog = feeFileLogRepository.findById(1L);
         String name = findFileLog.get().getName();
-        assertThat(name).isEqualTo("2019년12월11일.xlsx");
+        assertThat(name).isEqualTo(testExcelFileName);
 
 
     }
