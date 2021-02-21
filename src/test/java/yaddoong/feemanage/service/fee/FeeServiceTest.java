@@ -96,12 +96,14 @@ class FeeServiceTest {
             form.setName(feeLogProjection.getName());
             form.setPrice(feeLogProjection.getPrice());
             form.setUnpaid(feeLogProjection.getUnpaid());
+            form.toString();
             feeFormList.add(form);
         }
-        System.out.println("list = " + list.toString());
 
         //then
         assertThat(lastUpdateData).isEqualTo("2019년12월11일 기준");
+        assertThat(feeFormList.get(feeFormList.size() - 1).getName()).isEqualTo("한성용");
+        assertThat(feeFormList.get(feeFormList.size() - 1).getUnpaid()).isEqualTo(75000);
     }
 
 
