@@ -8,11 +8,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import yaddoong.feemanage.domain.fee.FeeFileLog;
-import yaddoong.feemanage.domain.fee.FeeFileLogRepository;
-import yaddoong.feemanage.domain.fee.FeeLog;
-import yaddoong.feemanage.domain.fee.FeeLogRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.web.dto.FeeLogDto;
+import yaddoong.feemanage.web.form.UserFeeForm;
 
 import java.io.*;
 import java.text.ParseException;
@@ -72,14 +74,34 @@ class FeeServiceTest {
     @Test
     public void 회비목록조회테스트() throws Exception {
 
-        디렉토리생성_파일이동및등록();
         //given
-
-
+        디렉토리생성_파일이동및등록();
+        Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "name"));
 
         //when
+        Page<FeeFileLog> all = feeFileLogRepository.findAll(pageable);
+        String lastUpdateData = all.getContent()
+                .get(0)
+                .getName()
+                .replaceAll(".xlsx","") + " 기준";
+        if (all.getContent().size() == 0) {
+            lastUpdateData = "업데이트 기록 없음";
+        }
+
+        //미납금 + (오늘 날짜 - 오늘 날짜가 15보다 적으면 저번 달 15일 or 이번달 15일)*
+        List<FeeLogProjection> list = feeLogRepository.findGroupByName();
+        List<UserFeeForm> feeFormList = new ArrayList<>();
+        for (FeeLogProjection feeLogProjection : list) {
+            UserFeeForm form = new UserFeeForm();
+            form.setName(feeLogProjection.getName());
+            form.setPrice(feeLogProjection.getPrice());
+            form.setUnpaid(feeLogProjection.getUnpaid());
+            feeFormList.add(form);
+        }
+        System.out.println("list = " + list.toString());
 
         //then
+        assertThat(lastUpdateData).isEqualTo("2019년12월11일 기준");
     }
 
 
@@ -87,6 +109,8 @@ class FeeServiceTest {
     public void 디렉토리생성_파일이동및등록() throws IOException, ParseException {
 
         디렉토리확인및생성();
+
+        System.out.println("FeeServiceTest.디렉토리생성_파일이동및등록");
 
         boolean exists = new File(tmpPath).exists();
         // 디렉토리가 생성 됐는지
