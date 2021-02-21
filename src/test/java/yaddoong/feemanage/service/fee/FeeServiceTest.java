@@ -112,17 +112,20 @@ class FeeServiceTest {
     @Test
     public void 유저가아닌데이터인서트() throws Exception {
 
-        디렉토리생성_파일이동및등록();
         //given
-        List<String> usersNames = userRepository.findUsersNames();
-        List<FeeLog> feeLogsByContentsNotIn = feeLogRepository.findFeeLogsByContentsNotIn(usersNames);
-
-        System.out.println("feeLogsByContentsNotIn = " + feeLogsByContentsNotIn.get(0).toString());
-
+        디렉토리생성_파일이동및등록();
 
         //when
+        List<String> usersNames = userRepository.findUsersNames();
+        List<FeeLog> findEtcList = feeLogRepository.findFeeLogEtc(usersNames);
         
         //then
+        assertThat(usersNames.size()).isEqualTo(23);
+        assertThat(findEtcList.get(0).getPrice()).isEqualTo(1070021);
+        assertThat(findEtcList.get(0).getContents()).isEqualTo("잔액이체");
+        assertThat(findEtcList.get(findEtcList.size()-1).getPrice()).isEqualTo(-79000);
+        assertThat(findEtcList.get(findEtcList.size()-1).getPrice()).isEqualTo("박지홍");
+
     }
         
 
