@@ -13,4 +13,6 @@ public interface FeeLogRepository extends JpaRepository<FeeLog, Long>  {
             , nativeQuery = true)
     List<FeeLogProjection> findGroupByName();
 
+    List<FeeLog> findFeeLogsByContentsNotIn(List<String> names);
+
 }

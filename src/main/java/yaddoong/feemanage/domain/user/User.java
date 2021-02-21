@@ -23,6 +23,7 @@ public class User extends BaseTimeEntity {
     private String name;
     private LocalDate birth;
     private char sex;
+    @Column(updatable = false)
     private LocalDate joinDate;
     private LocalDate secessionDate;
     private int unpaid;

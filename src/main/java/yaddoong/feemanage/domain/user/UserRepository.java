@@ -5,5 +5,6 @@ import yaddoong.feemanage.domain.fee.FeeLog;
 
 import java.util.List;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
+
 }

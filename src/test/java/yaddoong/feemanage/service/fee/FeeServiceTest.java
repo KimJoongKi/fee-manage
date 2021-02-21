@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import yaddoong.feemanage.domain.fee.*;
+import yaddoong.feemanage.domain.user.UserRepository;
 import yaddoong.feemanage.web.dto.FeeLogDto;
 import yaddoong.feemanage.web.form.UserFeeForm;
 
@@ -30,6 +31,8 @@ class FeeServiceTest {
     FeeService feeService;
     @Autowired
     FeeLogRepository feeLogRepository;
+    @Autowired
+    UserRepository userRepository;
     @Autowired
     FeeFileLogRepository feeFileLogRepository;
 
@@ -105,6 +108,23 @@ class FeeServiceTest {
         assertThat(feeFormList.get(feeFormList.size() - 1).getName()).isEqualTo("한성용");
         assertThat(feeFormList.get(feeFormList.size() - 1).getUnpaid()).isEqualTo(75000);
     }
+    
+    @Test
+    public void 유저가아닌데이터인서트() throws Exception {
+
+        디렉토리생성_파일이동및등록();
+        //given
+        List<String> usersNames = userRepository.findUsersNames();
+        List<FeeLog> feeLogsByContentsNotIn = feeLogRepository.findFeeLogsByContentsNotIn(usersNames);
+
+        System.out.println("feeLogsByContentsNotIn = " + feeLogsByContentsNotIn.get(0).toString());
+
+
+        //when
+        
+        //then
+    }
+        
 
 
     @Test
@@ -124,7 +144,6 @@ class FeeServiceTest {
         File dir = new File(tmpPath);
         File[] files = dir.listFiles();
         assertThat(files.length).isEqualTo(1);
-
 
         for (File file : files) {
             XSSFSheet sheet = 엑셀시트읽기(file);
@@ -152,7 +171,6 @@ class FeeServiceTest {
         Optional<FeeFileLog> findFileLog = feeFileLogRepository.findById(1L);
         String name = findFileLog.get().getName();
         assertThat(name).isEqualTo(testExcelFileName);
-
 
     }
 

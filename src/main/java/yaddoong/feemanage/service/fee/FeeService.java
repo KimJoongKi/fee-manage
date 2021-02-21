@@ -10,10 +10,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import yaddoong.feemanage.domain.fee.FeeFileLog;
-import yaddoong.feemanage.domain.fee.FeeFileLogRepository;
-import yaddoong.feemanage.domain.fee.FeeLog;
-import yaddoong.feemanage.domain.fee.FeeLogRepository;
+import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.web.dto.FeeLogDto;
 
 import java.io.File;
@@ -71,7 +68,7 @@ public class FeeService {
         // 해당 디렉토리에 있는 파일을 모두 가져온다.
         File[] files = dir.listFiles();
 
-        // TODO: 2021-01-23 업로든 된 파일이 존재하지 않을 때 메시지 추가
+        // TODO: 2021-01-23 업로드 된 파일이 존재하지 않을 때 메시지 추가
         if (files.length == 0) {
             System.out.println("파일이 첨부되지 않았을 때 메시지 추가");
             return;
