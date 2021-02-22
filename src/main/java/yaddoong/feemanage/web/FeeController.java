@@ -10,18 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.domain.fee.*;
-import yaddoong.feemanage.domain.user.User;
 import yaddoong.feemanage.service.fee.FeeService;
-import yaddoong.feemanage.web.dto.UserFeeStatusDto;
 import yaddoong.feemanage.web.form.UserFeeForm;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Member;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,13 +32,25 @@ public class FeeController {
         return "fee/saveForm";
     }
 
-    @GetMapping(value = "/list")
-    public String list(Model model) {
+    @PostMapping("/save")
+    public String insertFeeLog(@RequestParam("file") MultipartFile file) throws IOException, ParseException {
+        feeService.save(file);
+        return "redirect:/";
+    }
+
+    @PostMapping("/list")
+    public String list(Model model) throws IOException, ParseException {
+        List<FeeLog> feeLogs = feeService.findAll();
+        return "";
+    }
+
+    @GetMapping(value = "/userFeeList")
+    public String userFeeList(Model model) {
         Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "name"));
         Page<FeeFileLog> all = feeFileLogRepository.findAll(pageable);
         if (all.getContent().size() == 0) {
             model.addAttribute("lastUpdateData", "업데이트 기록 없음");
-            return "fee/list";
+            return "fee/userFeeList";
         }
         model.addAttribute
                 ("lastUpdateData",all.getContent()
@@ -65,14 +69,15 @@ public class FeeController {
         }
         model.addAttribute("fees", feeFormList);
 
-        return "fee/list";
+        return "fee/userFeeList";
     }
 
-    @PostMapping("/save")
-    public String insertFeeLog(@RequestParam("file") MultipartFile file) throws IOException, ParseException {
-        feeService.save(file);
-        return "redirect:/";
+    @GetMapping("/etcList")
+    public String etcList(Model model) {
+        return "fee/etcList";
     }
+
+
 
 }
 

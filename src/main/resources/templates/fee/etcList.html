@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div>
+        회비 구분 화면
+    </div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>총 납부액</th>
+                <th>미납금액</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fee : ${fees}">
+                <td th:text="${fee.name}"></td>
+                <td th:text="${fee.price}"></td>
+                <td th:text="${fee.unpaid}"></td>
+            </tr>
+            <!--tr th:each="member : ${}">
+                <td th:text="${}"></td>
+                <td th:text="${}"></td>
+                <td th:text="${}"></td>
+                <td th:text="${}"></td>
+                <td th:text="${}"></td>
+            </tr -->
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>

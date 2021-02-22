@@ -17,7 +17,10 @@ import yaddoong.feemanage.domain.user.UserRepository;
 import yaddoong.feemanage.web.dto.FeeLogDto;
 import yaddoong.feemanage.web.form.UserFeeForm;
 
+import javax.persistence.Id;
+import javax.swing.text.html.Option;
 import java.io.*;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -64,6 +67,34 @@ class FeeServiceTest {
     }
 
     @Test
+    public void 씨알유디() throws ParseException {
+
+        Timestamp date = Timestamp.valueOf("2018-12-14 17:59:14");
+        List<FeeLog> feeLogList = new ArrayList<>();
+        feeLogList.add(FeeLog.builder()
+                .date(date)
+                .contents("홍길동")
+                .division("입금")
+                .price(15000)
+                .afterBalance(165000)
+                .memo("")
+                .build());
+        FeeLog feeLog = feeLogRepository.save(feeLogList.get(0));
+
+        System.out.println("feeLogList = " + feeLogList);
+        System.out.println("feeLog = " + feeLog);
+        Optional<FeeLog> findFeeLog = feeLogRepository.findFeeLogByContentsAndDate(feeLog.getContents(), feeLog.getDate());
+        System.out.println("findFeeLog = " + findFeeLog);
+        assertThat(findFeeLog.get().getContents()).isEqualTo(feeLog.getContents());
+        assertThat(findFeeLog.get().getDate()).isEqualTo(feeLog.getDate());
+
+        feeLogRepository.delete(feeLog);
+        Optional<FeeLog> afterDeleted = feeLogRepository.findFeeLogByContentsAndDate(feeLog.getContents(), feeLog.getDate());
+        assertThat(afterDeleted).isEmpty();
+
+    }
+
+    @Test
     public void 서비스호출() {
     }
 
@@ -75,6 +106,13 @@ class FeeServiceTest {
 //
 //        파일(originalFilePath, copyFilePath);
 //    }
+
+    @Test
+    public void 로그목록조회테스트() throws IOException, ParseException {
+        디렉토리생성_파일이동및등록();
+        List<FeeLog> all = feeService.findAll();
+        System.out.println("all = " + all.get(0).getContents());
+    }
 
     @Test
     public void 회비목록조회테스트() throws Exception {

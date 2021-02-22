@@ -30,6 +30,11 @@ public class FeeService {
     private final FeeLogRepository feeLogRepository;
     private final FeeFileLogRepository feeFileLogRepository;
 
+    public List<FeeLog> findAll() {
+        List<FeeLog> feeLogs = feeLogRepository.findFeeLogsByOrderByDateAsc();
+        return feeLogs;
+    }
+
     /**
      * 회비 내역이 담긴 엑셀파일의 정보를 등록한다.
      * @throws IOException
@@ -40,7 +45,13 @@ public class FeeService {
     public void save(MultipartFile uploadFile) throws IOException, ParseException {
 
         String filename = uploadFile.getOriginalFilename();
-        String tmpPath = System.getProperty("user.dir") + "\\tmp";
+        String osName = System.getProperty("os.name").toUpperCase();
+        String tmpPath = System.getProperty("user.dir") + "/tmp";
+        String filePath = tmpPath + "/" + filename;
+        if(osName.indexOf("WIN") >= 0) {
+            tmpPath = System.getProperty("user.dir") + "\\tmp";
+            filePath = tmpPath + "\\" + filename;
+        }
 
         // 디렉토리가 존재하지 않으면 디렉토리 생성
         if (!new File(tmpPath).exists()) {
@@ -60,7 +71,6 @@ public class FeeService {
         }
 
         // 업로드 디렉토리로 파일 복사
-        String filePath = tmpPath + "\\" + filename;
         uploadFile.transferTo(new File(filePath));
 
         // 파일이 저장된 디렉토리
@@ -128,7 +138,7 @@ public class FeeService {
      * 한 cell에 있는 데이터를 가져온다.
      * @param cell
      */
-    public FeeLogDto cellValueSet(FeeLogDto feeLogDto, Cell cell) throws ParseException {
+    private FeeLogDto cellValueSet(FeeLogDto feeLogDto, Cell cell) throws ParseException {
         switch (cell.getColumnIndex()) { // 셀
             case 1:
                 SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
