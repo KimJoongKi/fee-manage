@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import yaddoong.feemanage.domain.user.User;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.Date;
 @Entity
 public class FeeLogEtc {
 
-    @Id
+    @Id @GeneratedValue
     private Long id;
     private Date date;
     private String contents;
@@ -24,4 +25,13 @@ public class FeeLogEtc {
     private int afterBalance;
     private String memo;
 
+    @Builder
+    public FeeLogEtc(Date date, String contents, String division, int price, int afterBalance, String memo) {
+        this.date = date;
+        this.contents = contents;
+        this.division = division;
+        this.price = price;
+        this.afterBalance = afterBalance;
+        this.memo = memo;
+    }
 }

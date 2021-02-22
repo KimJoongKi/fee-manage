@@ -35,6 +35,8 @@ class FeeServiceTest {
     UserRepository userRepository;
     @Autowired
     FeeFileLogRepository feeFileLogRepository;
+    @Autowired
+    FeeLogEtcRepository feeLogEtcRepository;
 
     static String osName = System.getProperty("os.name").toUpperCase();
     static String testExcelFileName = "2019년12월11일.xlsx";
@@ -118,13 +120,30 @@ class FeeServiceTest {
         //when
         List<String> usersNames = userRepository.findUsersNames();
         List<FeeLog> findEtcList = feeLogRepository.findFeeLogEtc(usersNames);
-        
+        List<FeeLogEtc> feeLogEtcs = new ArrayList<>();
+
+        findEtcList.forEach(etc ->
+                {
+                    FeeLogEtc feeLogEtc = FeeLogEtc.builder()
+                            .date(etc.getDate())
+                            .contents(etc.getContents())
+                            .division(etc.getDivision())
+                            .price(etc.getPrice())
+                            .afterBalance(etc.getAfterBalance())
+                            .memo(etc.getMemo())
+                            .build();
+                    feeLogEtcs.add(feeLogEtc);
+                }
+                );
+
+        feeLogEtcRepository.saveAll(feeLogEtcs);
+
         //then
         assertThat(usersNames.size()).isEqualTo(23);
         assertThat(findEtcList.get(0).getPrice()).isEqualTo(1070021);
         assertThat(findEtcList.get(0).getContents()).isEqualTo("잔액이체");
         assertThat(findEtcList.get(findEtcList.size()-1).getPrice()).isEqualTo(-79000);
-        assertThat(findEtcList.get(findEtcList.size()-1).getPrice()).isEqualTo("박지홍");
+        assertThat(findEtcList.get(findEtcList.size()-1).getContents()).isEqualTo("박지홍");
 
     }
         

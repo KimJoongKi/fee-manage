@@ -21,8 +21,7 @@ public class FeeLogRepositoryImpl implements FeeLogRepositoryCustom {
                 .select(feeLog)
                 .from(feeLog)
                 .where(
-                        feeLog.contents.notIn(contents),
-                        feeLog.contents.in(contents).or(feeLog.memo.ne(""))
+                        feeLog.contents.notIn(contents).or(feeLog.contents.in(contents).or(feeLog.memo.ne("")))
                 )
                 .fetch();
         return feeLogList;
