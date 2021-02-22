@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div>
+        회비 구분 화면
+    </div>
+    <div>
+        <div class="row g-3">
+            <div class="col">
+                <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
+            </div>
+            <div class="col">
+                <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
+            </div>
+            <div class="col">
+                <input type="text" class="form-control" placeholder="내용">
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>입금일자</th>
+                <th>내용</th>
+                <th>잔액</th>
+                <th>구분</th>
+                <th>비고</th>
+                <th>금액</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <!--tr th:each="member : ${}">
+                <td th:text="${}"></td>
+                <td th:text="${}"></td>
+                <td th:text="${}"></td>
+                <td th:text="${}"></td>
+                <td th:text="${}"></td>
+            </tr -->
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>

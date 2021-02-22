@@ -12,10 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.web.dto.FeeLogDto;
+import yaddoong.feemanage.web.form.FeeLogCondition;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,8 +32,11 @@ public class FeeService {
     private final FeeLogRepository feeLogRepository;
     private final FeeFileLogRepository feeFileLogRepository;
 
-    public List<FeeLog> findAll() {
-        List<FeeLog> feeLogs = feeLogRepository.findFeeLogsByOrderByDateAsc();
+    public List<FeeLog> findAll(FeeLogCondition condition) {
+        Timestamp stdate = Timestamp.valueOf("2018-12-14 00:00:00");
+        Timestamp eddate = Timestamp.valueOf("2019-01-13 23:59:59");
+        String contents = "";
+        List<FeeLog> feeLogs = feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(stdate, eddate, contents);
         return feeLogs;
     }
 

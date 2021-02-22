@@ -110,8 +110,14 @@ class FeeServiceTest {
     @Test
     public void 로그목록조회테스트() throws IOException, ParseException {
         디렉토리생성_파일이동및등록();
-        List<FeeLog> all = feeService.findAll();
-        System.out.println("all = " + all.get(0).getContents());
+        Timestamp stdate = Timestamp.valueOf("2018-12-14 00:00:00");
+        Timestamp eddate = Timestamp.valueOf("2019-01-13 23:59:59");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date sdate = simpleDateFormat.parse("2018-12-14");
+        Date edate = simpleDateFormat.parse("2019-01-13");
+        String contents = "%김중기%";
+        List<FeeLog> all = feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(sdate, edate, contents);
+        assertThat(all.get(0).getContents()).isEqualTo("김중기");
     }
 
     @Test

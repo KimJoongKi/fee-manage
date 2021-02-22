@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.service.fee.FeeService;
+import yaddoong.feemanage.web.form.FeeLogCondition;
 import yaddoong.feemanage.web.form.UserFeeForm;
 
 import java.io.IOException;
@@ -38,10 +39,11 @@ public class FeeController {
         return "redirect:/";
     }
 
-    @PostMapping("/list")
-    public String list(Model model) throws IOException, ParseException {
-        List<FeeLog> feeLogs = feeService.findAll();
-        return "";
+    @GetMapping("/list")
+    public String list(FeeLogCondition condition) throws IOException, ParseException {
+        System.out.println("condition = " + condition.toString());
+        feeService.findAll(condition);
+        return "fee/list";
     }
 
     @GetMapping(value = "/userFeeList")
