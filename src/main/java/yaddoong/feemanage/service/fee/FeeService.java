@@ -5,14 +5,13 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.web.dto.FeeLogDto;
-import yaddoong.feemanage.web.form.FeeLogCondition;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,8 +19,9 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @PropertySource("classpath:application-param.properties")
@@ -32,11 +32,16 @@ public class FeeService {
     private final FeeLogRepository feeLogRepository;
     private final FeeFileLogRepository feeFileLogRepository;
 
-    public List<FeeLog> findAll(FeeLogCondition condition) {
-        Timestamp stdate = Timestamp.valueOf("2018-12-14 00:00:00");
-        Timestamp eddate = Timestamp.valueOf("2019-01-13 23:59:59");
+    public List<FeeLog> findAll(FeeLogCondition condition, Model model) {
+        LocalDateTime sdate = LocalDateTime.now().minusMonths(1);
+        LocalDateTime edate = LocalDateTime.now();
+        FeeLogCondition feeLogCondition = new FeeLogCondition();
+        feeLogCondition.setStartDate(sdate);
+        feeLogCondition.setEndDate(edate);
+        model.addAttribute(feeLogCondition);
         String contents = "";
-        List<FeeLog> feeLogs = feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(stdate, eddate, contents);
+
+        List<FeeLog> feeLogs = feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(sdate, edate, contents);
         return feeLogs;
     }
 

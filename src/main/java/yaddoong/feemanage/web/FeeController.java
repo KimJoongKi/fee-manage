@@ -11,12 +11,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.service.fee.FeeService;
-import yaddoong.feemanage.web.form.FeeLogCondition;
+import yaddoong.feemanage.web.form.FeeLogForm;
 import yaddoong.feemanage.web.form.UserFeeForm;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -40,11 +44,23 @@ public class FeeController {
     }
 
     @GetMapping("/list")
-    public String list(FeeLogCondition condition) throws IOException, ParseException {
-        System.out.println("condition = " + condition.toString());
-        feeService.findAll(condition);
+    public String listView(Model model) throws IOException, ParseException {
+//        Timestamp stdate = Timestamp.valueOf("2018-12-14 00:00:00");
+//        Timestamp eddate = Timestamp.valueOf("2019-01-13 23:59:59");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        LocalDate sdate = LocalDate.now().minusMonths(1);
+        LocalDate edate = LocalDate.now();
+        FeeLogForm form = new FeeLogForm();
+        form.setStartDate(sdate);
+        form.setEndDate(edate);
         return "fee/list";
     }
+
+    @PostMapping("/list")
+    public String list(FeeLogForm form) {
+        return "fee/list";
+    }
+
 
     @GetMapping(value = "/userFeeList")
     public String userFeeList(Model model) {

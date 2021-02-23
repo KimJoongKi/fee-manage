@@ -9,18 +9,20 @@
     </div>
     <div>
         <div class="row g-3">
+            <form th:object="${form}" method="post">
             <div class="col">
-                <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
+                <input class="form-control" type="date" value="" id="example-date-input">
             </div>
             <div class="col">
-                <input class="form-control" type="date" value="2011-08-19" id="example-date-input">
+                <input class="form-control" type="date" th:field="*{stockQuantity}" id="example-date-input">
             </div>
             <div class="col">
                 <input type="text" class="form-control" placeholder="내용">
             </div>
             <div class="col">
-                <button type="submit" class="btn btn-primary">Sign in</button>
+                <button type="submit" class="btn btn-primary">검색</button>
             </div>
+            </form>
         </div>
         <table class="table table-striped">
             <thead>
