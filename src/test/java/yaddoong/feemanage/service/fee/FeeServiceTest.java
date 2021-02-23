@@ -134,6 +134,7 @@ class FeeServiceTest {
 
         List<FeeLog> all = feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(startDate, endDate, contents);
         assertThat(all.get(0).getContents()).isEqualTo("김중기");
+        assertThat(all.get(0).getDate()).isEqualTo("2018-12-24T08:09:56");
     }
 
     @Test

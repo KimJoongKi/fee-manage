@@ -19,6 +19,9 @@ import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,14 +48,15 @@ public class FeeController {
 
     @GetMapping("/list")
     public String listView(Model model) throws IOException, ParseException {
-//        Timestamp stdate = Timestamp.valueOf("2018-12-14 00:00:00");
-//        Timestamp eddate = Timestamp.valueOf("2019-01-13 23:59:59");
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        LocalDate sdate = LocalDate.now().minusMonths(1);
-        LocalDate edate = LocalDate.now();
+
+        LocalDateTime queryStartDate = LocalDate.now().minusMonths(1).atTime(LocalTime.MIN);
+        LocalDateTime queryEndDate = LocalDate.now().atTime(LocalTime.MAX);
+        String formStartDate = queryStartDate.toLocalDate().format(DateTimeFormatter.ISO_DATE);
+        String formEndDate = queryEndDate.toLocalDate().format(DateTimeFormatter.ISO_DATE);
+
         FeeLogForm form = new FeeLogForm();
-        form.setStartDate(sdate);
-        form.setEndDate(edate);
+        form.setStartDate(formStartDate);
+        form.setEndDate(formEndDate);
         return "fee/list";
     }
 

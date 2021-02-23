@@ -32,7 +32,12 @@ public class JavaTest {
         LocalDate endDate = LocalDate.now();
         LocalDateTime startDateTime = LocalDate.now().minusMonths(1).atTime(LocalTime.MIN);
         LocalDateTime endDateTime = LocalDate.now().atTime(LocalTime.MAX);
+        LocalDate localDate = startDateTime.toLocalDate();
+        System.out.println("localDate = " + localDate);
 
+
+        String format = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
+        System.out.println("format = " + format);
 
 
         System.out.println("startDate = " + startDate.toString());

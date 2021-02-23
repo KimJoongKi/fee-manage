@@ -10,8 +10,8 @@ import java.util.Date;
 @Setter
 public class FeeLogForm {
 
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String startDate;
+    private String endDate;
     private String contents;
 
 }
