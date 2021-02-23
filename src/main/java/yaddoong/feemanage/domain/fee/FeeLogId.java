@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -12,7 +13,7 @@ import java.util.Date;
 public class FeeLogId implements Serializable {
 
     @Id
-    private Date date;
+    private LocalDateTime date;
     @Id
     private String contents;
 

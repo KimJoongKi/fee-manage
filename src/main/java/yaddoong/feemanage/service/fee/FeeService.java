@@ -21,7 +21,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @PropertySource("classpath:application-param.properties")
@@ -33,16 +36,29 @@ public class FeeService {
     private final FeeFileLogRepository feeFileLogRepository;
 
     public List<FeeLog> findAll(FeeLogCondition condition, Model model) {
-        LocalDateTime sdate = LocalDateTime.now().minusMonths(1);
-        LocalDateTime edate = LocalDateTime.now();
-        FeeLogCondition feeLogCondition = new FeeLogCondition();
-        feeLogCondition.setStartDate(sdate);
-        feeLogCondition.setEndDate(edate);
-        model.addAttribute(feeLogCondition);
-        String contents = "";
 
-        List<FeeLog> feeLogs = feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(sdate, edate, contents);
-        return feeLogs;
+//        SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd");
+//        Date time = new Date();
+//        Calendar cal = Calendar.getInstance();
+//        cal.setTime(time);
+//        cal.add(Calendar.MONTH, -1);
+//        String startDate = format.format(cal.getTime());
+//        String endDate = format.format(time);
+//
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//        Date sdate = simpleDateFormat.parse(startDate);
+//        Date edate = simpleDateFormat.parse(endDate);
+//
+//        LocalDateTime sdate = LocalDateTime.now().minusMonths(1);
+//        LocalDateTime edate = LocalDateTime.now();
+//        FeeLogCondition feeLogCondition = new FeeLogCondition();
+//        feeLogCondition.setStartDate(sdate);
+//        feeLogCondition.setEndDate(edate);
+//        model.addAttribute(feeLogCondition);
+//        String contents = "";
+//
+//        List<FeeLog> feeLogs = feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(sdate, edate, contents);
+        return null;
     }
 
     /**
@@ -151,9 +167,8 @@ public class FeeService {
     private FeeLogDto cellValueSet(FeeLogDto feeLogDto, Cell cell) throws ParseException {
         switch (cell.getColumnIndex()) { // 셀
             case 1:
-                SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                feeLogDto.setDate(format.parse(cell
-                        .getStringCellValue()));
+                feeLogDto.setDate(
+                        LocalDateTime.parse(cell.getStringCellValue(), DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss")));
                 break;
             case 2:
                 feeLogDto.setDivision(cell

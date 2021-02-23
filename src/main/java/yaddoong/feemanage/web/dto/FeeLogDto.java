@@ -8,13 +8,15 @@ import yaddoong.feemanage.domain.fee.FeeLog;
 import yaddoong.feemanage.domain.user.Role;
 
 import javax.persistence.Id;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class FeeLogDto {
-    private Date date;
+    private LocalDateTime date;
     private String contents;
     private String division;
     private int price;
@@ -22,7 +24,7 @@ public class FeeLogDto {
     private String memo;
 
     @Builder
-    public FeeLogDto(Date date, String contents, String division, int price, int afterBalance, String memo) {
+    public FeeLogDto(LocalDateTime date, String contents, String division, int price, int afterBalance, String memo) {
         this.date = date;
         this.contents = contents;
         this.division = division;

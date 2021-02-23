@@ -26,6 +26,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -72,7 +74,8 @@ class FeeServiceTest {
     @Test
     public void 씨알유디() throws ParseException {
 
-        Timestamp date = Timestamp.valueOf("2018-12-14 17:59:14");
+        LocalDateTime date = LocalDateTime.now();
+
         List<FeeLog> feeLogList = new ArrayList<>();
         feeLogList.add(FeeLog.builder()
                 .date(date)
@@ -112,29 +115,25 @@ class FeeServiceTest {
 
     @Test
     public void 로그목록조회테스트() throws IOException, ParseException {
+
         디렉토리생성_파일이동및등록();
-        SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd");
 
-        Date time = new Date();
-        format1.format(time);
+        // 테스트용
+        String formStartDate = "2018-12-14";
+        String formEndDate = "2019-01-14";
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(time);
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        String format = df.format(time);
-        System.out.println("current: " + df.format(cal.getTime()));
+        LocalDateTime startDate = LocalDate.parse(formStartDate, DateTimeFormatter.ISO_DATE).atTime(LocalTime.MIN);
+        LocalDateTime endDate = LocalDate.parse(formEndDate, DateTimeFormatter.ISO_DATE).atTime(LocalTime.MAX);
 
-        cal.add(Calendar.MONTH, -1);
-        cal.getTime();
-        System.out.println("after: " + df.format(cal.getTime()));
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date sdate = simpleDateFormat.parse("2018-12-14");
-        Date edate = simpleDateFormat.parse("2019-01-13");
-
+        // 실제 로직
+//        LocalDate startDate = LocalDate.now().minusMonths(1);
+//        LocalDate endDate = LocalDate.now();
+//        LocalDateTime startDateTime = LocalDate.now().minusMonths(1).atTime(LocalTime.MIN);
+//        LocalDateTime endDateTime = LocalDate.now().atTime(LocalTime.MAX);
         String contents = "%김중기%";
-//        List<FeeLog> all = feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(sdate, edate, contents);
-//        assertThat(all.get(0).getContents()).isEqualTo("김중기");
+
+        List<FeeLog> all = feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(startDate, endDate, contents);
+        assertThat(all.get(0).getContents()).isEqualTo("김중기");
     }
 
     @Test
@@ -207,7 +206,6 @@ class FeeServiceTest {
         assertThat(findEtcList.get(findEtcList.size()-1).getContents()).isEqualTo("박지홍");
 
     }
-        
 
 
     @Test
@@ -244,11 +242,11 @@ class FeeServiceTest {
         List<FeeLog> all = feeLogRepository.findAll();
         String contents = all.get(all.size() - 1)
                 .getContents();
-        Date date = all.get(all.size() - 1)
+        LocalDateTime date = all.get(all.size() - 1)
                 .getDate();
 
         assertThat(contents).isEqualTo("박지홍");
-        assertThat(date.toString()).isEqualTo("2019-12-09 20:52:02.0");
+        assertThat(date.toString()).isEqualTo("2019-12-09T20:52:02");
 
 
         Optional<FeeFileLog> findFileLog = feeFileLogRepository.findById(1L);
@@ -327,9 +325,8 @@ class FeeServiceTest {
     public FeeLogDto cellValueSet(FeeLogDto feeLogDto, Cell cell) throws ParseException {
         switch (cell.getColumnIndex()) { // 셀
             case 1:
-                SimpleDateFormat format = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                feeLogDto.setDate(format.parse(cell
-                        .getStringCellValue()));
+                feeLogDto.setDate(
+                        LocalDateTime.parse(cell.getStringCellValue(), DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss")));
                 break;
             case 2:
                 feeLogDto.setDivision(cell

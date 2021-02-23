@@ -9,6 +9,7 @@ import yaddoong.feemanage.domain.base.BaseTimeEntity;
 import yaddoong.feemanage.domain.user.User;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import java.util.List;
 public class FeeLog {
 
     @Id
-    private Date date;
+    private LocalDateTime date;
     @Id
     private String contents;
     private String division;
@@ -28,7 +29,7 @@ public class FeeLog {
     private String memo;
 
     @Builder
-    public FeeLog(Date date, String contents, String division, int price, int afterBalance, String memo, User user) {
+    public FeeLog(LocalDateTime date, String contents, String division, int price, int afterBalance, String memo, User user) {
         this.date = date;
         this.contents = contents;
         this.division = division;
