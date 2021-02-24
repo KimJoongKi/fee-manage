@@ -51,17 +51,15 @@ public class FeeController {
 
         LocalDateTime queryStartDate = LocalDate.now().minusMonths(1).atTime(LocalTime.MIN);
         LocalDateTime queryEndDate = LocalDate.now().atTime(LocalTime.MAX);
-        String formStartDate = queryStartDate.toLocalDate().format(DateTimeFormatter.ISO_DATE);
-        String formEndDate = queryEndDate.toLocalDate().format(DateTimeFormatter.ISO_DATE);
 
-        FeeLogForm form = new FeeLogForm();
-        form.setStartDate(formStartDate);
-        form.setEndDate(formEndDate);
+        FeeLogForm form = new FeeLogForm(queryStartDate, queryEndDate);
+
+        model.addAttribute("form", form);
         return "fee/list";
     }
 
     @PostMapping("/list")
-    public String list(FeeLogForm form) {
+    public String searchList(FeeLogForm form) {
         return "fee/list";
     }
 
