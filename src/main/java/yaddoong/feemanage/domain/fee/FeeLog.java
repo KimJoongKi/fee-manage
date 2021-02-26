@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JoinColumnOrFormula;
+import org.springframework.format.annotation.DateTimeFormat;
 import yaddoong.feemanage.domain.base.BaseTimeEntity;
 import yaddoong.feemanage.domain.user.User;
 
@@ -19,7 +20,7 @@ import java.util.List;
 @Entity
 public class FeeLog {
 
-    @Id
+    @Id @DateTimeFormat(pattern = "yyyy년 MM월 dd일 HH시 mm분 ss초")
     private LocalDateTime date;
     @Id
     private String contents;

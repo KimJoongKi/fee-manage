@@ -49,18 +49,41 @@ public class FeeController {
     @GetMapping("/list")
     public String listView(Model model) throws IOException, ParseException {
 
-        LocalDateTime queryStartDate = LocalDate.now().minusMonths(1).atTime(LocalTime.MIN);
-        LocalDateTime queryEndDate = LocalDate.now().atTime(LocalTime.MAX);
+        LocalDateTime startDate = LocalDate.now().minusMonths(1).atTime(LocalTime.MIN);
+        LocalDateTime endDate = LocalDate.now().atTime(LocalTime.MAX);
+        String contents = "%%";
 
-        FeeLogForm form = new FeeLogForm(queryStartDate, queryEndDate);
+        FeeLogForm form = new FeeLogForm(startDate, endDate);
+        List<FeeLog> feeLogs = feeService.findAll(startDate, endDate, contents);
 
         model.addAttribute("form", form);
+        model.addAttribute("feeLogs", feeLogs);
+
         return "fee/list";
 
     }
 
     @PostMapping("/list")
-    public String searchList(FeeLogForm form) {
+    public String searchList(FeeLogForm form, Model model) {
+
+        String formStartDate = form.getStartDate();
+        String formEndDate = form.getEndDate();
+        String formContents = "%" + form.getContents() + "%";
+
+        LocalDateTime startDate = LocalDate.parse(formStartDate,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .atTime(
+                        LocalTime.MIN);
+        LocalDateTime endDate = LocalDate.parse(formEndDate,
+                DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                .atTime(
+                        LocalTime.MAX);
+
+        List<FeeLog> feeLogs = feeService.findAll(startDate, endDate, formContents);
+
+        model.addAttribute("form", form);
+        model.addAttribute("feeLogs", feeLogs);
+
         return "fee/list";
     }
 
@@ -68,7 +91,8 @@ public class FeeController {
     @GetMapping(value = "/userFeeList")
     public String userFeeList(Model model) {
         Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "name"));
-        Page<FeeFileLog> all = feeFileLogRepository.findAll(pageable);
+
+        Page<FeeFileLog> all = feeService.findFeeFileLogAll(pageable);
         if (all.getContent().size() == 0) {
             model.addAttribute("lastUpdateData", "업데이트 기록 없음");
             return "fee/userFeeList";
@@ -79,7 +103,7 @@ public class FeeController {
                         .getName()
                         .replaceAll(".xlsx","") + " 기준");
         //미납금 + (오늘 날짜 - 오늘 날짜가 15보다 적으면 저번 달 15일 or 이번달 15일)*
-        List<FeeLogProjection> list = feeLogRepository.findGroupByName();
+        List<FeeLogProjection> list = feeService.findGroupByName();
         List<UserFeeForm> feeFormList = new ArrayList<>();
         for (FeeLogProjection feeLogProjection : list) {
             UserFeeForm form = new UserFeeForm();
@@ -97,8 +121,5 @@ public class FeeController {
     public String etcList(Model model) {
         return "fee/etcList";
     }
-
-
-
 }
 

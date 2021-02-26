@@ -6,6 +6,8 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -21,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,30 +38,8 @@ public class FeeService {
     private final FeeLogRepository feeLogRepository;
     private final FeeFileLogRepository feeFileLogRepository;
 
-    public List<FeeLog> findAll(FeeLogCondition condition, Model model) {
-
-//        SimpleDateFormat format = new SimpleDateFormat ( "yyyy-MM-dd");
-//        Date time = new Date();
-//        Calendar cal = Calendar.getInstance();
-//        cal.setTime(time);
-//        cal.add(Calendar.MONTH, -1);
-//        String startDate = format.format(cal.getTime());
-//        String endDate = format.format(time);
-//
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        Date sdate = simpleDateFormat.parse(startDate);
-//        Date edate = simpleDateFormat.parse(endDate);
-//
-//        LocalDateTime sdate = LocalDateTime.now().minusMonths(1);
-//        LocalDateTime edate = LocalDateTime.now();
-//        FeeLogCondition feeLogCondition = new FeeLogCondition();
-//        feeLogCondition.setStartDate(sdate);
-//        feeLogCondition.setEndDate(edate);
-//        model.addAttribute(feeLogCondition);
-//        String contents = "";
-//
-//        List<FeeLog> feeLogs = feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(sdate, edate, contents);
-        return null;
+    public List<FeeLog> findAll(LocalDateTime queryStartDate, LocalDateTime queryEndDate, String contents) {
+        return feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(queryStartDate, queryEndDate, contents);
     }
 
     /**
@@ -113,6 +94,12 @@ public class FeeService {
         uploadFileInsertDb(files);
     }
 
+    /**
+     * 엑셀파일 등록
+     * @param files
+     * @throws IOException
+     * @throws ParseException
+     */
     private void uploadFileInsertDb(File[] files) throws IOException, ParseException {
         for (File file : files) {
             FileInputStream fis = new FileInputStream(file);
@@ -199,4 +186,11 @@ public class FeeService {
     }
 
 
+    public Page<FeeFileLog> findFeeFileLogAll(Pageable pageable) {
+        return feeFileLogRepository.findAll(pageable);
+    }
+
+    public List<FeeLogProjection> findGroupByName() {
+        return feeLogRepository.findGroupByName();
+    }
 }
