@@ -56,6 +56,7 @@ public class FeeController {
 
         model.addAttribute("form", form);
         return "fee/list";
+
     }
 
     @PostMapping("/list")

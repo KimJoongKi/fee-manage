@@ -8,22 +8,22 @@
         회비 구분 화면
     </div>
     <div>
+        <form th:object="${form}" method="post">
         <div class="row g-3">
-            <form th:object="${form}" method="post">
             <div class="col">
-                <input class="form-control" type="date" th:field="*{startDate}" id="example-date-input">
+                <input class="form-control" type="date" th:field="*{startDate}">
             </div>
             <div class="col">
-                <input class="form-control" type="date" th:field="*{endDate}" id="example-date-input">
+                <input class="form-control" type="date" th:field="*{endDate}">
             </div>
             <div class="col">
-                <input type="text" class="form-control" th:field="*{contents}" placeholder="내용">
+                <input type="text" class="form-control" placeholder="내용">
             </div>
             <div class="col">
                 <button type="submit" class="btn btn-primary">검색</button>
             </div>
-            </form>
         </div>
+        </form>
         <table class="table table-striped">
             <thead>
             <tr>
