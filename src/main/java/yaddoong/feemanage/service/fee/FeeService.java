@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.domain.fee.*;
+import yaddoong.feemanage.service.user.UserService;
 import yaddoong.feemanage.web.dto.FeeLogDto;
 
 import java.io.File;
@@ -35,8 +36,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FeeService {
 
+    private final UserService userService;
     private final FeeLogRepository feeLogRepository;
     private final FeeFileLogRepository feeFileLogRepository;
+    private final FeeLogEtcRepository feeLogEtcRepository;
 
     public List<FeeLog> findAll(LocalDateTime queryStartDate, LocalDateTime queryEndDate, String contents) {
         return feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(queryStartDate, queryEndDate, contents);
@@ -52,6 +55,7 @@ public class FeeService {
     public void save(MultipartFile uploadFile) throws IOException, ParseException {
 
         String filename = uploadFile.getOriginalFilename();
+        // TODO: 2021/02/27 서버 반영시 삭제
         String osName = System.getProperty("os.name").toUpperCase();
         String tmpPath = System.getProperty("user.dir") + "/tmp";
         String filePath = tmpPath + "/" + filename;
@@ -91,8 +95,41 @@ public class FeeService {
             return;
         }
 
+        // TODO: 2021/02/27 파일명이 존재할 때 이미 존재하는 파일입니다. 추가
+
+
         uploadFileInsertDb(files);
+
+        List<String> userNames = userService.findUserNames();
+        List<FeeLog> findEtcLogs = findFeeLogEtc(userNames);
+        List<FeeLogEtc> feeLogEtcs = putFeeLogEtc(findEtcLogs);
+
+        feeLogEtcRepository.saveAll(feeLogEtcs);
+
     }
+
+    public List<FeeLogEtc> putFeeLogEtc(List<FeeLog> findEtcLogs) {
+        List<FeeLogEtc> feeLogEtcs = new ArrayList<>();
+        findEtcLogs.forEach(etc ->
+                {
+                    FeeLogEtc feeLogEtc = FeeLogEtc.builder()
+                            .date(etc.getDate())
+                            .contents(etc.getContents())
+                            .division(etc.getDivision())
+                            .price(etc.getPrice())
+                            .afterBalance(etc.getAfterBalance())
+                            .memo(etc.getMemo())
+                            .build();
+                    feeLogEtcs.add(feeLogEtc);
+                }
+        );
+        return feeLogEtcs;
+    }
+
+    public List<FeeLog> findFeeLogEtc(List<String> userNames) {
+        return feeLogRepository.findFeeLogEtc(userNames);
+    }
+
 
     /**
      * 엑셀파일 등록
@@ -100,7 +137,7 @@ public class FeeService {
      * @throws IOException
      * @throws ParseException
      */
-    private void uploadFileInsertDb(File[] files) throws IOException, ParseException {
+    public void uploadFileInsertDb(File[] files) throws IOException, ParseException {
         for (File file : files) {
             FileInputStream fis = new FileInputStream(file);
             // xlsx 파일 로드
@@ -123,7 +160,7 @@ public class FeeService {
      * @param list
      * @throws ParseException
      */
-    private List<FeeLog> listObjectSet(XSSFSheet sheet, List<FeeLog> list) throws ParseException {
+    public List<FeeLog> listObjectSet(XSSFSheet sheet, List<FeeLog> list) throws ParseException {
         for (int i = 11; i <= sheet.getLastRowNum(); i++) { // 행
             FeeLogDto feeLogDto = new FeeLogDto();
             Row row = sheet.getRow(i);
@@ -140,7 +177,7 @@ public class FeeService {
      * @return
      * @throws ParseException
      */
-    private FeeLogDto rowValueSet(FeeLogDto feeLogDto, Row row) throws ParseException {
+    public FeeLogDto rowValueSet(FeeLogDto feeLogDto, Row row) throws ParseException {
         for (int j = 1; j < row.getLastCellNum(); j++) { // 열
             feeLogDto = cellValueSet(feeLogDto, row.getCell(j));
         }
@@ -151,7 +188,7 @@ public class FeeService {
      * 한 cell에 있는 데이터를 가져온다.
      * @param cell
      */
-    private FeeLogDto cellValueSet(FeeLogDto feeLogDto, Cell cell) throws ParseException {
+    public FeeLogDto cellValueSet(FeeLogDto feeLogDto, Cell cell) throws ParseException {
         switch (cell.getColumnIndex()) { // 셀
             case 1:
                 feeLogDto.setDate(
@@ -192,5 +229,9 @@ public class FeeService {
 
     public List<FeeLogProjection> findGroupByName() {
         return feeLogRepository.findGroupByName();
+    }
+
+    public List<FeeLogEtc> findFeeLogEtcAll() {
+        return feeLogEtcRepository.findAll();
     }
 }

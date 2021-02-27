@@ -11,16 +11,22 @@
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>이름</th>
-                <th>총 납부액</th>
-                <th>미납금액</th>
+                <th>입금일자</th>
+                <th>내용</th>
+                <th>잔액</th>
+                <th>구분</th>
+                <th>비고</th>
+                <th>금액</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="fee : ${fees}">
-                <td th:text="${fee.name}"></td>
-                <td th:text="${fee.price}"></td>
-                <td th:text="${fee.unpaid}"></td>
+            <tr th:each="feeLogEtc: ${feeLogEtcs}">
+                <td th:text="${#temporals.format(feeLogEtc.date, 'yyyy년MM월dd일 HH시mm분ss초')}"></td>
+                <td th:text="${feeLogEtc.contents}"></td>
+                <td th:text="${#numbers.formatCurrency(feeLogEtc.afterBalance)}"></td>
+                <td th:text="${feeLogEtc.division}"></td>
+                <td th:text="${feeLogEtc.memo}"></td>
+                <td th:text="${#numbers.formatCurrency(feeLogEtc.price)}"></td>
             </tr>
             <!--tr th:each="member : ${}">
                 <td th:text="${}"></td>

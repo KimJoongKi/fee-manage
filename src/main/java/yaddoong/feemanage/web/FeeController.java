@@ -32,8 +32,6 @@ import java.util.List;
 public class FeeController {
 
     private final FeeService feeService;
-    private final FeeLogRepository feeLogRepository;
-    private final FeeFileLogRepository feeFileLogRepository;
 
     @GetMapping(value = "/new")
     public String saveForm() {
@@ -119,6 +117,11 @@ public class FeeController {
 
     @GetMapping("/etcList")
     public String etcList(Model model) {
+
+        List<FeeLogEtc> feeLogEtcs = feeService.findFeeLogEtcAll();
+
+        model.addAttribute("feeLogEtcs", feeLogEtcs);
+
         return "fee/etcList";
     }
 }
