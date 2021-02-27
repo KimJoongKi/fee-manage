@@ -14,6 +14,7 @@ import yaddoong.feemanage.service.fee.FeeService;
 import yaddoong.feemanage.web.form.FeeLogForm;
 import yaddoong.feemanage.web.form.UserFeeForm;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -123,6 +124,14 @@ public class FeeController {
         model.addAttribute("feeLogEtcs", feeLogEtcs);
 
         return "fee/etcList";
+    }
+
+    @RequestMapping("/feeLogEtcUpdate")
+    public String feeLogEtcUpdate(HttpServletRequest request) {
+        // TODO: 2021/02/27 머리가안돌아감 여기부터 
+        System.out.println("request = " + request.getParameter("id"));
+        System.out.println("request = " + request.getParameter("memo"));
+        return "redirect:/fee/etcList";
     }
 }
 

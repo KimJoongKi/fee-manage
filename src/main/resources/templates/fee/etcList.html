@@ -11,6 +11,8 @@
 
         <table class="table table-striped">
             <form action="/fee/feeLogEtcUpdate" method="post">
+                <input th:id="id" th:hidden="hidden" >
+                <input th:id="memo" th:hidden="hidden">
             <thead>
             <tr>
                 <th>입금일자</th>
@@ -27,7 +29,11 @@
                 <td th:text="${feeLogEtc.contents}"></td>
                 <td th:text="${#numbers.formatCurrency(feeLogEtc.afterBalance)}"></td>
                 <td th:text="${feeLogEtc.division}"></td>
-                <td><input th:type="text" th:value="${feeLogEtc.memo}"><button type="submit" class="btn btn-primary">수정</button></td>
+                <td>
+                    <input th:id="'id'+${feeLogEtcStat.index}" th:hidden="hidden" th:value="${feeLogEtc.id}">
+                    <input th:id="'val'+${feeLogEtcStat.index}" th:type="text" th:value="${feeLogEtc.memo}">
+                    <button class="btn btn-primary" th:attr="onclick=|sbmBtnClick('${feeLogEtcStat.index}')|">수정</button>
+                </td>
                 <td th:text="${#numbers.formatCurrency(feeLogEtc.price)}"></td>
             </tr>
             </form>
@@ -44,4 +50,17 @@
     <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->
 </body>
+<script>
+    function sbmBtnClick(idx) {
+
+        var idParam = document.getElementById('id' + idx).value;
+        var memoParam = document.getElementById('val' + idx).value;
+        alert(idParam);
+        alert(memoParam);
+        document.getElementsByName("id").value = idParam;
+        document.getElementsByName("memo").value = memoParam;
+        alert(document.getElementsByName("id").value);
+        alert(document.getElementsByName("memo").value);
+    }
+</script>
 </html>
