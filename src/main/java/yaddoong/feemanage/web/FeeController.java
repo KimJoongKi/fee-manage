@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping(value = "/fee")
@@ -43,7 +45,7 @@ public class FeeController {
 
     @PostMapping("/save")
     public String insertFeeLog(@RequestParam("file") MultipartFile file) throws IOException, ParseException {
-        feeService.save(file);
+        feeService.saveAll(file);
         return "redirect:/";
     }
 
@@ -118,6 +120,7 @@ public class FeeController {
         return "fee/userFeeList";
     }
 
+    @Transactional
     @GetMapping("/etcList")
     public String etcList(Model model) {
 
@@ -131,6 +134,18 @@ public class FeeController {
 
     @PostMapping("/feeLogEtcUpdate")
     public String feeLogEtcUpdate(FeeLogEtcUpdateForm form) {
+
+        Optional<FeeLogEtc> feeLogEtc = feeService.findFeeLogEtcById(form.getId());
+        feeLogEtc.get().updateMemo(form.getMemo());
+        feeService.feeLogEtcSave(feeLogEtc.get());
+
+        LocalDateTime date = feeLogEtc.get().getDate();
+        String contents = feeLogEtc.get().getContents();
+
+        Optional<FeeLog> feeLog = feeService.findFeeLog(contents, date);
+        feeLog.get().updateMemo(form.getMemo());
+        feeService.feeLogsave(feeLog.get());
+
         return "redirect:/fee/etcList";
     }
 }

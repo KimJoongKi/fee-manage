@@ -128,12 +128,6 @@ class FeeServiceTest {
 
         LocalDateTime startDate = LocalDate.parse(formStartDate, DateTimeFormatter.ISO_DATE).atTime(LocalTime.MIN);
         LocalDateTime endDate = LocalDate.parse(formEndDate, DateTimeFormatter.ISO_DATE).atTime(LocalTime.MAX);
-
-        // 실제 로직
-//        LocalDate startDate = LocalDate.now().minusMonths(1);
-//        LocalDate endDate = LocalDate.now();
-//        LocalDateTime startDateTime = LocalDate.now().minusMonths(1).atTime(LocalTime.MIN);
-//        LocalDateTime endDateTime = LocalDate.now().atTime(LocalTime.MAX);
         String contents = "%김중기%";
 
         List<FeeLog> all = feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(startDate, endDate, contents);

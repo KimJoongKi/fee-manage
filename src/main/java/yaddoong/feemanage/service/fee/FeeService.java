@@ -26,10 +26,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @PropertySource("classpath:application-param.properties")
 @Service
@@ -52,7 +49,7 @@ public class FeeService {
      * @param uploadFile
      */
     @Transactional
-    public void save(MultipartFile uploadFile) throws IOException, ParseException {
+    public void saveAll(MultipartFile uploadFile) throws IOException, ParseException {
 
         String filename = uploadFile.getOriginalFilename();
         // TODO: 2021/02/27 서버 반영시 삭제
@@ -231,7 +228,26 @@ public class FeeService {
         return feeLogRepository.findGroupByName();
     }
 
+    @Transactional
     public List<FeeLogEtc> findFeeLogEtcAll() {
         return feeLogEtcRepository.findAll();
+    }
+
+    public Optional<FeeLogEtc> findFeeLogEtcById(Long id) {
+        return feeLogEtcRepository.findById(id);
+    }
+
+    public Optional<FeeLog> findFeeLog(String contents, LocalDateTime date) {
+        return feeLogRepository.findFeeLogByContentsAndDate(contents, date);
+    }
+
+    @Transactional
+    public void feeLogsave(FeeLog feeLog) {
+        feeLogRepository.save(feeLog);
+    }
+
+    @Transactional
+    public void feeLogEtcSave(FeeLogEtc feeLogEtc) {
+        feeLogEtcRepository.save(feeLogEtc);
     }
 }
