@@ -2,17 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header" />
 <body>
+<form action="/fee/feeLogEtcUpdate" method="post" name="form">
+    <input type="hidden" name="id">
+    <input type="hidden" name="memo">
+</form>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
     <div>
         회비 구분 화면
     </div>
     <div>
-
         <table class="table table-striped">
-            <form action="/fee/feeLogEtcUpdate" method="post">
-                <input th:id="id" th:hidden="hidden" >
-                <input th:id="memo" th:hidden="hidden">
             <thead>
             <tr>
                 <th>입금일자</th>
@@ -31,19 +31,11 @@
                 <td th:text="${feeLogEtc.division}"></td>
                 <td>
                     <input th:id="'id'+${feeLogEtcStat.index}" th:hidden="hidden" th:value="${feeLogEtc.id}">
-                    <input th:id="'val'+${feeLogEtcStat.index}" th:type="text" th:value="${feeLogEtc.memo}">
+                    <input th:id="'memo'+${feeLogEtcStat.index}" th:type="text" th:value="${feeLogEtc.memo}">
                     <button class="btn btn-primary" th:attr="onclick=|sbmBtnClick('${feeLogEtcStat.index}')|">수정</button>
                 </td>
                 <td th:text="${#numbers.formatCurrency(feeLogEtc.price)}"></td>
             </tr>
-            </form>
-            <!--tr th:each="member : ${}">
-                <td th:text="${}"></td>
-                <td th:text="${}"></td>
-                <td th:text="${}"></td>
-                <td th:text="${}"></td>
-                <td th:text="${}"></td>
-            </tr -->
             </tbody>
         </table>
     </div>
@@ -52,15 +44,14 @@
 </body>
 <script>
     function sbmBtnClick(idx) {
-
-        var idParam = document.getElementById('id' + idx).value;
-        var memoParam = document.getElementById('val' + idx).value;
-        alert(idParam);
-        alert(memoParam);
-        document.getElementsByName("id").value = idParam;
-        document.getElementsByName("memo").value = memoParam;
-        alert(document.getElementsByName("id").value);
-        alert(document.getElementsByName("memo").value);
+        if(document.getElementById('memo' + idx).value==='') {
+            alert('수정할 값을 입력하세요.');
+            document.getElementById('memo' + idx).focus();
+            return;
+        }
+        document.form.id.value = document.getElementById('id' + idx).value;
+        document.form.memo.value = document.getElementById('memo' + idx).value;
+        document.form.submit();
     }
 </script>
 </html>

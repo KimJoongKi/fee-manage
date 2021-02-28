@@ -31,6 +31,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-devtools'
     implementation 'com.querydsl:querydsl-jpa'
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
