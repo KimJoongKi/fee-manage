@@ -38,4 +38,8 @@ public class FeeLog {
         this.afterBalance = afterBalance;
         this.memo = memo;
     }
+
+    public void updateMemo(String memo) {
+        this.memo = memo;
+    }
 }

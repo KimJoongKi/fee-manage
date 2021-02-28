@@ -14,7 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.domain.user.UserRepository;
+import yaddoong.feemanage.service.user.UserService;
 import yaddoong.feemanage.web.dto.FeeLogDto;
+import yaddoong.feemanage.web.form.FeeLogEtcUpdateForm;
 import yaddoong.feemanage.web.form.UserFeeForm;
 
 import javax.persistence.Id;
@@ -45,10 +47,12 @@ class FeeServiceTest {
     FeeFileLogRepository feeFileLogRepository;
     @Autowired
     FeeLogEtcRepository feeLogEtcRepository;
+    @Autowired
+    UserService userService;
 
     static String osName = System.getProperty("os.name").toUpperCase();
     static String testExcelFileName = "2019년12월11일.xlsx";
-    static String originalFilePath = "/Users/yaddoong/study/fee/test";
+    static String originalFilePath = System.getProperty("user.home") + "/study/fee/test";
     static String tmpPath = System.getProperty("user.dir") + "/tmp/";
     static String copyFilePath = "";
 
@@ -136,6 +140,40 @@ class FeeServiceTest {
         assertThat(all.get(0).getContents()).isEqualTo("김중기");
         assertThat(all.get(0).getDate()).isEqualTo("2018-12-24T08:09:56");
     }
+    
+    @Test
+    public void 회비비고수정() throws Exception {
+        디렉토리생성_파일이동및등록();
+        //given
+        FeeLogEtcUpdateForm form = new FeeLogEtcUpdateForm();
+        form.setId(1L);
+        form.setMemo("실수");
+
+        Long id = form.getId();
+        String memo = form.getMemo();
+        List<String> userNames = userService.findUserNames();
+        List<FeeLog> findEtcLogs = feeService.findFeeLogEtc(userNames);
+        List<FeeLogEtc> feeLogEtcs = feeService.putFeeLogEtc(findEtcLogs);
+        feeLogEtcRepository.saveAll(feeLogEtcs);
+
+        //when
+        Optional<FeeLogEtc> feeLogEtc = feeLogEtcRepository.findById(id);
+        LocalDateTime date = feeLogEtc.get().getDate();
+        String contents = feeLogEtc.get().getContents();
+        Optional<FeeLog> findFeeLog = feeLogRepository.findFeeLogByContentsAndDate(contents, date);
+        findFeeLog.get().updateMemo(memo);
+        FeeLog save = feeLogRepository.save(findFeeLog.get());
+
+        //then
+        assertThat(feeLogEtc.get().getId()).isEqualTo(1L);
+        assertThat(date).isEqualTo("2018-12-14T17:59:14");
+        assertThat(contents).isEqualTo("잔액이체");
+        assertThat(save.getMemo()).isEqualTo("실수");
+        assertThat(save.getDate()).isEqualTo(findFeeLog.get().getDate());
+        assertThat(save.getContents()).isEqualTo(findFeeLog.get().getContents());
+
+    }
+        
 
     @Test
     public void 회비목록조회테스트() throws Exception {

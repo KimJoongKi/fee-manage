@@ -19,4 +19,5 @@ public interface FeeLogRepository extends JpaRepository<FeeLog, Long>, FeeLogRep
             , nativeQuery = true)
     List<FeeLogProjection> findGroupByName();
 
+
 }

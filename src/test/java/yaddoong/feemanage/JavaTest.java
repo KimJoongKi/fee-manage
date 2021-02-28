@@ -24,6 +24,12 @@ public class JavaTest {
     }
 
     @Test
+    public void 맥경로() throws Exception {
+        System.out.println(System.getProperty("user.home"));
+    }
+
+
+    @Test
     public void LocalDateTime() throws Exception {
         LocalDateTime parse = LocalDateTime.parse("2019-01-14 23:59:59", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         System.out.println("parse = " + parse);
