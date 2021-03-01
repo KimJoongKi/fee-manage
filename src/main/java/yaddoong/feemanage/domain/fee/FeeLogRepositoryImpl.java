@@ -16,12 +16,14 @@ public class FeeLogRepositoryImpl implements FeeLogRepositoryCustom {
     }
 
     @Override
-    public List<FeeLog> findFeeLogEtc(List<String> contents) {
+    public List<FeeLog> findFeeLogEtc(List<String> usernames) {
         List<FeeLog> feeLogList = queryFactory
                 .select(feeLog)
                 .from(feeLog)
                 .where(
-                        feeLog.contents.notIn(contents).or(feeLog.contents.in(contents).and(feeLog.memo.ne("")))
+                        feeLog
+                                .contents
+                                .notIn(usernames).and(feeLog.memo.eq(""))
                 )
                 .fetch();
         return feeLogList;

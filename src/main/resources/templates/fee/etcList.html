@@ -9,9 +9,10 @@
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
     <div>
-        회비 구분 화면
+        회비 구분
     </div>
     <div>
+        <button class="btn btn-primary" th:attr="onclick=|apply()|">적용</button>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -51,6 +52,12 @@
         }
         document.form.id.value = document.getElementById('id' + idx).value;
         document.form.memo.value = document.getElementById('memo' + idx).value;
+        document.form.submit();
+    }
+
+    function apply() {
+        document.form.action = "/fee/feeLogEtcAllUpdate";
+        document.form.method = "get";
         document.form.submit();
     }
 </script>

@@ -130,6 +130,7 @@ public class FeeController {
         model.addAttribute("form", new FeeLogEtcUpdateForm());
 
         return "fee/etcList";
+
     }
 
     @PostMapping("/feeLogEtcUpdate")
@@ -137,15 +138,14 @@ public class FeeController {
 
         Optional<FeeLogEtc> feeLogEtc = feeService.findFeeLogEtcById(form.getId());
         feeLogEtc.get().updateMemo(form.getMemo());
-        feeService.feeLogEtcSave(feeLogEtc.get());
+        feeService.feeLogAndEtcSave(feeLogEtc.get());
 
-        LocalDateTime date = feeLogEtc.get().getDate();
-        String contents = feeLogEtc.get().getContents();
+        return "redirect:/fee/etcList";
+    }
 
-        Optional<FeeLog> feeLog = feeService.findFeeLog(contents, date);
-        feeLog.get().updateMemo(form.getMemo());
-        feeService.feeLogsave(feeLog.get());
-
+    @GetMapping("/feeLogEtcAllUpdate")
+    public String feeLogEtcAllUpdate() {
+        feeService.feeLogEtcAllUpdate();
         return "redirect:/fee/etcList";
     }
 }

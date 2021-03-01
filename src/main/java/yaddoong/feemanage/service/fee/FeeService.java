@@ -96,13 +96,18 @@ public class FeeService {
 
 
         uploadFileInsertDb(files);
+        feeLogEtcsSaveAll();
 
+    }
+
+    /**
+     * 기타내역 조회 및 입력
+     */
+    public void feeLogEtcsSaveAll() {
         List<String> userNames = userService.findUserNames();
         List<FeeLog> findEtcLogs = findFeeLogEtc(userNames);
         List<FeeLogEtc> feeLogEtcs = putFeeLogEtc(findEtcLogs);
-
         feeLogEtcRepository.saveAll(feeLogEtcs);
-
     }
 
     public List<FeeLogEtc> putFeeLogEtc(List<FeeLog> findEtcLogs) {
@@ -241,13 +246,27 @@ public class FeeService {
         return feeLogRepository.findFeeLogByContentsAndDate(contents, date);
     }
 
+    /**
+     * 기타내역 재적용
+     */
     @Transactional
-    public void feeLogsave(FeeLog feeLog) {
-        feeLogRepository.save(feeLog);
+    public void feeLogEtcAllUpdate() {
+        feeLogEtcRepository.deleteAll();
+        feeLogEtcsSaveAll();
     }
 
+    /**
+     * 회비, 기타 내역 수정
+     * @param feeLogEtc
+     */
     @Transactional
-    public void feeLogEtcSave(FeeLogEtc feeLogEtc) {
+    public void feeLogAndEtcSave(FeeLogEtc feeLogEtc) {
+        LocalDateTime date = feeLogEtc.getDate();
+        String contents = feeLogEtc.getContents();
         feeLogEtcRepository.save(feeLogEtc);
+
+        Optional<FeeLog> feeLog = findFeeLog(contents, date);
+        feeLog.get().updateMemo(feeLogEtc.getMemo());
+        feeLogRepository.save(feeLog.get());
     }
 }

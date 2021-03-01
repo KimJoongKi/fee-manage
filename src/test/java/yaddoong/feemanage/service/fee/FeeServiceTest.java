@@ -145,10 +145,7 @@ class FeeServiceTest {
 
         Long id = form.getId();
         String memo = form.getMemo();
-        List<String> userNames = userService.findUserNames();
-        List<FeeLog> findEtcLogs = feeService.findFeeLogEtc(userNames);
-        List<FeeLogEtc> feeLogEtcs = feeService.putFeeLogEtc(findEtcLogs);
-        feeLogEtcRepository.saveAll(feeLogEtcs);
+        feeService.feeLogEtcsSaveAll();
 
         //when
         Optional<FeeLogEtc> feeLogEtc = feeLogEtcRepository.findById(id);
@@ -165,8 +162,41 @@ class FeeServiceTest {
         assertThat(save.getMemo()).isEqualTo("실수");
         assertThat(save.getDate()).isEqualTo(findFeeLog.get().getDate());
         assertThat(save.getContents()).isEqualTo(findFeeLog.get().getContents());
+    }
+
+    @Test
+    public void 기타내역적용() throws Exception {
+
+        // 테스트 데이터 and 기타내역 입력
+        디렉토리생성_파일이동및등록();
+        feeService.feeLogEtcsSaveAll();
+
+        // 기타내역 수정 데이터 세팅
+        Long id = 1L;
+        String memo = "김중기얼짱";
+
+        // 기타내역 수정
+        Optional<FeeLogEtc> feeLogEtc = feeLogEtcRepository.findById(id);
+        feeLogEtc.get().updateMemo(memo);
+        feeService.feeLogAndEtcSave(feeLogEtc.get());
+
+        // 기타내역 모두 삭제
+        feeLogEtcRepository.deleteAll();
+
+        // 기타내역 삭제 테스트
+        List<FeeLogEtc> findFeeLogEtcs = feeLogEtcRepository.findAll();
+        int findFeeLogEtcsSize = findFeeLogEtcs.size();
+        assertThat(findFeeLogEtcsSize).isEqualTo(0);
+
+        // 기타내역 재 입력
+        feeService.feeLogEtcsSaveAll();
+
+        // 기타내역 재조회
+        Optional<FeeLogEtc> reFeeLogEtc = feeLogEtcRepository.findById(50L);
+        assertThat(reFeeLogEtc.get().getMemo()).isNotEqualTo("김중기얼짱");
 
     }
+
         
 
     @Test
