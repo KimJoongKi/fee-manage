@@ -1,11 +1,15 @@
 package yaddoong.feemanage;
 
+import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.Test;
 
+import javax.jdo.listener.LoadLifecycleListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -48,12 +52,42 @@ public class JavaTest {
 
         System.out.println("startDate = " + startDate.toString());
         System.out.println("endDate = " + endDate.toString());
-
-
-
         //when
 
         //then
     }
+    
+    @Test
+    public void 회비기준테스트() throws Exception {
+
+//        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.parse("2021-03-23");
+        LocalDate startDay = LocalDate.parse("2021-01-23");
+        int todayMonth = today.getMonthValue();
+        int startMonth = startDay.getMonthValue()+1;
+        int todayDay = today.getDayOfMonth();
+        int todayYear = today.getYear();
+        int startYear = startDay.getYear();
+
+        int cnt = todayDay >= 15 ? 1 : 0;
+        if (todayYear == startYear) {
+            cnt += todayMonth - startMonth;
+        }
+        System.out.println("cnt = " + cnt);
+
+
+        // (카운터 * 15000원) + 해당사용자 현재미납액 - 섬(해당사용자 입금금액) = 미납금액
+//        @Query(
+//                value = "SELECT * FROM Users u WHERE u.status = ?1",
+//                nativeQuery = true)
+
+
+
+        
+        //when
+        
+        //then
+    }
+        
 
 }
