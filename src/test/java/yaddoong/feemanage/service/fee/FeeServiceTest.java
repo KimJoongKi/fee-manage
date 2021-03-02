@@ -7,7 +7,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +36,7 @@ import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@PropertySource("classpath:application-testparam.properties")
 @SpringBootTest
 class FeeServiceTest {
 
@@ -49,6 +52,10 @@ class FeeServiceTest {
     FeeLogEtcRepository feeLogEtcRepository;
     @Autowired
     UserService userService;
+    @Value("${start.date}")
+    String startDateStr;
+    @Value("${fee.price}")
+    int feePrice;
 
     static String osName = System.getProperty("os.name").toUpperCase();
     static String testExcelFileName = "2019년12월11일.xlsx";
@@ -116,6 +123,25 @@ class FeeServiceTest {
 //
 //        파일(originalFilePath, copyFilePath);
 //    }
+
+    @Test
+    public void 회비계산() {
+        LocalDate today = LocalDate.now();
+        LocalDate startDay = LocalDate.parse(startDateStr);
+        System.out.println("startDateStr = " + startDateStr);
+        int todayMonth = today.getMonthValue();
+        int startMonth = startDay.getMonthValue()+1;
+        int todayDay = today.getDayOfMonth();
+        int todayYear = today.getYear();
+        int startYear = startDay.getYear();
+
+        int cnt = todayDay >= 15 ? 1 : 0;
+        if (todayYear == startYear) {
+            cnt += todayMonth - startMonth;
+        }
+        System.out.println("cnt = " + cnt);
+        System.out.println("cnt * price = " + cnt * feePrice);
+    }
 
     @Test
     public void 로그목록조회테스트() throws IOException, ParseException {

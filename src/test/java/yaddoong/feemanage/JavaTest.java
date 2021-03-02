@@ -2,6 +2,8 @@ package yaddoong.feemanage;
 
 import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 
 import javax.jdo.listener.LoadLifecycleListener;
 import java.time.LocalDate;
@@ -13,6 +15,7 @@ import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@PropertySource("classpath:application-testparam.properties")
 public class JavaTest {
 
     @Test
@@ -48,20 +51,18 @@ public class JavaTest {
 
         String format = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
         System.out.println("format = " + format);
-
-
         System.out.println("startDate = " + startDate.toString());
         System.out.println("endDate = " + endDate.toString());
         //when
 
         //then
     }
-    
+
     @Test
     public void 회비기준테스트() throws Exception {
 
-//        LocalDate today = LocalDate.now();
-        LocalDate today = LocalDate.parse("2021-03-23");
+        LocalDate today = LocalDate.now();
+//        LocalDate today = LocalDate.parse("2021-03-23");
         LocalDate startDay = LocalDate.parse("2021-01-23");
         int todayMonth = today.getMonthValue();
         int startMonth = startDay.getMonthValue()+1;
