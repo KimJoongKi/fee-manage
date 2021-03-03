@@ -230,7 +230,9 @@ public class FeeService {
     }
 
     public List<FeeLogProjection> findGroupByName() {
-        return feeLogRepository.findGroupByName();
+//        return feeLogRepository.findGroupByName();
+        return null;
+
     }
 
     @Transactional

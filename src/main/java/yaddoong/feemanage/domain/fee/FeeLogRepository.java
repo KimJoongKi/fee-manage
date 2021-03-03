@@ -14,10 +14,10 @@ public interface FeeLogRepository extends JpaRepository<FeeLog, Long>, FeeLogRep
 
     List<FeeLog> findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(LocalDateTime sDate, LocalDateTime eDate, String contents);
     Optional<FeeLog> findFeeLogByContentsAndDate(String contents, LocalDateTime date);
-    @Query(value = "select u.name, COALESCE(sum(f.price),0) AS price, u.unpaid from user as u left outer join fee_log as f on u.name = f.contents " +
+    @Query(value = "select u.name, COALESCE(sum(f.price),0) AS price, (u.unpaid + ?1) - COALESCE(sum(f.price),0) from user as u left outer join fee_log as f on u.name = f.contents " +
             "where u.secession_date is null and (f.memo = '' or f.memo is null) group by u.name order by u.name"
             , nativeQuery = true)
-    List<FeeLogProjection> findGroupByName();
+    List<FeeLogProjection> findGroupByName(int feePrice);
 
 
 }

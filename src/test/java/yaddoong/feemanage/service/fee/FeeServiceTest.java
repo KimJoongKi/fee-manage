@@ -125,10 +125,12 @@ class FeeServiceTest {
 //    }
 
     @Test
-    public void 회비계산() {
-        LocalDate today = LocalDate.now();
+    public void 회비계산() throws IOException, ParseException {
+        디렉토리생성_파일이동및등록();
+
+//        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.parse("2022-01-05");
         LocalDate startDay = LocalDate.parse(startDateStr);
-        System.out.println("startDateStr = " + startDateStr);
         int todayMonth = today.getMonthValue();
         int startMonth = startDay.getMonthValue()+1;
         int todayDay = today.getDayOfMonth();
@@ -136,11 +138,12 @@ class FeeServiceTest {
         int startYear = startDay.getYear();
 
         int cnt = todayDay >= 15 ? 1 : 0;
-        if (todayYear == startYear) {
-            cnt += todayMonth - startMonth;
-        }
-        System.out.println("cnt = " + cnt);
-        System.out.println("cnt * price = " + cnt * feePrice);
+        cnt += todayMonth - startMonth;
+        cnt += (todayYear - startYear) * 12;
+        int i = cnt * feePrice;
+
+        feeLogRepository.findGroupByName(i);
+
     }
 
     @Test
@@ -243,7 +246,8 @@ class FeeServiceTest {
         }
 
         //미납금 + (오늘 날짜 - 오늘 날짜가 15보다 적으면 저번 달 15일 or 이번달 15일)*
-        List<FeeLogProjection> list = feeLogRepository.findGroupByName();
+//        List<FeeLogProjection> list = feeLogRepository.findGroupByName();null
+        List<FeeLogProjection> list = null;
         List<UserFeeForm> feeFormList = new ArrayList<>();
         for (FeeLogProjection feeLogProjection : list) {
             UserFeeForm form = new UserFeeForm();
