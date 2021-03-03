@@ -89,6 +89,13 @@ public class JavaTest {
         
         //then
     }
+
+    @Test
+    public void 문자열자르기() {
+        String etc = "경기장,음료(110000,12450)";
+        System.out.println(etc.substring(etc.indexOf("(")));
+        System.out.println(etc.substring(0,etc.indexOf("(")));
+    }
         
 
 }
