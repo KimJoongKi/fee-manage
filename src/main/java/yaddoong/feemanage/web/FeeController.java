@@ -38,17 +38,35 @@ public class FeeController {
 
     private final FeeService feeService;
 
+    /**
+     * 파일업로드 화면
+     * @return
+     */
     @GetMapping(value = "/new")
     public String saveForm() {
         return "fee/saveForm";
     }
 
+    /**
+     * 입출금내역 저장
+     * @param file
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
     @PostMapping("/save")
     public String insertFeeLog(@RequestParam("file") MultipartFile file) throws IOException, ParseException {
         feeService.saveAll(file);
         return "redirect:/";
     }
 
+    /**
+     * 통장 입출금내역 조회
+     * @param model
+     * @return
+     * @throws IOException
+     * @throws ParseException
+     */
     @GetMapping("/list")
     public String listView(Model model) throws IOException, ParseException {
 
@@ -66,6 +84,12 @@ public class FeeController {
 
     }
 
+    /**
+     * 통장 입출금내역 조회
+     * @param form
+     * @param model
+     * @return
+     */
     @PostMapping("/list")
     public String searchList(FeeLogForm form, Model model) {
 
@@ -91,6 +115,11 @@ public class FeeController {
     }
 
 
+    /**
+     * 회비 미납내역 조회
+     * @param model
+     * @return
+     */
     @GetMapping(value = "/userFeeList")
     public String userFeeList(Model model) {
         Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "name"));
@@ -119,7 +148,11 @@ public class FeeController {
         return "fee/userFeeList";
     }
 
-    @Transactional
+    /**
+     * 기타내역 조회
+     * @param model
+     * @return
+     */
     @GetMapping("/etcList")
     public String etcList(Model model) {
 
@@ -132,6 +165,11 @@ public class FeeController {
 
     }
 
+    /**
+     * 기타내역 개별 변경
+     * @param form
+     * @return
+     */
     @PostMapping("/feeLogEtcUpdate")
     public String feeLogEtcUpdate(FeeLogEtcUpdateForm form) {
 
@@ -142,10 +180,19 @@ public class FeeController {
         return "redirect:/fee/etcList";
     }
 
+    /**
+     * 기타내역 변경내용 적용
+     * @return
+     */
     @GetMapping("/feeLogEtcAllUpdate")
     public String feeLogEtcAllUpdate() {
         feeService.feeLogEtcAllUpdate();
         return "redirect:/fee/etcList";
+    }
+
+    @GetMapping("/earningsAndExpenditure")
+    public String earningsAndExpenditure() {
+        return "fee/earningsAndExpenditureView";
     }
 }
 

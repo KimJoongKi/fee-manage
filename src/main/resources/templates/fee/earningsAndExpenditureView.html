@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container" style="max-width: 768px;">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div>
+        지출.수입 조회 화면
+    </div>
+    <div>
+        <button class="btn btn-primary" th:attr="onclick=|apply()|">새로고침</button>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>
