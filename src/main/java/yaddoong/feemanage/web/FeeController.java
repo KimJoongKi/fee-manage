@@ -105,7 +105,6 @@ public class FeeController {
                         .get(0)
                         .getName()
                         .replaceAll(".xlsx","") + " 까지 기준");
-        //미납금 + (오늘 날짜 - 오늘 날짜가 15보다 적으면 저번 달 15일 or 이번달 15일)*
         List<FeeLogProjection> list = feeService.findGroupByName();
         List<UserFeeForm> feeFormList = new ArrayList<>();
         for (FeeLogProjection feeLogProjection : list) {

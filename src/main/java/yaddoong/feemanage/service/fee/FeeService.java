@@ -5,6 +5,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +38,10 @@ public class FeeService {
     private final FeeLogRepository feeLogRepository;
     private final FeeFileLogRepository feeFileLogRepository;
     private final FeeLogEtcRepository feeLogEtcRepository;
+    @Value("${start.date}")
+    String startDateStr;
+    @Value("${fee.price}")
+    int feePrice;
 
     public List<FeeLog> findAll(LocalDateTime queryStartDate, LocalDateTime queryEndDate, String contents) {
         return feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(queryStartDate, queryEndDate, contents);
@@ -230,9 +235,28 @@ public class FeeService {
     }
 
     public List<FeeLogProjection> findGroupByName() {
-//        return feeLogRepository.findGroupByName();
-        return null;
+        int feePriceCalc = feePriceCalc();
+        return feeLogRepository.findGroupByName(feePriceCalc);
+    }
 
+    /**
+     * 오늘날짜 기준 입금할 회비
+     * @return
+     */
+    public int feePriceCalc() {
+        LocalDate today = LocalDate.now();
+        LocalDate startDay = LocalDate.parse(startDateStr);
+        int todayMonth = today.getMonthValue();
+        int startMonth = startDay.getMonthValue()+1;
+        int todayDay = today.getDayOfMonth();
+        int todayYear = today.getYear();
+        int startYear = startDay.getYear();
+
+        int cnt = (todayDay >= 15 ? 1 : 0)
+                + (todayMonth - startMonth)
+                + (todayYear - startYear) * 12;
+        
+        return cnt * feePrice;
     }
 
     @Transactional
