@@ -22,6 +22,7 @@ public class FeeCode extends BaseTimeEntity {
     @GeneratedValue
     private Long id;
     private String name;
+    private String gubun;
 
     @OneToMany(mappedBy = "code")
     private List<FeeDetailGubun> details = new ArrayList<>();

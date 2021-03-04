@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.domain.user.UserRepository;
 import yaddoong.feemanage.service.user.UserService;
@@ -454,6 +455,7 @@ class FeeServiceTest {
     }
     
     @Test
+    @Transactional
     public void 연관관계_테스트() throws Exception {
         FeeCode code = new FeeCode("졸려");
         feeCodeRepository.save(code);
@@ -467,9 +469,15 @@ class FeeServiceTest {
                 "경기장",
                 code);
         feeDetailGubunRepository.save(detailGubun);
-        feeDetailGubunRepository.findAll();
-
     }
+    
+    @Test
+    public void 연관관계2() throws Exception {
+        연관관계_테스트();
+        List<FeeDetailGubun> feeDetailGubuns = feeDetailGubunRepository.findAll();
+        System.out.println("영속성 컨텍스트" + feeDetailGubuns.get(0).getCode().getName());
+    }
+        
         
 
 }
