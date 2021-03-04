@@ -56,6 +56,10 @@ class FeeServiceTest {
     String startDateStr;
     @Value("${fee.price}")
     int feePrice;
+    @Autowired
+    FeeCodeRepository feeCodeRepository;
+    @Autowired
+    FeeDetailGubunRepository feeDetailGubunRepository;
 
     static String osName = System.getProperty("os.name").toUpperCase();
     static String testExcelFileName = "2019년12월11일.xlsx";
@@ -448,5 +452,24 @@ class FeeServiceTest {
         }
         return feeLogDto;
     }
+    
+    @Test
+    public void 연관관계_테스트() throws Exception {
+        FeeCode code = new FeeCode("졸려");
+        feeCodeRepository.save(code);
+
+        FeeDetailGubun detailGubun = new FeeDetailGubun(
+                LocalDateTime.now(),
+                "홍길동",
+                "출금",
+                11000,
+                1110000,
+                "경기장",
+                code);
+        feeDetailGubunRepository.save(detailGubun);
+        feeDetailGubunRepository.findAll();
+
+    }
+        
 
 }
