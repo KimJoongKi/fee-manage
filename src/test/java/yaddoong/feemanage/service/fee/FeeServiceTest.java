@@ -453,29 +453,45 @@ class FeeServiceTest {
         }
         return feeLogDto;
     }
-    
-    @Test
-    @Transactional
-    public void 연관관계_테스트() throws Exception {
-        FeeCode code = new FeeCode("졸려");
-        feeCodeRepository.save(code);
 
-        FeeDetailGubun detailGubun = new FeeDetailGubun(
-                LocalDateTime.now(),
-                "홍길동",
-                "출금",
-                11000,
-                1110000,
-                "경기장",
-                code);
-        feeDetailGubunRepository.save(detailGubun);
-    }
-    
     @Test
-    public void 연관관계2() throws Exception {
-        연관관계_테스트();
-        List<FeeDetailGubun> feeDetailGubuns = feeDetailGubunRepository.findAll();
-        System.out.println("영속성 컨텍스트" + feeDetailGubuns.get(0).getCode().getName());
+    public void 이력없는내역조회() throws IOException, ParseException {
+        디렉토리생성_파일이동및등록();
+
+        // 메모가 있는 항목 조회
+        List<FeeLog> feeLogs = feeLogRepository.findAllByMemoNot("");
+        feeLogs.forEach(log -> {
+            Optional<FeeCode> code = feeCodeRepository.findAllByName(log.getMemo());
+            FeeCode findFeeCode = null;
+
+            if (code.isPresent()) {
+                findFeeCode = code.get();
+            }
+
+            FeeDetailGubun detailGubun = FeeDetailGubun.builder()
+                    .date(log.getDate())
+                    .contents(log.getContents())
+                    .division(log.getDivision())
+                    .price(log.getPrice())
+                    .afterBalance(log.getAfterBalance())
+                    .memo(log.getMemo())
+                    .code(findFeeCode)
+                    .build();
+
+            feeDetailGubunRepository.save(detailGubun);
+        });
+
+
+    }
+
+    @Test
+    public void 코드입력() throws IOException, ParseException {
+
+//        디렉토리생성_파일이동및등록();
+        FeeCode code = new FeeCode("경기장", "출금");
+        FeeCode code1 = new FeeCode("음료", "출금");
+        feeCodeRepository.save(code);
+        feeCodeRepository.save(code1);
     }
         
         

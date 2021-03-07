@@ -27,7 +27,8 @@ public class FeeCode extends BaseTimeEntity {
     @OneToMany(mappedBy = "code")
     private List<FeeDetailGubun> details = new ArrayList<>();
 
-    public FeeCode(String name) {
+    public FeeCode(String name, String gubun) {
         this.name = name;
+        this.gubun = gubun;
     }
 }

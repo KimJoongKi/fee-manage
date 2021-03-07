@@ -1,6 +1,7 @@
 package yaddoong.feemanage.domain.fee;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -31,6 +32,7 @@ public class FeeDetailGubun {
         this(date, contents, division, price, afterBalance, memo, null);
     }
 
+    @Builder
     public FeeDetailGubun(LocalDateTime date, String contents, String division, int price, int afterBalance, String memo, FeeCode code) {
         this.date = date;
         this.contents = contents;
@@ -40,5 +42,7 @@ public class FeeDetailGubun {
         this.memo = memo;
         this.code = code;
     }
+
+
 }
 
