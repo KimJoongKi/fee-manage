@@ -43,6 +43,5 @@ public class FeeDetailGubun {
         this.code = code;
     }
 
-
 }
 

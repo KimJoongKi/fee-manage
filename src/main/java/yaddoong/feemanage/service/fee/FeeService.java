@@ -38,6 +38,8 @@ public class FeeService {
     private final FeeLogRepository feeLogRepository;
     private final FeeFileLogRepository feeFileLogRepository;
     private final FeeLogEtcRepository feeLogEtcRepository;
+    private final FeeCodeRepository feeCodeRepository;
+    private final FeeDetailGubunRepository feeDetailGubunRepository;
     @Value("${start.date}")
     String startDateStr;
     @Value("${fee.price}")
@@ -294,5 +296,35 @@ public class FeeService {
         Optional<FeeLog> feeLog = findFeeLog(contents, date);
         feeLog.get().updateMemo(feeLogEtc.getMemo());
         feeLogRepository.save(feeLog.get());
+    }
+
+    /**
+     * 로그 새로고침
+     */
+    @Transactional
+    public void feeLogRefresh() {
+
+        List<FeeLog> feeLogs = feeLogRepository.findAllByMemoNot("");
+        feeLogs.forEach(log -> {
+            Optional<FeeCode> code = feeCodeRepository.findAllByName(log.getMemo());
+            FeeCode findFeeCode = null;
+
+            if (code.isPresent())
+                findFeeCode = code.get();
+
+            FeeDetailGubun feeDetailGubun = FeeDetailGubun.builder()
+                    .date(log.getDate())
+                    .contents(log.getContents())
+                    .division(log.getDivision())
+                    .price(log.getPrice())
+                    .afterBalance(log.getAfterBalance())
+                    .memo(log.getMemo())
+                    .code(findFeeCode)
+                    .build();
+
+            feeDetailGubunRepository.save(feeDetailGubun);
+
+        });
+
     }
 }

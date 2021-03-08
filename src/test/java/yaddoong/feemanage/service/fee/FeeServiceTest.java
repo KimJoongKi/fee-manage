@@ -455,7 +455,7 @@ class FeeServiceTest {
     }
 
     @Test
-    public void 이력없는내역조회() throws IOException, ParseException {
+    public void 새로고침기능() throws IOException, ParseException {
         디렉토리생성_파일이동및등록();
 
         // 메모가 있는 항목 조회
@@ -481,8 +481,19 @@ class FeeServiceTest {
             feeDetailGubunRepository.save(detailGubun);
         });
 
+        List<FeeDetailGubun> feeDetailGubuns = feeDetailGubunRepository.findAll();
+        assertThat(feeDetailGubuns.size()).isEqualTo(18);
 
     }
+
+    @Test
+    public void 메모없는이력조회() throws Exception {
+
+        List<FeeLog> feeLogs = feeLogRepository.findAllByMemoNot("");
+
+
+    }
+
 
     @Test
     public void 코드입력() throws IOException, ParseException {

@@ -190,9 +190,22 @@ public class FeeController {
         return "redirect:/fee/etcList";
     }
 
+    /**
+     * 입출금 통계 조회 화면
+     * @return
+     */
     @GetMapping("/earningsAndExpenditure")
     public String earningsAndExpenditure() {
         return "fee/earningsAndExpenditureView";
+    }
+
+    /**
+     * 입출금 내역 새로고침
+     */
+    @GetMapping("/feeLogRefresh")
+    public String logRefresh() {
+        feeService.feeLogRefresh();
+        return "redirect:/fee/earningsAndExpenditure";
     }
 }
 

@@ -8,9 +8,8 @@
         지출.수입 조회 화면
     </div>
     <div>
-        <button class="btn btn-primary" th:attr="onclick=|apply()|">새로고침</button>
-        <button class="btn btn-primary" th:attr="onclick=|apply()|">코드관리</button>
-
+        <a class="btn btn-lg btn-dark" href="/fee/feeLogRefresh">새로고침</a>
+        <a class="btn btn-lg btn-dark" href="">코드관리</a>
     </div>
     <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->
