@@ -88,6 +88,52 @@ class FeeServiceTest {
     }
 
     @Test
+    public void 디렉토리생성_파일이동및등록() throws IOException, ParseException {
+
+        디렉토리확인및생성();
+
+        boolean exists = new File(tmpPath).exists();
+        // 디렉토리가 생성 됐는지
+        assertThat(exists).isTrue();
+
+        테스트엑셀파일복사(originalFilePath, copyFilePath);
+
+        // 복사한 경로에 파일 확인
+        File dir = new File(tmpPath);
+        File[] files = dir.listFiles();
+        assertThat(files.length).isEqualTo(1);
+
+        for (File file : files) {
+            XSSFSheet sheet = 엑셀시트읽기(file);
+            List<FeeLog> list = new ArrayList<>();
+            list = excelToDto(sheet, list);
+            feeLogRepository.saveAll(list);
+            String fileName = file.getName();
+            feeFileLogRepository.save(FeeFileLog
+                    .builder()
+                    .name(fileName)
+                    .build());
+        }
+
+        // 등록은 잘 됐을까요
+        List<FeeLog> all = feeLogRepository.findAll();
+        String contents = all.get(all.size() - 1)
+                .getContents();
+        LocalDateTime date = all.get(all.size() - 1)
+                .getDate();
+
+        assertThat(contents).isEqualTo("박지홍");
+        assertThat(date.toString()).isEqualTo("2019-12-09T20:52:02");
+
+        Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "name"));
+        Page<FeeFileLog> feeFileLogs = feeFileLogRepository.findAll(pageable);
+        String name = feeFileLogs.getContent().get(0).getName();
+        assertThat(name).isEqualTo(testExcelFileName);
+
+    }
+
+    @Transactional
+    @Test
     public void 씨알유디() throws ParseException {
 
         LocalDateTime date = LocalDateTime.now();
@@ -116,19 +162,7 @@ class FeeServiceTest {
 
     }
 
-    @Test
-    public void 서비스호출() {
-    }
-
-//    @Test
-//    public void 파일_옮기기() {
-//        String originalFilePath = "C:\\tmp\\test\\2021년1월23일.xlsx";
-//        String tmpPath = System.getProperty("user.dir") + "\\tmp";
-//        String copyFilePath = tmpPath + "\\2021년1월23일.xlsx";
-//
-//        파일(originalFilePath, copyFilePath);
-//    }
-
+    @Transactional
     @Test
     public void 회비계산() throws IOException, ParseException {
         디렉토리생성_파일이동및등록();
@@ -151,6 +185,7 @@ class FeeServiceTest {
 
     }
 
+    @Transactional
     @Test
     public void 로그목록조회테스트() throws IOException, ParseException {
 
@@ -168,7 +203,8 @@ class FeeServiceTest {
         assertThat(all.get(0).getContents()).isEqualTo("김중기");
         assertThat(all.get(0).getDate()).isEqualTo("2018-12-24T08:09:56");
     }
-    
+
+    @Transactional
     @Test
     public void 회비비고수정() throws Exception {
         디렉토리생성_파일이동및등록();
@@ -198,6 +234,7 @@ class FeeServiceTest {
         assertThat(save.getContents()).isEqualTo(findFeeLog.get().getContents());
     }
 
+    @Transactional
     @Test
     public void 기타내역적용() throws Exception {
 
@@ -231,8 +268,7 @@ class FeeServiceTest {
 
     }
 
-        
-
+    @Transactional
     @Test
     public void 회비목록조회테스트() throws Exception {
 
@@ -268,7 +304,8 @@ class FeeServiceTest {
         assertThat(feeFormList.get(feeFormList.size() - 1).getName()).isEqualTo("한성용");
         assertThat(feeFormList.get(feeFormList.size() - 1).getUnpaid()).isEqualTo(75000);
     }
-    
+
+    @Transactional
     @Test
     public void 유저가아닌데이터인서트() throws Exception {
 
@@ -302,54 +339,6 @@ class FeeServiceTest {
         assertThat(findEtcList.get(0).getContents()).isEqualTo("잔액이체");
         assertThat(findEtcList.get(findEtcList.size()-1).getPrice()).isEqualTo(-79000);
         assertThat(findEtcList.get(findEtcList.size()-1).getContents()).isEqualTo("박지홍");
-
-    }
-
-
-    @Test
-    public void 디렉토리생성_파일이동및등록() throws IOException, ParseException {
-
-        디렉토리확인및생성();
-
-        System.out.println("FeeServiceTest.디렉토리생성_파일이동및등록");
-
-        boolean exists = new File(tmpPath).exists();
-        // 디렉토리가 생성 됐는지
-        assertThat(exists).isTrue();
-
-        테스트엑셀파일복사(originalFilePath, copyFilePath);
-
-        // 복사한 경로에 파일 확인
-        File dir = new File(tmpPath);
-        File[] files = dir.listFiles();
-        assertThat(files.length).isEqualTo(1);
-
-        for (File file : files) {
-            XSSFSheet sheet = 엑셀시트읽기(file);
-            List<FeeLog> list = new ArrayList<>();
-            list = excelToDto(sheet, list);
-            feeLogRepository.saveAll(list);
-            String fileName = file.getName();
-            feeFileLogRepository.save(FeeFileLog
-                    .builder()
-                    .name(fileName)
-                    .build());
-        }
-
-        // 등록은 잘 됐을까요
-        List<FeeLog> all = feeLogRepository.findAll();
-        String contents = all.get(all.size() - 1)
-                .getContents();
-        LocalDateTime date = all.get(all.size() - 1)
-                .getDate();
-
-        assertThat(contents).isEqualTo("박지홍");
-        assertThat(date.toString()).isEqualTo("2019-12-09T20:52:02");
-
-
-        Optional<FeeFileLog> findFileLog = feeFileLogRepository.findById(1L);
-        String name = findFileLog.get().getName();
-        assertThat(name).isEqualTo(testExcelFileName);
 
     }
 
@@ -454,6 +443,7 @@ class FeeServiceTest {
         return feeLogDto;
     }
 
+    @Transactional
     @Test
     public void 새로고침기능() throws IOException, ParseException {
         디렉토리생성_파일이동및등록();
@@ -486,15 +476,19 @@ class FeeServiceTest {
 
     }
 
+    @Transactional
     @Test
     public void 메모없는이력조회() throws Exception {
 
+        디렉토리생성_파일이동및등록();
+
         List<FeeLog> feeLogs = feeLogRepository.findAllByMemoNot("");
 
+        assertThat(feeLogs.get(0).getMemo()).isNotEqualTo("");
 
     }
 
-
+    @Transactional
     @Test
     public void 코드입력() throws IOException, ParseException {
 
