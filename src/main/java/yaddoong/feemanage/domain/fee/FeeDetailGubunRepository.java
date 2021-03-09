@@ -13,4 +13,6 @@ public interface FeeDetailGubunRepository extends JpaRepository<FeeDetailGubun, 
     @EntityGraph(attributePaths = "code")
     List<FeeDetailGubun> findAll();
 
+    List<FeeDetailGubun> findAllByCodeIsNull();
+
 }

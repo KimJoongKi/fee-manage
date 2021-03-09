@@ -1,6 +1,7 @@
 package yaddoong.feemanage.domain.fee;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yaddoong.feemanage.domain.base.BaseTimeEntity;
@@ -27,6 +28,7 @@ public class FeeCode extends BaseTimeEntity {
     @OneToMany(mappedBy = "code")
     private List<FeeDetailGubun> details = new ArrayList<>();
 
+    @Builder
     public FeeCode(String name, String gubun) {
         this.name = name;
         this.gubun = gubun;
