@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<form action="/fee/feeLogEtcUpdate" method="post" name="form">
+    <input type="hidden" name="id">
+    <input type="hidden" name="memo">
+</form>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader" />
+    <div>
+        회비 구분
+    </div>
+    <div>
+        <button class="btn btn-primary" th:attr="onclick=|apply()|">적용</button>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>입금일자</th>
+                <th>내용</th>
+                <th>잔액</th>
+                <th>구분</th>
+                <th>비고</th>
+                <th>금액</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>몇월몇일</td>
+                <td>몇월몇일</td>
+                <td>몇월몇일</td>
+                <td>몇월몇일</td>
+                <td>몇월몇일</td>
+                <td>몇월몇일</td>
+            </tr>
+<!--            <tr th:each="feeLogEtc: ${feeLogEtcs}">-->
+<!--                <td th:text="${#temporals.format(feeLogEtc.date, 'yyyy년MM월dd일 HH시mm분ss초')}"></td>-->
+<!--                <td th:text="${feeLogEtc.contents}"></td>-->
+<!--                <td th:text="${#numbers.formatCurrency(feeLogEtc.afterBalance)}"></td>-->
+<!--                <td th:text="${feeLogEtc.division}"></td>-->
+<!--                <td>-->
+<!--                    <input th:id="'id'+${feeLogEtcStat.index}" th:hidden="hidden" th:value="${feeLogEtc.id}">-->
+<!--                    <input th:id="'memo'+${feeLogEtcStat.index}" th:type="text" th:value="${feeLogEtc.memo}">-->
+<!--                    <button class="btn btn-primary" th:attr="onclick=|sbmBtnClick('${feeLogEtcStat.index}')|">수정</button>-->
+<!--                </td>-->
+<!--                <td th:text="${#numbers.formatCurrency(feeLogEtc.price)}"></td>-->
+<!--            </tr>-->
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+<script>
+</script>
+</html>

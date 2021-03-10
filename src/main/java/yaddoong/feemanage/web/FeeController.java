@@ -207,5 +207,10 @@ public class FeeController {
         feeService.feeLogRefresh();
         return "redirect:/fee/earningsAndExpenditure";
     }
+
+    @GetMapping("/fee/feeCode")
+    public String selectFeeCode() {
+        return "fee/feeCodeList";
+    }
 }
 
