@@ -327,4 +327,12 @@ public class FeeService {
         });
 
     }
+
+    public List<FeeDetailGubun> feeCodeView() {
+
+        List<FeeDetailGubun> feeDetailGubuns = feeDetailGubunRepository.findAllByCodeIsNull();
+
+        return feeDetailGubuns;
+
+    }
 }

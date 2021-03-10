@@ -383,7 +383,7 @@ class FeeServiceTest {
                     .memo(log.getMemo())
                     .code(findFeeCode)
                     .build();
-
+            
             feeDetailGubunRepository.save(detailGubun);
         });
 

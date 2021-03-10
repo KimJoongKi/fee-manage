@@ -208,9 +208,13 @@ public class FeeController {
         return "redirect:/fee/earningsAndExpenditure";
     }
 
-    @GetMapping("/fee/feeCode")
-    public String selectFeeCode() {
+    @GetMapping("/feeCode")
+    public String feeCodeView(Model model) {
+        List<FeeDetailGubun> feeDetailGubuns = feeService.feeCodeView();
+        model.addAttribute("detailList", feeDetailGubuns);
         return "fee/feeCodeList";
     }
+
+
 }
 

@@ -10,6 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import yaddoong.feemanage.web.FeeController;
 
+import javax.persistence.Id;
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDateTime;

@@ -2,9 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header" />
 <body>
-<form action="/fee/feeLogEtcUpdate" method="post" name="form">
-    <input type="hidden" name="id">
-    <input type="hidden" name="memo">
+<form action="/fee/feeCodeInsert" method="post" name="form">
+    <input type="hidden" name="name">
+    <input type="hidden" name="gubun">
 </form>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
@@ -12,7 +12,7 @@
         회비 구분
     </div>
     <div>
-        <button class="btn btn-primary" th:attr="onclick=|apply()|">적용</button>
+        <button class="btn btn-primary" th:attr="onclick=|apply()|">모두적용</button>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -22,29 +22,24 @@
                 <th>구분</th>
                 <th>비고</th>
                 <th>금액</th>
+                <th>코드</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>몇월몇일</td>
-                <td>몇월몇일</td>
-                <td>몇월몇일</td>
-                <td>몇월몇일</td>
-                <td>몇월몇일</td>
-                <td>몇월몇일</td>
+            <tr th:each="detail: ${detailList}">
+                <td th:text="${#temporals.format(detail.date, 'yyyy년MM월dd일 HH시mm분ss초')}" th:name="'date'+${detailStat.index}"></td>
+                <td th:text="${detail.contents}" th:name="'contents'+${detailStat.index}"></td>
+                <td th:text="${#numbers.formatCurrency(detail.afterBalance)}" th:name="'afterBalance'+${detailStat.index}"></td>
+                <td th:text="${detail.division}" th:name="'division'+${detailStat.index}"></td>
+                <td th:text="${detail.memo}" th:name="'memo'+${detailStat.index}"></td>
+                <td th:text="${#numbers.formatCurrency(detail.price)}" th:name="'price'+${detailStat.index}"></td>
+                <td><input type="text">
+                    <select th:name="code">
+                        <option value="선택">선택</option>
+                    </select>
+                    <a class="btn btn-lg btn-info" th:onclick="|javascript:test('${detailStat.index}')|">적용</a>
+                </td>
             </tr>
-<!--            <tr th:each="feeLogEtc: ${feeLogEtcs}">-->
-<!--                <td th:text="${#temporals.format(feeLogEtc.date, 'yyyy년MM월dd일 HH시mm분ss초')}"></td>-->
-<!--                <td th:text="${feeLogEtc.contents}"></td>-->
-<!--                <td th:text="${#numbers.formatCurrency(feeLogEtc.afterBalance)}"></td>-->
-<!--                <td th:text="${feeLogEtc.division}"></td>-->
-<!--                <td>-->
-<!--                    <input th:id="'id'+${feeLogEtcStat.index}" th:hidden="hidden" th:value="${feeLogEtc.id}">-->
-<!--                    <input th:id="'memo'+${feeLogEtcStat.index}" th:type="text" th:value="${feeLogEtc.memo}">-->
-<!--                    <button class="btn btn-primary" th:attr="onclick=|sbmBtnClick('${feeLogEtcStat.index}')|">수정</button>-->
-<!--                </td>-->
-<!--                <td th:text="${#numbers.formatCurrency(feeLogEtc.price)}"></td>-->
-<!--            </tr>-->
             </tbody>
         </table>
     </div>
@@ -52,5 +47,9 @@
 </div> <!-- /container -->
 </body>
 <script>
+    function test(idx) {
+        let innerText = document.getElementsByName("division" + idx)[0].innerText;
+        alert(innerText);
+    }
 </script>
 </html>
