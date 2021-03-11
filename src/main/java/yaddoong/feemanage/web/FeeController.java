@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.service.fee.FeeService;
+import yaddoong.feemanage.web.form.FeeCodeUpdateForm;
 import yaddoong.feemanage.web.form.FeeLogEtcUpdateForm;
 import yaddoong.feemanage.web.form.FeeLogForm;
 import yaddoong.feemanage.web.form.UserFeeForm;
@@ -37,6 +38,7 @@ import java.util.Optional;
 public class FeeController {
 
     private final FeeService feeService;
+    private final FeeCodeRepository feeCodeRepository;
 
     /**
      * 파일업로드 화면
@@ -211,8 +213,20 @@ public class FeeController {
     @GetMapping("/feeCode")
     public String feeCodeView(Model model) {
         List<FeeDetailGubun> feeDetailGubuns = feeService.feeCodeView();
+        List<FeeCode> codeList = feeCodeRepository.findAll();
         model.addAttribute("detailList", feeDetailGubuns);
+        model.addAttribute("codeList", codeList);
         return "fee/feeCodeList";
+    }
+
+    @PostMapping("/feeCodeInsert")
+    public String feeCodeInsert(FeeCodeUpdateForm form) {
+        FeeCode feeCode = FeeCode.builder()
+                .name(form.getName())
+                .gubun(form.getGubun())
+                .build();
+        feeCodeRepository.save(feeCode);
+        return "redirect:/fee/feeCode";
     }
 
 

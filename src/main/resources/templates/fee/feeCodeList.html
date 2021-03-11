@@ -33,12 +33,35 @@
                 <td th:text="${detail.division}" th:name="'division'+${detailStat.index}"></td>
                 <td th:text="${detail.memo}" th:name="'memo'+${detailStat.index}"></td>
                 <td th:text="${#numbers.formatCurrency(detail.price)}" th:name="'price'+${detailStat.index}"></td>
-                <td><input type="text">
+                <td><input type="text" th:name="'text'+${detailStat.index}">
                     <select th:name="code">
                         <option value="선택">선택</option>
                     </select>
                     <a class="btn btn-lg btn-info" th:onclick="|javascript:test('${detailStat.index}')|">적용</a>
                 </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        코드관리
+    </div>
+    <div>
+        <button class="btn btn-primary" th:attr="onclick=|apply()|">모두적용</button>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>순번</th>
+                <th>구분</th>
+                <th>이름</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="code: ${codeList}">
+                <td th:text="${codeStat.index}" ></td>
+                <td th:text="${code.gubun}"></td>
+                <td th:text="${code.name}"></td>
             </tr>
             </tbody>
         </table>
@@ -49,7 +72,11 @@
 <script>
     function test(idx) {
         let innerText = document.getElementsByName("division" + idx)[0].innerText;
-        alert(innerText);
+        let text = document.getElementsByName("text" + idx)[0].value;
+        alert(innerText + "," + text)
+        document.form.gubun.value = innerText;
+        document.form.name.value = text;
+        document.form.submit();
     }
 </script>
 </html>
