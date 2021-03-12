@@ -113,4 +113,23 @@ class FeeLogRepositoryTest {
         assertThat(feeDetailGubuns.get(0).getContents()).isEqualTo("박룡철");
 
     }
+    
+    @Test
+    public void 코드카운트조회() throws Exception {
+
+        FeeCode feeCode = FeeCode.builder()
+                .gubun("입금")
+                .name("경기장")
+                .build();
+
+        //given
+        feeCodeRepository.save(feeCode);
+        int count = feeCodeRepository.findCountAllByNameAAndGubun("경기장", "입금");
+
+        //when
+        
+        //then
+        System.out.println("count = " + count);
+    }
+        
 }

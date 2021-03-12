@@ -73,7 +73,6 @@
     function test(idx) {
         let innerText = document.getElementsByName("division" + idx)[0].innerText;
         let text = document.getElementsByName("text" + idx)[0].value;
-        alert(innerText + "," + text)
         document.form.gubun.value = innerText;
         document.form.name.value = text;
         document.form.submit();
