@@ -221,11 +221,30 @@ public class FeeController {
 
     @PostMapping("/feeCodeInsert")
     public String feeCodeInsert(FeeCodeUpdateForm form) {
-        FeeCode feeCode = FeeCode.builder()
+
+        FeeCode feeCode = null;
+
+        System.out.println("form = " + form.getCodeId());
+        if (form.getCodeId() != null) {
+            feeCode = feeCodeRepository.findById(form
+                    .getCodeId())
+                    .get();
+
+            feeService.saveCode(feeCode, form.getId());
+
+            return "redirect:/fee/feeCode";
+        }
+
+
+
+        feeCode = FeeCode.builder()
                 .name(form.getName())
                 .gubun(form.getGubun())
                 .build();
-        feeCodeRepository.save(feeCode);
+
+        feeCode.updateCode(form.getName(), form.getGubun());
+        feeService.saveCode(feeCode, form.getId());
+
         return "redirect:/fee/feeCode";
     }
 

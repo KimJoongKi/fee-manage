@@ -33,4 +33,9 @@ public class FeeCode extends BaseTimeEntity {
         this.name = name;
         this.gubun = gubun;
     }
+
+    public void updateCode(String name, String gubun) {
+        this.name = name;
+        this.gubun = gubun;
+    }
 }

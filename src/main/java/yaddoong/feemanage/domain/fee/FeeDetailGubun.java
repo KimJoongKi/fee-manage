@@ -43,5 +43,9 @@ public class FeeDetailGubun {
         this.code = code;
     }
 
+    public void addCode(FeeCode code) {
+        this.code = code;
+    }
+
 }
 

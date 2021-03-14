@@ -336,5 +336,16 @@ public class FeeService {
 
     }
 
+    @Transactional
+    public void saveCode(FeeCode feeCode, Long id) {
+        int cnt = feeCodeRepository.findCountAllByNameAAndGubun(feeCode.getName(), feeCode.getGubun());
+        if (cnt == 0) {
+            feeCodeRepository.save(feeCode);
+        }
+        Optional<FeeDetailGubun> feeDetailGubun = feeDetailGubunRepository.findById(id);
+        feeDetailGubun.get().addCode(feeCode);
+        feeDetailGubunRepository.save(feeDetailGubun.get());
+
+    }
 
 }

@@ -3,6 +3,8 @@
 <head th:replace="fragments/header :: header" />
 <body>
 <form action="/fee/feeCodeInsert" method="post" name="form">
+    <input type="hidden" name="id">
+    <input type="hidden" name="codeId">
     <input type="hidden" name="name">
     <input type="hidden" name="gubun">
 </form>
@@ -33,11 +35,16 @@
                 <td th:text="${detail.division}" th:name="'division'+${detailStat.index}"></td>
                 <td th:text="${detail.memo}" th:name="'memo'+${detailStat.index}"></td>
                 <td th:text="${#numbers.formatCurrency(detail.price)}" th:name="'price'+${detailStat.index}"></td>
-                <td><input type="text" th:name="'text'+${detailStat.index}">
-                    <select th:name="code">
-                        <option value="선택">선택</option>
+                <td><input type="text" th:name="'codeText'+${detailStat.index}" th:value="${detail.code}">
+                    <input type="hidden" th:value="${detail.id}" th:name="'id'+${detailStat.index}">
+                    <select class="select_type01 w170" th:name="'code'+${detailStat.index}"
+                            th:onchange="|javascript:cleanText('${detailStat.index}')|">
+                        <option value="선택"> 선택 </option>
+                        <option th:each="code : ${codeList}"
+                                th:value="${code?.id}"
+                                th:utext="${code?.name + '(' + code?.gubun + ')'}"></option>
                     </select>
-                    <a class="btn btn-lg btn-info" th:onclick="|javascript:test('${detailStat.index}')|">적용</a>
+                    <a class="btn btn-lg btn-info" th:onclick="|javascript:update('${detailStat.index}')|">적용</a>
                 </td>
             </tr>
             </tbody>
@@ -59,7 +66,7 @@
             </thead>
             <tbody>
             <tr th:each="code: ${codeList}">
-                <td th:text="${codeStat.index}" ></td>
+                <td th:text="${codeStat.index}+1" ></td>
                 <td th:text="${code.gubun}"></td>
                 <td th:text="${code.name}"></td>
             </tr>
@@ -70,12 +77,32 @@
 </div> <!-- /container -->
 </body>
 <script>
-    function test(idx) {
-        let innerText = document.getElementsByName("division" + idx)[0].innerText;
-        let text = document.getElementsByName("text" + idx)[0].value;
-        document.form.gubun.value = innerText;
-        document.form.name.value = text;
+    function update(idx) {
+
+        let division = document.getElementsByName("division" + idx)[0].innerText;
+        let codeName = document.getElementsByName("codeText" + idx)[0];
+        let code = document.getElementsByName("code" + idx)[0];
+        let id = document.getElementsByName("id" + idx)[0];
+
+
+        if (codeName.value === '' && code.value === '선택') {
+            alert("코드값을 입력하세요");
+            codeName.focus();
+            return;
+        }
+
+        if (code.value !== '선택') {
+            document.form.codeId.value = code.value;
+        }
+
+        document.form.name.value = codeName.value;
+        document.form.gubun.value = division;
+        document.form.id.value = id.value;
         document.form.submit();
+    }
+
+    function cleanText(idx) {
+        document.getElementsByName("codeText" + idx)[0].value = '';
     }
 </script>
 </html>
