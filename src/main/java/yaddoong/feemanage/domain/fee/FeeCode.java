@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import yaddoong.feemanage.domain.base.BaseTimeEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +22,7 @@ public class FeeCode extends BaseTimeEntity {
     private String name;
     private String gubun;
 
-    @OneToMany(mappedBy = "code")
+    @OneToMany(mappedBy = "code", cascade = CascadeType.ALL)
     private List<FeeDetailGubun> details = new ArrayList<>();
 
     @Builder

@@ -337,15 +337,33 @@ public class FeeService {
     }
 
     @Transactional
-    public void saveCode(FeeCode feeCode, Long id) {
-        int cnt = feeCodeRepository.findCountAllByNameAAndGubun(feeCode.getName(), feeCode.getGubun());
-        if (cnt == 0) {
-            feeCodeRepository.save(feeCode);
+    public boolean saveCodeSaveDetail(String name, String gubun, Long detailId) {
+        FeeCode feeCode = null;
+        Optional<FeeCode> feeCodeOptional = feeCodeRepository.findAllByNameAndGubun(name, gubun);
+        if (feeCodeOptional.isPresent()) {
+            feeCode = feeCodeOptional.get();
+            return addCodeSaveDatailGubun(feeCode, detailId);
         }
+        feeCode = FeeCode.builder()
+                .name(name)
+                .gubun(gubun)
+                .build();
+        feeCodeRepository.save(feeCode);
+        return addCodeSaveDatailGubun(feeCode, detailId);
+    }
+
+    @Transactional
+    public void selectCodeSaveDetail(Long codeId, Long detailId) {
+        FeeCode feeCode = feeCodeRepository.findById(codeId)
+                .get();
+        addCodeSaveDatailGubun(feeCode, detailId);
+    }
+
+    private boolean addCodeSaveDatailGubun(FeeCode feeCode, Long id) {
         Optional<FeeDetailGubun> feeDetailGubun = feeDetailGubunRepository.findById(id);
         feeDetailGubun.get().addCode(feeCode);
         feeDetailGubunRepository.save(feeDetailGubun.get());
-
+        return true;
     }
 
 }

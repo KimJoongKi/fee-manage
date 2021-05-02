@@ -224,26 +224,16 @@ public class FeeController {
 
         FeeCode feeCode = null;
 
-        System.out.println("form = " + form.getCodeId());
+        // 코드 아이디가 있으면, 코드 정보를 가져와서 detail에 추가 후 입력한다.
         if (form.getCodeId() != null) {
-            feeCode = feeCodeRepository.findById(form
-                    .getCodeId())
-                    .get();
 
-            feeService.saveCode(feeCode, form.getId());
+            feeService.selectCodeSaveDetail(form.getCodeId(), form.getId());
 
             return "redirect:/fee/feeCode";
         }
 
-
-
-        feeCode = FeeCode.builder()
-                .name(form.getName())
-                .gubun(form.getGubun())
-                .build();
-
-        feeCode.updateCode(form.getName(), form.getGubun());
-        feeService.saveCode(feeCode, form.getId());
+        // 코드 아이디가 없으면, 코드 정보를 입력 후 detail에 입력한다.
+        feeService.saveCodeSaveDetail(form.getName(), form.getGubun(), form.getId());
 
         return "redirect:/fee/feeCode";
     }

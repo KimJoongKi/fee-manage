@@ -27,8 +27,8 @@
             <tbody>
             <tr th:each="fee : ${fees}">
                 <td th:text="${fee.name}"></td>
-                <td th:text="${fee.price}"></td>
-                <td th:text="${fee.unpaid}"></td>
+                <td th:text="${#numbers.formatCurrency(fee.price)}"></td>
+                <td th:text="${#numbers.formatCurrency(fee.unpaid)}"></td>
             </tr>
             <!--tr th:each="member : ${}">
                 <td th:text="${}"></td>
