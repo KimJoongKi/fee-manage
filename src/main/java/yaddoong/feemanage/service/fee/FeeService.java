@@ -56,54 +56,60 @@ public class FeeService {
      * @param uploadFile
      */
     @Transactional
-    public void saveAll(MultipartFile uploadFile) throws IOException, ParseException {
+    public void saveAll(MultipartFile[] uploadFile) throws IOException, ParseException {
 
-        String filename = uploadFile.getOriginalFilename();
-        // TODO: 2021/02/27 서버 반영시 삭제
-        String osName = System.getProperty("os.name").toUpperCase();
-        String tmpPath = System.getProperty("user.dir") + "/tmp";
-        String filePath = tmpPath + "/" + filename;
-        if(osName.indexOf("WIN") >= 0) {
-            tmpPath = System.getProperty("user.dir") + "\\tmp";
-            filePath = tmpPath + "\\" + filename;
-        }
+        Arrays.stream(uploadFile).forEach(file ->{
 
-        // 디렉토리가 존재하지 않으면 디렉토리 생성
-        if (!new File(tmpPath).exists()) {
-            try {
-                new File(tmpPath).mkdir();
-            } catch (Exception e) {
-                e.getStackTrace();
+            String filename = file.getOriginalFilename();
+
+            // TODO: 2021/02/27 서버 반영시 삭제
+            // TODO: 2021/05/11 반복문 안에 파일로직 부분부터 다시 시작
+            String osName = System.getProperty("os.name").toUpperCase();
+            String tmpPath = System.getProperty("user.dir") + "/tmp";
+            String filePath = tmpPath + "/" + filename;
+            if(osName.indexOf("WIN") >= 0) {
+                tmpPath = System.getProperty("user.dir") + "\\tmp";
+                filePath = tmpPath + "\\" + filename;
             }
-        }
 
-        // 파일업로드 디렉토리 하위 파일을 모두 지운다.
-        File deleteFolder = new File(tmpPath);
-        File[] deleteFiles = deleteFolder.listFiles();
+            // 디렉토리가 존재하지 않으면 디렉토리 생성
+            if (!new File(tmpPath).exists()) {
+                try {
+                    new File(tmpPath).mkdir();
+                } catch (Exception e) {
+                    e.getStackTrace();
+                }
+            }
 
-        for (File deleteFile : deleteFiles) {
-            deleteFile.delete();
-        }
+            // 파일업로드 디렉토리 하위 파일을 모두 지운다.
+            File deleteFolder = new File(tmpPath);
+            File[] deleteFiles = deleteFolder.listFiles();
 
-        // 업로드 디렉토리로 파일 복사
-        uploadFile.transferTo(new File(filePath));
+            for (File deleteFile : deleteFiles) {
+                deleteFile.delete();
+            }
 
-        // 파일이 저장된 디렉토리
-        File dir = new File(tmpPath);
-        // 해당 디렉토리에 있는 파일을 모두 가져온다.
-        File[] files = dir.listFiles();
+            // 업로드 디렉토리로 파일 복사
+            //file.transferTo(new File(filePath));
 
-        // TODO: 2021-01-23 업로드 된 파일이 존재하지 않을 때 메시지 추가
-        if (files.length == 0) {
-            System.out.println("파일이 첨부되지 않았을 때 메시지 추가");
-            return;
-        }
+            // 파일이 저장된 디렉토리
+            File dir = new File(tmpPath);
+            // 해당 디렉토리에 있는 파일을 모두 가져온다.
+            File[] files = dir.listFiles();
 
-        // TODO: 2021/02/27 파일명이 존재할 때 이미 존재하는 파일입니다. 추가
+            // TODO: 2021-01-23 업로드 된 파일이 존재하지 않을 때 메시지 추가
+            if (files.length == 0) {
+                System.out.println("파일이 첨부되지 않았을 때 메시지 추가");
+                return;
+            }
+
+            // TODO: 2021/02/27 파일명이 존재할 때 이미 존재하는 파일입니다. 추가
 
 
-        uploadFileInsertDb(files);
-        feeLogEtcsSaveAll();
+            //uploadFileInsertDb(files);
+            feeLogEtcsSaveAll();
+
+        });
 
     }
 
