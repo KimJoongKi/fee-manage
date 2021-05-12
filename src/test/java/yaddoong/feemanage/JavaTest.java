@@ -96,6 +96,11 @@ public class JavaTest {
         System.out.println(etc.substring(etc.indexOf("(")));
         System.out.println(etc.substring(0,etc.indexOf("(")));
     }
+
+    @Test
+    public void 자바테스트() {
+        System.out.println(System.getProperty("user.dir"));
+    }
         
 
 }

@@ -45,6 +45,13 @@ public class FeeService {
     @Value("${fee.price}")
     int feePrice;
 
+    /**
+     *
+     * @param queryStartDate
+     * @param queryEndDate
+     * @param contents
+     * @return
+     */
     public List<FeeLog> findAll(LocalDateTime queryStartDate, LocalDateTime queryEndDate, String contents) {
         return feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(queryStartDate, queryEndDate, contents);
     }
@@ -56,60 +63,66 @@ public class FeeService {
      * @param uploadFile
      */
     @Transactional
-    public void saveAll(MultipartFile[] uploadFile) throws IOException, ParseException {
+    public void saveAll(MultipartFile[] uploadFile) throws Exception {
 
-        Arrays.stream(uploadFile).forEach(file ->{
+        Arrays.stream(uploadFile)
+                .forEach(file ->{
 
-            String filename = file.getOriginalFilename();
+                    // 파일명
+                    String filename = file.getOriginalFilename();
 
-            // TODO: 2021/02/27 서버 반영시 삭제
-            // TODO: 2021/05/11 반복문 안에 파일로직 부분부터 다시 시작
-            String osName = System.getProperty("os.name").toUpperCase();
-            String tmpPath = System.getProperty("user.dir") + "/tmp";
-            String filePath = tmpPath + "/" + filename;
-            if(osName.indexOf("WIN") >= 0) {
-                tmpPath = System.getProperty("user.dir") + "\\tmp";
-                filePath = tmpPath + "\\" + filename;
-            }
+                    // TODO: 2021/02/27 서버 반영시 삭제
+                    String osName = System.getProperty("os.name").toUpperCase();
+                    String tmpPath = System.getProperty("user.dir") + "/tmp";
+                    String filePath = tmpPath + "/" + filename;
 
-            // 디렉토리가 존재하지 않으면 디렉토리 생성
-            if (!new File(tmpPath).exists()) {
-                try {
-                    new File(tmpPath).mkdir();
-                } catch (Exception e) {
-                    e.getStackTrace();
-                }
-            }
+                    // 윈도우와 맥OS 경로 구분
+                    if(osName.indexOf("WIN") >= 0) {
+                        tmpPath = System.getProperty("user.dir") + "\\tmp";
+                        filePath = tmpPath + "\\" + filename;
+                    }
 
-            // 파일업로드 디렉토리 하위 파일을 모두 지운다.
-            File deleteFolder = new File(tmpPath);
-            File[] deleteFiles = deleteFolder.listFiles();
+                    // 디렉토리가 존재하지 않으면 디렉토리 생성
+                    if (!new File(tmpPath).exists()) {
+                        try {
+                            new File(tmpPath).mkdir();
+                        } catch (Exception e) {
+                            e.getStackTrace();
+                        }
+                    }
 
-            for (File deleteFile : deleteFiles) {
-                deleteFile.delete();
-            }
+                    // 파일업로드 디렉토리 하위 파일을 모두 지운다.
+                    try {
+                    File deleteFolder = new File(tmpPath);
+                    File[] deleteFiles = deleteFolder.listFiles();
+                    for (File deleteFile : deleteFiles) {
+                        deleteFile.delete();
+                    }
 
-            // 업로드 디렉토리로 파일 복사
-            //file.transferTo(new File(filePath));
+                    // 업로드 디렉토리로 파일 복사
+                    file.transferTo(new File(filePath));
 
-            // 파일이 저장된 디렉토리
-            File dir = new File(tmpPath);
-            // 해당 디렉토리에 있는 파일을 모두 가져온다.
-            File[] files = dir.listFiles();
+                    // 파일이 저장된 디렉토리
+                    File dir = new File(tmpPath);
 
-            // TODO: 2021-01-23 업로드 된 파일이 존재하지 않을 때 메시지 추가
-            if (files.length == 0) {
-                System.out.println("파일이 첨부되지 않았을 때 메시지 추가");
-                return;
-            }
+                    // 해당 디렉토리에 있는 파일을 모두 가져온다.
+                    File[] files = dir.listFiles();
 
-            // TODO: 2021/02/27 파일명이 존재할 때 이미 존재하는 파일입니다. 추가
+                    // TODO: 2021-01-23 업로드 된 파일이 존재하지 않을 때 메시지 추가
+                    if (files.length == 0) {
+                        System.out.println("파일이 첨부되지 않았을 때 메시지 추가");
+                        return;
+                    }
 
+                    // TODO: 2021/02/27 파일명이 존재할 때 이미 존재하는 파일입니다. 추가
+                    uploadFileInsertDb(files);
+                    // 기타내역 입력
+                    feeLogEtcsSaveAll();
+                    } catch (IOException | ParseException e) {
+                        e.printStackTrace();
+                    }
 
-            //uploadFileInsertDb(files);
-            feeLogEtcsSaveAll();
-
-        });
+                });
 
     }
 
@@ -267,7 +280,10 @@ public class FeeService {
         return cnt * feePrice;
     }
 
-    @Transactional
+    /**
+     * 구분이 필요한 회비내역 조회
+     * @return
+     */
     public List<FeeLogEtc> findFeeLogEtcAll() {
         return feeLogEtcRepository.findAll();
     }
@@ -301,7 +317,6 @@ public class FeeService {
 
         Optional<FeeLog> feeLog = findFeeLog(contents, date);
         feeLog.get().updateMemo(feeLogEtc.getMemo());
-        feeLogRepository.save(feeLog.get());
     }
 
     /**
@@ -311,26 +326,28 @@ public class FeeService {
     public void feeLogRefresh() {
 
         List<FeeLog> feeLogs = feeLogRepository.findAllByMemoNot("");
-        feeLogs.forEach(log -> {
-            Optional<FeeCode> code = feeCodeRepository.findAllByName(log.getMemo());
-            FeeCode findFeeCode = null;
+        feeLogs.stream()
+                .filter(Objects::nonNull)
+                .forEach(log -> {
+                    Optional<FeeCode> code = feeCodeRepository.findAllByName(log.getMemo());
+                    FeeCode findFeeCode = null;
 
-            if (code.isPresent())
-                findFeeCode = code.get();
+                    if (code.isPresent())
+                        findFeeCode = code.get();
 
-            FeeDetailGubun feeDetailGubun = FeeDetailGubun.builder()
-                    .date(log.getDate())
-                    .contents(log.getContents())
-                    .division(log.getDivision())
-                    .price(log.getPrice())
-                    .afterBalance(log.getAfterBalance())
-                    .memo(log.getMemo())
-                    .code(findFeeCode)
-                    .build();
+                    FeeDetailGubun feeDetailGubun = FeeDetailGubun.builder()
+                            .date(log.getDate())
+                            .contents(log.getContents())
+                            .division(log.getDivision())
+                            .price(log.getPrice())
+                            .afterBalance(log.getAfterBalance())
+                            .memo(log.getMemo())
+                            .code(findFeeCode)
+                            .build();
 
-            feeDetailGubunRepository.save(feeDetailGubun);
+                    feeDetailGubunRepository.save(feeDetailGubun);
 
-        });
+                });
 
     }
 

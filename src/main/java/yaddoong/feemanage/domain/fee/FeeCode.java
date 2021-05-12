@@ -22,7 +22,7 @@ public class FeeCode extends BaseTimeEntity {
     private String name;
     private String gubun;
 
-    @OneToMany(mappedBy = "code", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "code")
     private List<FeeDetailGubun> details = new ArrayList<>();
 
     @Builder

@@ -57,8 +57,7 @@ public class FeeController {
      * @throws ParseException
      */
     @PostMapping("/save")
-    public String insertFeeLog(@RequestParam("file") MultipartFile file) throws IOException, ParseException {
-        // TODO: 2021/05/11 파일 다중업로드
+    public String insertFeeLog(@RequestParam("file") MultipartFile[] file) throws Exception {
         feeService.saveAll(file);
         return "redirect:/";
     }
@@ -211,9 +210,17 @@ public class FeeController {
         return "redirect:/fee/earningsAndExpenditure";
     }
 
+    /**
+     * 코드 관리 화면 조회
+     * @param model
+     * @return
+     */
     @GetMapping("/feeCode")
     public String feeCodeView(Model model) {
+        // 분류가 필요한 회비 내역 조회
         List<FeeDetailGubun> feeDetailGubuns = feeService.feeCodeView();
+        // 입,출금 코드 목록 조회
+        // TODO: 2021/05/12 아래 소스 부터 수정 데이터 조인 후 코드별 금액까지 표시 되게끔 
         List<FeeCode> codeList = feeCodeRepository.findAll();
         model.addAttribute("detailList", feeDetailGubuns);
         model.addAttribute("codeList", codeList);
