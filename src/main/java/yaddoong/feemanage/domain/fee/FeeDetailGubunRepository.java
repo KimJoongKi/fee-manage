@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface FeeDetailGubunRepository extends JpaRepository<FeeDetailGubun, Long> {
+public interface FeeDetailGubunRepository extends JpaRepository<FeeDetailGubun, Long>, FeeDetailGubunRepositoryCustom {
 
     @Override
     @EntityGraph(attributePaths = "code")

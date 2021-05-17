@@ -39,6 +39,7 @@ public class FeeController {
 
     private final FeeService feeService;
     private final FeeCodeRepository feeCodeRepository;
+    private final FeeDetailGubunRepository feeDetailGubunRepository;
 
     /**
      * 파일업로드 화면
@@ -220,8 +221,9 @@ public class FeeController {
         // 분류가 필요한 회비 내역 조회
         List<FeeDetailGubun> feeDetailGubuns = feeService.feeCodeView();
         // 입,출금 코드 목록 조회
-        // TODO: 2021/05/12 아래 소스 부터 수정 데이터 조인 후 코드별 금액까지 표시 되게끔 
         List<FeeCode> codeList = feeCodeRepository.findAll();
+        List<FeeDetailGubun> detailList = feeDetailGubunRepository.findAll();
+        feeDetailGubunRepository.feeDetailGubunGroupByCode();
         model.addAttribute("detailList", feeDetailGubuns);
         model.addAttribute("codeList", codeList);
         return "fee/feeCodeList";
