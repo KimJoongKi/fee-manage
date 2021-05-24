@@ -10,6 +10,33 @@
 </form>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
+
+    <div>
+        코드별 통계
+        <!--TODO 통계 금액 시각화 -->
+    </div>
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>순번</th>
+                <th>구분</th>
+                <th>이름</th>
+                <th>금액</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="stat: ${statList}">
+                <td th:text="${statStat.index}+1" ></td>
+                <td th:text="${stat.gubun}"></td>
+                <td th:text="${stat.name}"></td>
+                <td th:text="${#numbers.formatCurrency(stat.priceSum)}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
     <div>
         회비 구분
     </div>
@@ -51,30 +78,7 @@
         </table>
     </div>
 
-    <div>
-        코드관리
-    </div>
-    <div>
-        <button class="btn btn-primary" th:attr="onclick=|apply()|">모두적용</button>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>순번</th>
-                <th>구분</th>
-                <th>이름</th>
-                <th>금액</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="stat: ${statList}">
-                <td th:text="${statStat.index}+1" ></td>
-                <td th:text="${stat.gubun}"></td>
-                <td th:text="${stat.name}"></td>
-                <td th:text="${#numbers.formatCurrency(stat.priceSum)}"></td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+
     <div th:replace="fragments/footer :: footer" />
 </div> <!-- /container -->
 </body>
