@@ -30,6 +30,7 @@ public class FeeDetailGubunRepositoryImpl implements FeeDetailGubunRepositoryCus
                 .from(feeDetailGubun)
                 .innerJoin(feeDetailGubun.code, feeCode)
                 .groupBy(feeCode.id, feeCode.name)
+                .orderBy(feeCode.gubun.asc(),feeDetailGubun.price.sum().desc())
                 .fetch();
 
         return list;
