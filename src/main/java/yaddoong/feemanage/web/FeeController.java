@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.service.fee.FeeService;
+import yaddoong.feemanage.web.dto.FeeCodeStatisticsDto;
 import yaddoong.feemanage.web.form.FeeCodeUpdateForm;
 import yaddoong.feemanage.web.form.FeeLogEtcUpdateForm;
 import yaddoong.feemanage.web.form.FeeLogForm;
@@ -223,8 +224,9 @@ public class FeeController {
         // 입,출금 코드 목록 조회
         List<FeeCode> codeList = feeCodeRepository.findAll();
         List<FeeDetailGubun> detailList = feeDetailGubunRepository.findAll();
-        feeDetailGubunRepository.feeDetailGubunGroupByCode();
+        List<FeeCodeStatisticsDto> statList = feeDetailGubunRepository.feeDetailGubunGroupByCode();
         model.addAttribute("detailList", feeDetailGubuns);
+        model.addAttribute("statList", statList);
         model.addAttribute("codeList", codeList);
         return "fee/feeCodeList";
     }

@@ -66,10 +66,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="code: ${codeList}">
-                <td th:text="${codeStat.index}+1" ></td>
-                <td th:text="${code.gubun}"></td>
-                <td th:text="${code.name}"></td>
+            <tr th:each="stat: ${statList}">
+                <td th:text="${statStat.index}+1" ></td>
+                <td th:text="${stat.gubun}"></td>
+                <td th:text="${stat.name}"></td>
+                <td th:text="${#numbers.formatCurrency(stat.priceSum)}"></td>
             </tr>
             </tbody>
         </table>
