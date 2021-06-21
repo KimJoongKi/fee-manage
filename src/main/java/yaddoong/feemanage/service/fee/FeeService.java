@@ -325,15 +325,25 @@ public class FeeService {
     @Transactional
     public void feeLogRefresh() {
 
+        // 메모가 존재하는 내역을 가져온다.
         List<FeeLog> feeLogs = feeLogRepository.findAllByMemoNot("");
+
         feeLogs.stream()
                 .filter(Objects::nonNull)
                 .forEach(log -> {
-                    Optional<FeeCode> code = feeCodeRepository.findAllByName(log.getMemo());
+
+                    // 같은 코드가 존재하는지 확인 후 상세내역을 수정한다.
+                    String division = "출금";
                     FeeCode findFeeCode = null;
+                    if (log.getPrice() > 0) {
+                        division = "입금";
+                    }
+                    Optional<FeeCode> code = feeCodeRepository.findFeeCodeMemoAndDivision(log.getMemo(), division);
 
                     if (code.isPresent())
                         findFeeCode = code.get();
+
+                    // todo 2021 06 21 데이터 중복 입력 수정
 
                     FeeDetailGubun feeDetailGubun = FeeDetailGubun.builder()
                             .date(log.getDate())

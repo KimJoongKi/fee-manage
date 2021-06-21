@@ -74,7 +74,7 @@ public class FeeController {
     @GetMapping("/list")
     public String listView(Model model) throws IOException, ParseException {
 
-        LocalDateTime startDate = LocalDate.now().minusMonths(1).atTime(LocalTime.MIN);
+        LocalDateTime startDate = LocalDate.now().minusMonths(6).atTime(LocalTime.MIN);
         LocalDateTime endDate = LocalDate.now().atTime(LocalTime.MAX);
         String contents = "%%";
 

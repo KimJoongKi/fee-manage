@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface FeeCodeRepository extends JpaRepository<FeeCode, Long> {
+public interface FeeCodeRepository extends JpaRepository<FeeCode, Long>, FeeCodeRepositoryCustom {
     Optional<FeeCode> findAllByName(String name);
 
     Optional<FeeCode> findAllByNameAndGubun(String name, String gubun);

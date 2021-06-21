@@ -24,13 +24,12 @@ public class FeeDetailGubunRepositoryImpl implements FeeDetailGubunRepositoryCus
     @Override
     public List<FeeCodeStatisticsDto> feeDetailGubunGroupByCode() {
 
-        // TODO: 2021/05/17 금액을 가져오는 것까지는 했는데 이걸 객체에 담아서 화면에 뿌려줘야함 
         List<FeeCodeStatisticsDto> list = queryFactory
                 .select(new QFeeCodeStatisticsDto(feeCode.id, feeCode.gubun, feeCode.name, feeDetailGubun.price.sum()))
                 .from(feeDetailGubun)
                 .innerJoin(feeDetailGubun.code, feeCode)
                 .groupBy(feeCode.id, feeCode.name)
-                .orderBy(feeCode.gubun.asc(),feeDetailGubun.price.sum().desc())
+                .orderBy(feeCode.gubun.desc(),feeDetailGubun.price.sum().asc())
                 .fetch();
 
         return list;
