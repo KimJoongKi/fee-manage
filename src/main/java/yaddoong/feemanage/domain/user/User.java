@@ -31,4 +31,8 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    public void updateSecessionDate(String secessionDate) {
+        this.secessionDate = LocalDate.parse(secessionDate);
+    }
+
 }

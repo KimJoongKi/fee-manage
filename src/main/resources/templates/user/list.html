@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader" />
+  <div>
+    회원 목록
+  </div>
+  <div>
+    <form action="/user/secessionUpdate" method="post" name="form">
+      <input type="hidden" name="id">
+      <input type="hidden" name="secessionDate">
+    </form>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>이름</th>
+        <th>생년월일</th>
+        <th>가입일</th>
+        <th>탈퇴</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="user: ${userList}">
+        <td th:text="${user.name}"></td>
+        <td th:text="${#temporals.format(user.birth, 'yyyy년MM월dd일')}"></td>
+        <td th:text="${#temporals.format(user.joinDate, 'yyyy년MM월dd일')}"></td>
+        <td>
+          <input th:type="date" th:id="'dateId'+${userStat.index}"  />
+          <input th:type="hidden" th:id="'userId'+${userStat.index}" th:value="${user.id}"  />
+          <button class="btn btn-primary" th:attr="onclick=|secessionBtnClick('${userStat.index}')|">수정</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+<script>
+  function secessionBtnClick(idx) {
+    if (document.getElementById('dateId' + idx).value === '') {
+      alert('일자를 선택하세요.');
+      document.getElementById('dateId' + idx).focus();
+      return;
+    }
+    document.form.id.value = document.getElementById('userId' + idx).value;
+    document.form.secessionDate.value = document.getElementById('dateId' + idx).value;
+    document.form.submit();
+  }
+</script>
+</html>

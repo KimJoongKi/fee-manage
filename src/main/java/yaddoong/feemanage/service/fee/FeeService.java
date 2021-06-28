@@ -53,7 +53,7 @@ public class FeeService {
      * @return
      */
     public List<FeeLog> findAll(LocalDateTime queryStartDate, LocalDateTime queryEndDate, String contents) {
-        return feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateAsc(queryStartDate, queryEndDate, contents);
+        return feeLogRepository.findFeeLogsByDateBetweenAndContentsLikeOrderByDateDesc(queryStartDate, queryEndDate, contents);
     }
 
     /**

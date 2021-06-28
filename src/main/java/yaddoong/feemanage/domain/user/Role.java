@@ -9,9 +9,9 @@ import net.bytebuddy.asm.Advice;
 @RequiredArgsConstructor
 public enum Role {
 
-    OWNER("ROLE_ADMIN", "회장"),
-    GENERAL("ROLE_GENERAL", "총무"),
-    USER("ROLE_USER", "회원");
+    ROLE_ADMIN("ROLE_ADMIN", "회장"),
+    ROLE_GENERAL("ROLE_GENERAL", "총무"),
+    ROLE_USER("ROLE_USER", "회원");
 
     private final String key;
     private final String title;
