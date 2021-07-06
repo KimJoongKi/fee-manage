@@ -27,6 +27,11 @@ public class UserController {
         return "user/list";
     }
 
+    @GetMapping("/secessionList")
+    public String findSecessionList() {
+        return "user/secessionList";
+    }
+
     @PostMapping("/secessionUpdate")
     public String secessionUpdate(UserForm form) {
 

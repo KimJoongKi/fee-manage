@@ -40,8 +40,6 @@ public class FeeService {
     private final FeeLogEtcRepository feeLogEtcRepository;
     private final FeeCodeRepository feeCodeRepository;
     private final FeeDetailGubunRepository feeDetailGubunRepository;
-    @Value("${start.date}")
-    String startDateStr;
     @Value("${fee.price}")
     int feePrice;
 
@@ -256,15 +254,14 @@ public class FeeService {
     }
 
     public List<FeeLogProjection> findGroupByName() {
-        int feePriceCalc = feePriceCalc();
-        return feeLogRepository.findGroupByName(feePriceCalc);
+        return feeLogRepository.findGroupByName();
     }
 
     /**
      * 오늘날짜 기준 입금할 회비
      * @return
      */
-    public int feePriceCalc() {
+    public int feePriceCalc(String startDateStr) {
         LocalDate today = LocalDate.now();
         LocalDate startDay = LocalDate.parse(startDateStr);
         int todayMonth = today.getMonthValue();

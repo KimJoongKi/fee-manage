@@ -6,5 +6,5 @@ public interface FeeLogProjection {
 
     Integer getPrice();
 
-    Integer getUnpaid();
+    String getJoinDate();
 }

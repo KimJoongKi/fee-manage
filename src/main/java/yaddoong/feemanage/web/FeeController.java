@@ -144,7 +144,7 @@ public class FeeController {
             UserFeeForm form = new UserFeeForm();
             form.setName(feeLogProjection.getName());
             form.setPrice(feeLogProjection.getPrice());
-            form.setUnpaid(feeLogProjection.getUnpaid());
+            form.setUnpaid(feeService.feePriceCalc(feeLogProjection.getJoinDate()));
             feeFormList.add(form);
         }
         model.addAttribute("fees", feeFormList);
