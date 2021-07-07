@@ -1,7 +1,6 @@
 package yaddoong.feemanage.web;
 
 import lombok.RequiredArgsConstructor;
-import org.h2.engine.Mode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,16 +27,21 @@ public class UserController {
     }
 
     @GetMapping("/secessionList")
-    public String findSecessionList() {
+    public String findSecessionList(Model model) {
+        List<User> secessionUserList = userService.findSecessionUserList();
+        model.addAttribute("userList", secessionUserList);
         return "user/secessionList";
+    }
+
+    @PostMapping("/rejoin")
+    public String rejoin(UserForm form) {
+        userService.rejoin(form.getId(), form.getRejoinDate());
+        return "redirect:/user/secessionList";
     }
 
     @PostMapping("/secessionUpdate")
     public String secessionUpdate(UserForm form) {
-
-
-        userService.secessionUpdate(form.getId(), form.getSecessionDate());
-
+        userService.secession(form.getId(), form.getSecessionDate());
         return "redirect:/user/list";
     }
 

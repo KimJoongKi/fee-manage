@@ -10,6 +10,7 @@ import java.time.LocalDate;
 public class UserForm {
     private Long id;
     private String secessionDate;
+    private String rejoinDate;
 
     @Override
     public String toString() {

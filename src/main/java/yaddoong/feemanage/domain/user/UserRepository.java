@@ -9,6 +9,8 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
 
     List<User> findAllBySecessionDateIsNull();
 
+    List<User> findAllBySecessionDateIsNotNull();
+
 
 
 }

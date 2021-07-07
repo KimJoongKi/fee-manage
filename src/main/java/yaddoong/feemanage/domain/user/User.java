@@ -23,7 +23,6 @@ public class User extends BaseTimeEntity {
     private String name;
     private LocalDate birth;
     private char sex;
-    @Column(updatable = false)
     private LocalDate joinDate;
     private LocalDate secessionDate;
     private int unpaid;
@@ -32,7 +31,15 @@ public class User extends BaseTimeEntity {
     private Role role;
 
     public void updateSecessionDate(String secessionDate) {
+        if (secessionDate == null) {
+            this.secessionDate = null;
+            return;
+        }
         this.secessionDate = LocalDate.parse(secessionDate);
+    }
+
+    public void updateJoinDate(String rejoinDate) {
+        this.joinDate = LocalDate.parse(rejoinDate);
     }
 
 }
