@@ -28,4 +28,21 @@ public class FeeLogRepositoryImpl implements FeeLogRepositoryCustom {
                 .fetch();
         return feeLogList;
     }
+
+    @Override
+    public int findFeePrice(String contents) {
+        List<Integer> fetch = queryFactory
+                .select(feeLog.price.sum())
+                .from(feeLog)
+                .where(
+                        feeLog.contents
+                                .eq(contents)
+                                .and(feeLog.memo.eq(""))
+                )
+                .groupBy(feeLog.contents)
+                .fetch();
+        return fetch.get(0);
+    }
+
+
 }

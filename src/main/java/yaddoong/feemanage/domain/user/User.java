@@ -42,4 +42,8 @@ public class User extends BaseTimeEntity {
         this.joinDate = LocalDate.parse(rejoinDate);
     }
 
+    public void updateUnpaid(int unpaid) {
+        this.unpaid = unpaid;
+    }
+
 }

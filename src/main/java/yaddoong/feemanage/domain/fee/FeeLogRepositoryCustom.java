@@ -8,4 +8,6 @@ import java.util.List;
 public interface FeeLogRepositoryCustom {
     List<FeeLog> findFeeLogEtc(List<String> contents);
 
+    int findFeePrice(String contents);
+
 }
