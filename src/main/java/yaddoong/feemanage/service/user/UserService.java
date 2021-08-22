@@ -65,12 +65,13 @@ public class UserService {
                             .build());
                 });
         secessionFeeLogRepository.saveAll(list);
-        // TODO: 2021-07-11 service 단 중복해결 
-        int feePriceCalc = feePriceCalc(secessionDate);
+
+        int feePriceCalc = feePriceCalc(findUser.get().getJoinDate().toString());
+        System.out.println(feePriceCalc);
         int feePrice = feeLogRepository.findFeePrice(findUser
                 .get()
                 .getName());
-        findUser.get().updateUnpaid(feePriceCalc - feePrice);
+        findUser.get().updateUnpaid(feePriceCalc - feePrice + findUser.get().getUnpaid());
         findUser.get().updateSecessionDate(secessionDate);
     }
 

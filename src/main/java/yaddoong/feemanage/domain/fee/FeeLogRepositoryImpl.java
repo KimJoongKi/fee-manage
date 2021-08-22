@@ -41,7 +41,7 @@ public class FeeLogRepositoryImpl implements FeeLogRepositoryCustom {
                 )
                 .groupBy(feeLog.contents)
                 .fetch();
-        return fetch.get(0);
+        return fetch.size() == 0 ? 0 : fetch.get(0);
     }
 
 
