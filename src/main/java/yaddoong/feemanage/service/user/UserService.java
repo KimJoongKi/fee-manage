@@ -54,7 +54,6 @@ public class UserService {
         List<SecessionFeeLog> list = new ArrayList<>();
         allByContents.stream()
                 .forEach(feeLog -> {
-                    System.out.println(feeLog.getDate());
                     list.add(SecessionFeeLog.builder()
                             .date(feeLog.getDate())
                             .contents(feeLog.getContents())
@@ -64,10 +63,11 @@ public class UserService {
                             .price(feeLog.getPrice())
                             .build());
                 });
+        feeLogRepository.deleteFeeLogByContents(findUser.get().getName());
         secessionFeeLogRepository.saveAll(list);
 
-        int feePriceCalc = feePriceCalc(findUser.get().getJoinDate().toString());
-        System.out.println(feePriceCalc);
+        LocalDate secessionDay = LocalDate.parse(secessionDate);
+        int feePriceCalc = feePriceCalc(findUser.get().getJoinDate().toString(), secessionDay);
         int feePrice = feeLogRepository.findFeePrice(findUser
                 .get()
                 .getName());
@@ -80,15 +80,15 @@ public class UserService {
         Optional<User> findUser = userRepository.findById(id);
         findUser.get().updateSecessionDate(null);
         findUser.get().updateJoinDate(rejoinDate);
+        findUser.get().updateUnpaid(0);
     }
 
-    public int feePriceCalc(String startDateStr) {
-        LocalDate today = LocalDate.now();
+    public int feePriceCalc(String startDateStr, LocalDate endDay) {
         LocalDate startDay = LocalDate.parse(startDateStr);
-        int todayMonth = today.getMonthValue();
+        int todayMonth = endDay.getMonthValue();
         int startMonth = startDay.getMonthValue()+1;
-        int todayDay = today.getDayOfMonth();
-        int todayYear = today.getYear();
+        int todayDay = endDay.getDayOfMonth();
+        int todayYear = endDay.getYear();
         int startYear = startDay.getYear();
 
         int cnt = (todayDay >= 15 ? 1 : 0)
