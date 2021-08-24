@@ -14,6 +14,7 @@ import yaddoong.feemanage.service.fee.FeeService;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,6 @@ public class UserService {
 
     @Value("${fee.price}")
     int feePrice;
-
 
     public List<String> findUserNames() {
         return userRepository.findUsersNames();
@@ -66,21 +66,39 @@ public class UserService {
         feeLogRepository.deleteFeeLogByContents(findUser.get().getName());
         secessionFeeLogRepository.saveAll(list);
 
-        LocalDate secessionDay = LocalDate.parse(secessionDate);
-        int feePriceCalc = feePriceCalc(findUser.get().getJoinDate().toString(), secessionDay);
-        int feePrice = feeLogRepository.findFeePrice(findUser
-                .get()
-                .getName());
-        findUser.get().updateUnpaid(feePriceCalc - feePrice + findUser.get().getUnpaid());
+        findUser.get().updateUnpaid(secessionUnpaidCalc(findUser, secessionDate));
         findUser.get().updateSecessionDate(secessionDate);
     }
 
     @Transactional
     public void rejoin(Long id, String rejoinDate) {
         Optional<User> findUser = userRepository.findById(id);
+        List<FeeLog> allByContents = feeLogRepository.findAllByContentsAndDateLessThan(findUser.get().getName(), LocalDate.parse(rejoinDate));
+        List<SecessionFeeLog> list = new ArrayList<>();
+        allByContents.stream()
+                .forEach(feeLog -> {
+                    list.add(SecessionFeeLog.builder()
+                            .date(feeLog.getDate())
+                            .contents(feeLog.getContents())
+                            .afterBalance(feeLog.getAfterBalance())
+                            .division(feeLog.getDivision())
+                            .memo(feeLog.getMemo())
+                            .price(feeLog.getPrice())
+                            .build());
+                });
+        feeLogRepository.deleteFeeLogByContentsAndDateLessThan(findUser.get().getName(), LocalDate.parse(rejoinDate));
+        secessionFeeLogRepository.saveAll(list);
         findUser.get().updateSecessionDate(null);
         findUser.get().updateJoinDate(rejoinDate);
         findUser.get().updateUnpaid(0);
+    }
+
+    // 탈퇴시 미납 금액 계산 로직
+    private int secessionUnpaidCalc(Optional<User> findUser, String secessionDateStr) {
+        LocalDate secessionLocalDate = LocalDate.parse(secessionDateStr);
+        int standardFeePrice = feePriceCalc(findUser.get().getJoinDate().toString(), secessionLocalDate);
+        int depositFeePrice = feeLogRepository.findFeePrice(findUser.get().getName());
+        return standardFeePrice - depositFeePrice + findUser.get().getUnpaid();
     }
 
     public int feePriceCalc(String startDateStr, LocalDate endDay) {
