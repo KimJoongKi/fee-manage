@@ -35,6 +35,16 @@ public class JavaTest {
         System.out.println(System.getProperty("user.home"));
     }
 
+    @Test
+    public void LocalDate() throws Exception {
+        String date = "2020-12-31";
+        LocalDate localDate = LocalDate.parse(date);
+        System.out.println(localDate.atTime(0,0,0));
+        System.out.println(localDate.plusDays(1).atTime(0,0,0));
+
+        System.out.println(date);
+    }
+
 
     @Test
     public void LocalDateTime() throws Exception {
