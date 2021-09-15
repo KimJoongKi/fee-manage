@@ -79,7 +79,7 @@ class FeeLogRepositoryTest {
 
         LocalDateTime localDateTime = LocalDateTime.now();
         FeeCode feeCode = FeeCode.builder()
-                .gubun("입금")
+                .insertFlag("입금")
                 .name("경기장")
                 .build();
 
@@ -118,13 +118,13 @@ class FeeLogRepositoryTest {
     public void 코드카운트조회() throws Exception {
 
         FeeCode feeCode = FeeCode.builder()
-                .gubun("입금")
+                .insertFlag("입금")
                 .name("경기장")
                 .build();
 
         //given
         feeCodeRepository.save(feeCode);
-        int count = feeCodeRepository.findCountAllByNameAAndGubun("경기장", "입금");
+        int count = feeCodeRepository.findCountAllByNameAAndInsertFlag("경기장", "입금");
 
         //when
         

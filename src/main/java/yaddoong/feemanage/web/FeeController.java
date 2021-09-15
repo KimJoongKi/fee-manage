@@ -144,7 +144,9 @@ public class FeeController {
             UserFeeForm form = new UserFeeForm();
             form.setName(feeLogProjection.getName());
             form.setPrice(feeLogProjection.getPrice());
-            form.setUnpaid(feeService.feePriceCalc(feeLogProjection.getJoinDate()) + feeLogProjection.getUnpaid());
+            form.setUnpaid(feeService.feePriceCalc(feeLogProjection.getJoinDate())
+                    - feeLogProjection.getPrice()
+                    + feeLogProjection.getUnpaid());
             feeFormList.add(form);
         }
         model.addAttribute("fees", feeFormList);
@@ -245,10 +247,11 @@ public class FeeController {
         }
 
         // 코드 아이디가 없으면, 코드 정보를 입력 후 detail에 입력한다.
-        feeService.saveCodeSaveDetail(form.getName(), form.getGubun(), form.getId());
+        feeService.saveCodeSaveDetail(form.getName(), form.getInsertFlag(), form.getId());
 
         return "redirect:/fee/feeCode";
     }
+
 
 
 }

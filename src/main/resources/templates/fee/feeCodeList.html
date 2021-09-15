@@ -6,7 +6,7 @@
     <input type="hidden" name="id">
     <input type="hidden" name="codeId">
     <input type="hidden" name="name">
-    <input type="hidden" name="gubun">
+    <input type="hidden" name="insertFlag">
 </form>
 <div class="container">
     <div th:replace="fragments/bodyHeader :: bodyHeader" />
@@ -28,7 +28,7 @@
             <tbody>
             <tr th:each="stat: ${statList}">
                 <td th:text="${statStat.index}+1" ></td>
-                <td th:text="${stat.gubun}"></td>
+                <td th:text="${stat.insertFlag}"></td>
                 <td th:text="${stat.name}"></td>
                 <td th:text="${#numbers.formatCurrency(stat.priceSum)}"></td>
             </tr>
@@ -37,15 +37,22 @@
     </div>
 
     <canvas id="myChart" width="400" height="400"></canvas>
-    <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
+    <script th:inline="javascript">
+        let ctx = document.getElementById('myChart').getContext('2d');
+        let statList = new Array();
+        let priceList = new Array();
+
+        /*[# th:each="stat : ${statList}"]*/
+        statList.push(/*[[${stat.graphColumn}]]*/);
+        priceList.push(/*[[${stat.graphPriceSum}]]*/);
+        /*[/]*/
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                labels: statList,
                 datasets: [{
-                    label: '# of Votes',
-                    data: [12, 19, 3, 5, 2, 3],
+                    label: '항목별 입출금 그래프',
+                    data: priceList,
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
@@ -108,7 +115,7 @@
                         <option value="선택"> 선택 </option>
                         <option th:each="code : ${codeList}"
                                 th:value="${code?.id}"
-                                th:utext="${code?.name + '(' + code?.gubun + ')'}"></option>
+                                th:utext="${code?.name + '(' + code?.insertFlag + ')'}"></option>
                     </select>
                     <a class="btn btn-lg btn-info" th:onclick="|javascript:update('${detailStat.index}')|">적용</a>
                 </td>
@@ -142,7 +149,7 @@
         }
 
         document.form.name.value = codeName.value;
-        document.form.gubun.value = division;
+        document.form.insertFlag.value = division;
         document.form.id.value = id.value;
         document.form.submit();
     }

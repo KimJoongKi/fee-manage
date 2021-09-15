@@ -25,13 +25,14 @@ public class FeeDetailGubunRepositoryImpl implements FeeDetailGubunRepositoryCus
     public List<FeeCodeStatisticsDto> feeDetailGubunGroupByCode() {
 
         List<FeeCodeStatisticsDto> list = queryFactory
-                .select(new QFeeCodeStatisticsDto(feeCode.id, feeCode.gubun, feeCode.name, feeDetailGubun.price.sum()))
+                .select(new QFeeCodeStatisticsDto(feeCode.id, feeCode.insertFlag, feeCode.name, feeDetailGubun.price.sum()))
                 .from(feeDetailGubun)
                 .innerJoin(feeDetailGubun.code, feeCode)
                 .groupBy(feeCode.id, feeCode.name)
-                .orderBy(feeCode.gubun.desc(),feeDetailGubun.price.sum().asc())
+                .orderBy(feeCode.insertFlag.desc(),feeDetailGubun.price.sum().asc())
                 .fetch();
 
         return list;
     }
+
 }

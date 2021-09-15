@@ -8,15 +8,19 @@ import lombok.Setter;
 @Getter
 public class FeeCodeStatisticsDto {
     private Long id;
-    private String gubun;
+    private String insertFlag;
     private String name;
+    private String graphColumn;
     private int priceSum;
+    private int graphPriceSum;
 
     @QueryProjection
-    public FeeCodeStatisticsDto(Long id, String gubun, String name, int priceSum) {
+    public FeeCodeStatisticsDto(Long id, String insertFlag, String name, int priceSum) {
         this.id = id;
-        this.gubun = gubun;
+        this.insertFlag = insertFlag;
         this.name = name;
+        this.graphColumn = name + "(" + insertFlag + ")";
+        this.graphPriceSum = Math.abs(priceSum);
         this.priceSum = priceSum;
     }
 }

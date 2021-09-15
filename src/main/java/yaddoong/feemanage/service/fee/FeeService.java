@@ -367,16 +367,16 @@ public class FeeService {
     }
 
     @Transactional
-    public boolean saveCodeSaveDetail(String name, String gubun, Long detailId) {
+    public boolean saveCodeSaveDetail(String name, String insertFlag, Long detailId) {
         FeeCode feeCode = null;
-        Optional<FeeCode> feeCodeOptional = feeCodeRepository.findAllByNameAndGubun(name, gubun);
+        Optional<FeeCode> feeCodeOptional = feeCodeRepository.findAllByNameAndInsertFlag(name, insertFlag);
         if (feeCodeOptional.isPresent()) {
             feeCode = feeCodeOptional.get();
             return addCodeSaveDatailGubun(feeCode, detailId);
         }
         feeCode = FeeCode.builder()
                 .name(name)
-                .gubun(gubun)
+                .insertFlag(insertFlag)
                 .build();
         feeCodeRepository.save(feeCode);
         return addCodeSaveDatailGubun(feeCode, detailId);
