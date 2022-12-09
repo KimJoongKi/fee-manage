@@ -44,7 +44,6 @@ public class FeeService {
     int feePrice;
 
     /**
-     *
      * @param queryStartDate
      * @param queryEndDate
      * @param contents
@@ -56,15 +55,16 @@ public class FeeService {
 
     /**
      * 회비 내역이 담긴 엑셀파일의 정보를 등록한다.
+     *
+     * @param uploadFile
      * @throws IOException
      * @throws ParseException
-     * @param uploadFile
      */
     @Transactional
     public void saveAll(MultipartFile[] uploadFile) throws Exception {
 
         Arrays.stream(uploadFile)
-                .forEach(file ->{
+                .forEach(file -> {
 
                     // 파일명
                     String filename = file.getOriginalFilename();
@@ -75,7 +75,7 @@ public class FeeService {
                     String filePath = tmpPath + "/" + filename;
 
                     // 윈도우와 맥OS 경로 구분
-                    if(osName.indexOf("WIN") >= 0) {
+                    if (osName.indexOf("WIN") >= 0) {
                         tmpPath = System.getProperty("user.dir") + "\\tmp";
                         filePath = tmpPath + "\\" + filename;
                     }
@@ -91,31 +91,31 @@ public class FeeService {
 
                     // 파일업로드 디렉토리 하위 파일을 모두 지운다.
                     try {
-                    File deleteFolder = new File(tmpPath);
-                    File[] deleteFiles = deleteFolder.listFiles();
-                    for (File deleteFile : deleteFiles) {
-                        deleteFile.delete();
-                    }
+                        File deleteFolder = new File(tmpPath);
+                        File[] deleteFiles = deleteFolder.listFiles();
+                        for (File deleteFile : deleteFiles) {
+                            deleteFile.delete();
+                        }
 
-                    // 업로드 디렉토리로 파일 복사
-                    file.transferTo(new File(filePath));
+                        // 업로드 디렉토리로 파일 복사
+                        file.transferTo(new File(filePath));
 
-                    // 파일이 저장된 디렉토리
-                    File dir = new File(tmpPath);
+                        // 파일이 저장된 디렉토리
+                        File dir = new File(tmpPath);
 
-                    // 해당 디렉토리에 있는 파일을 모두 가져온다.
-                    File[] files = dir.listFiles();
+                        // 해당 디렉토리에 있는 파일을 모두 가져온다.
+                        File[] files = dir.listFiles();
 
-                    // TODO: 2021-01-23 업로드 된 파일이 존재하지 않을 때 메시지 추가
-                    if (files.length == 0) {
-                        System.out.println("파일이 첨부되지 않았을 때 메시지 추가");
-                        return;
-                    }
+                        // TODO: 2021-01-23 업로드 된 파일이 존재하지 않을 때 메시지 추가
+                        if (files.length == 0) {
+                            System.out.println("파일이 첨부되지 않았을 때 메시지 추가");
+                            return;
+                        }
 
-                    // TODO: 2021/02/27 파일명이 존재할 때 이미 존재하는 파일입니다. 추가
-                    uploadFileInsertDb(files);
-                    // 기타내역 입력
-                    feeLogEtcsSaveAll();
+                        // TODO: 2021/02/27 파일명이 존재할 때 이미 존재하는 파일입니다. 추가
+                        uploadFileInsertDb(files);
+                        // 기타내역 입력
+                        feeLogEtcsSaveAll();
                     } catch (IOException | ParseException e) {
                         e.printStackTrace();
                     }
@@ -159,6 +159,7 @@ public class FeeService {
 
     /**
      * 엑셀파일 등록
+     *
      * @param files
      * @throws IOException
      * @throws ParseException
@@ -174,14 +175,15 @@ public class FeeService {
             feeLogRepository.saveAll(list);
             String fileName = file.getName();
             feeFileLogRepository.save(FeeFileLog
-                            .builder()
-                            .name(fileName)
-                            .build());
+                    .builder()
+                    .name(fileName)
+                    .build());
         }
     }
 
     /**
      * 파일에 있는 모든 행을 조회한다.
+     *
      * @param sheet
      * @param list
      * @throws ParseException
@@ -198,6 +200,7 @@ public class FeeService {
 
     /**
      * 한 행에 있는 데이터를 가져온다.
+     *
      * @param feeLogDto
      * @param row
      * @return
@@ -212,6 +215,7 @@ public class FeeService {
 
     /**
      * 한 cell에 있는 데이터를 가져온다.
+     *
      * @param cell
      */
     public FeeLogDto cellValueSet(FeeLogDto feeLogDto, Cell cell) throws ParseException {
@@ -228,13 +232,13 @@ public class FeeService {
                 feeLogDto.setPrice(
                         Integer.parseInt(
                                 cell.getStringCellValue()
-                                        .replace(",","")));
+                                        .replace(",", "")));
                 break;
             case 4:
                 feeLogDto.setAfterBalance(Integer
                         .parseInt(cell
                                 .getStringCellValue()
-                                .replace(",","")));
+                                .replace(",", "")));
                 break;
             case 6:
                 feeLogDto.setContents(cell
@@ -259,13 +263,14 @@ public class FeeService {
 
     /**
      * 오늘날짜 기준 입금할 회비
+     *
      * @return
      */
     public int feePriceCalc(String startDateStr) {
         LocalDate today = LocalDate.now();
         LocalDate startDay = LocalDate.parse(startDateStr);
         int todayMonth = today.getMonthValue();
-        int startMonth = startDay.getMonthValue()+1;
+        int startMonth = startDay.getMonthValue() + 1;
         int todayDay = today.getDayOfMonth();
         int todayYear = today.getYear();
         int startYear = startDay.getYear();
@@ -273,12 +278,13 @@ public class FeeService {
         int cnt = (todayDay >= 15 ? 1 : 0)
                 + (todayMonth - startMonth)
                 + (todayYear - startYear) * 12;
-        
+
         return cnt * feePrice;
     }
 
     /**
      * 구분이 필요한 회비내역 조회
+     *
      * @return
      */
     public List<FeeLogEtc> findFeeLogEtcAll() {
@@ -304,6 +310,7 @@ public class FeeService {
 
     /**
      * 회비, 기타 내역 수정
+     *
      * @param feeLogEtc
      */
     @Transactional

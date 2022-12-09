@@ -14,6 +14,7 @@ public class FeeCodeRepositoryImpl implements FeeCodeRepositoryCustom {
     public FeeCodeRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
+
     @Override
     public Optional<FeeCode> findFeeCodeMemoAndDivision(String memo, String division) {
         Optional<FeeCode> feeCodeOptional = Optional.ofNullable(queryFactory

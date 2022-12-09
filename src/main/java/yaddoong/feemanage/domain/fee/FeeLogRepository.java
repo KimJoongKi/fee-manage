@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-public interface FeeLogRepository extends JpaRepository<FeeLog, Long>, FeeLogRepositoryCustom  {
+public interface FeeLogRepository extends JpaRepository<FeeLog, Long>, FeeLogRepositoryCustom {
 
     List<FeeLog> findFeeLogsByDateBetweenAndContentsLikeOrderByDateDesc(LocalDateTime sDate, LocalDateTime eDate, String contents);
 

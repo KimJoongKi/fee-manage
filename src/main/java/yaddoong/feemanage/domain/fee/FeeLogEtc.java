@@ -17,7 +17,8 @@ import java.util.Date;
 @Entity
 public class FeeLogEtc {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
     private LocalDateTime date;
     private String contents;
