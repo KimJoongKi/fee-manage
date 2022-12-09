@@ -9,5 +9,5 @@ public class FeeCodeUpdateForm {
     private Long id;
     private Long codeId;
     private String name;
-    private String gubun;
+    private String insertFlag;
 }

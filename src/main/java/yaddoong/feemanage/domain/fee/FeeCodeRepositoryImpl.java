@@ -19,7 +19,7 @@ public class FeeCodeRepositoryImpl implements FeeCodeRepositoryCustom {
     public Optional<FeeCode> findFeeCodeMemoAndDivision(String memo, String division) {
         Optional<FeeCode> feeCodeOptional = Optional.ofNullable(queryFactory
                 .selectFrom(feeCode)
-                .where(feeCode.name.eq(memo).and(feeCode.gubun.eq(division)))
+                .where(feeCode.name.eq(memo).and(feeCode.insertFlag.eq(division)))
                 .fetchOne());
         return feeCodeOptional;
     }

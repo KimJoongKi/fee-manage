@@ -20,19 +20,19 @@ public class FeeCode extends BaseTimeEntity {
     @GeneratedValue
     private Long id;
     private String name;
-    private String gubun;
+    private String insertFlag;
 
     @OneToMany(mappedBy = "code")
     private List<FeeDetailGubun> details = new ArrayList<>();
 
     @Builder
-    public FeeCode(String name, String gubun) {
+    public FeeCode(String name, String insertFlag) {
         this.name = name;
-        this.gubun = gubun;
+        this.insertFlag = insertFlag;
     }
 
-    public void updateCode(String name, String gubun) {
+    public void updateCode(String name, String insertFlag) {
         this.name = name;
-        this.gubun = gubun;
+        this.insertFlag = insertFlag;
     }
 }
