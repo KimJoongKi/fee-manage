@@ -2,6 +2,8 @@ package yaddoong.feemanage.web;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -9,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.web.file.form.FileForm;
+
+import java.io.IOException;
 
 /**
  * @RequiredArgsConstructor
@@ -45,9 +49,12 @@ public class FileController {
 
         // 첨부된 파일들의 확장자를 확인한다.(.xlsx 확장자만 업로드 가능)
         for (MultipartFile uploadFile : form.getUploadFiles()) {
+            // 업로드된 파일의 확장자를 가져온다.
             String extension = FilenameUtils.getExtension(
                     uploadFile.getOriginalFilename()
             );
+
+            // xlsx 파일이 아니면 알림 메시지를 보낸다.
             if (!messageSource.getMessage(
                     "upload.file.extention",
                     null,
@@ -58,9 +65,18 @@ public class FileController {
             }
         }
 
-        /**
-         * 첨부파일이
-         */
+        for (MultipartFile uploadFile : form.getUploadFiles()) {
+
+            try (XSSFWorkbook excel = new XSSFWorkbook(uploadFile.getInputStream())) {
+
+            } catch (OLE2NotOfficeXmlFileException e) {
+                bindingResult.reject("upload.file.password.notice", null);
+                return "file/upload";
+            }
+
+
+        }
+
 
         return "file/upload";
     }
