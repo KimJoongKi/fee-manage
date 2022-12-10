@@ -26,6 +26,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('com.h2database:h2')
     testCompile('org.springframework.boot:spring-boot-starter-test')
+    implementation group: 'commons-io', name: 'commons-io', version: '2.7'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-devtools'

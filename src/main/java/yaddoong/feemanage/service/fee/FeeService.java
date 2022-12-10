@@ -1,6 +1,7 @@
 package yaddoong.feemanage.service.fee;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -168,16 +169,27 @@ public class FeeService {
         for (File file : files) {
             FileInputStream fis = new FileInputStream(file);
             // xlsx 파일 로드
-            XSSFWorkbook wb = new XSSFWorkbook(fis);
-            XSSFSheet sheet = wb.getSheetAt(0);
-            List<FeeLog> list = new ArrayList<>();
-            list = listObjectSet(sheet, list);
-            feeLogRepository.saveAll(list);
-            String fileName = file.getName();
-            feeFileLogRepository.save(FeeFileLog
-                    .builder()
-                    .name(fileName)
-                    .build());
+
+            /**
+             * 카카오뱅크 모임통장 입출금내역을 엑셀파일로 받으면
+             * 기본적으로 보안(패스워드)가 걸려있다.
+             * 이를 해제하지 않고 업로드 하게되면 엑셀파일을 읽을 수 없는 오류가 발생하여
+             * 예외선언 하였다.
+             */
+            try (XSSFWorkbook wb = new XSSFWorkbook(fis)) {
+                XSSFSheet sheet = wb.getSheetAt(0);
+                List<FeeLog> list = new ArrayList<>();
+                list = listObjectSet(sheet, list);
+                feeLogRepository.saveAll(list);
+                String fileName = file.getName();
+                feeFileLogRepository.save(FeeFileLog
+                        .builder()
+                        .name(fileName)
+                        .build());
+            } catch (OLE2NotOfficeXmlFileException e) {
+
+            }
+
         }
     }
 

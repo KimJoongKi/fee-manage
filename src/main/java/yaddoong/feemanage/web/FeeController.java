@@ -33,6 +33,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * @RequiredArgsConstructor
+ * final필드나 @NonNull이 붙은 필드에 대해 생성자를 생성해줍니다.
+ */
 @RequiredArgsConstructor
 @RequestMapping(value = "/fee")
 @Controller
@@ -41,30 +45,6 @@ public class FeeController {
     private final FeeService feeService;
     private final FeeCodeRepository feeCodeRepository;
     private final FeeDetailGubunRepository feeDetailGubunRepository;
-
-    /**
-     * 파일업로드 화면
-     *
-     * @return
-     */
-    @GetMapping(value = "/new")
-    public String saveForm() {
-        return "fee/saveForm";
-    }
-
-    /**
-     * 입출금내역 저장
-     *
-     * @param file
-     * @return
-     * @throws IOException
-     * @throws ParseException
-     */
-    @PostMapping("/save")
-    public String insertFeeLog(@RequestParam("file") MultipartFile[] file) throws Exception {
-        feeService.saveAll(file);
-        return "redirect:/";
-    }
 
     /**
      * 통장 입출금내역 조회
