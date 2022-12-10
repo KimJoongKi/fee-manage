@@ -3,6 +3,8 @@ package yaddoong.feemanage.web;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.poi.openxml4j.exceptions.OLE2NotOfficeXmlFileException;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -60,21 +62,36 @@ public class FileController {
                     null,
                     null)
                     .equals(extension)) {
-                bindingResult.reject("upload.file.warning.notice", null);
+                bindingResult.reject("upload.file.xlsx.notice", null);
                 return "file/upload";
             }
         }
 
+        /**
+         * 카카오거래내역 엑셀파일이 맞는지 확인
+         */
         for (MultipartFile uploadFile : form.getUploadFiles()) {
 
             try (XSSFWorkbook excel = new XSSFWorkbook(uploadFile.getInputStream())) {
+                String sheetName = excel.getSheetName(0); //sheet 명
+                XSSFRow row = excel.getSheetAt(0) // 첫 행
+                        .getRow(0);
+                XSSFCell cell = row.getCell(1); // 제목 셀
+
+                // 카카오뱅크 거래내역 문자로 카카오뱅크 거래내역 파일인지 확인
+                if (!(sheetName.equals(
+                        messageSource.getMessage("kakaobank.transaction.history",null, null)
+                ) && cell.toString().equals(
+                        messageSource.getMessage("kakaobank.transaction.history", null, null)
+                ))) {
+                    bindingResult.reject("xlsx.gathering.passbook.notice", null);
+                    return "file/upload";
+                }
 
             } catch (OLE2NotOfficeXmlFileException e) {
                 bindingResult.reject("upload.file.password.notice", null);
                 return "file/upload";
             }
-
-
         }
 
 
