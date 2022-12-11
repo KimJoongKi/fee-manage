@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import yaddoong.feemanage.service.file.FileService;
+import yaddoong.feemanage.web.file.dto.FileDto;
 import yaddoong.feemanage.web.file.form.FileForm;
 
 import java.io.IOException;
@@ -27,6 +29,9 @@ public class FileController {
 
     @Autowired
     MessageSource messageSource;
+
+    // 파일 서비스
+    private final FileService fileService;
 
     /**
      * 파일업로드 화면 이동
@@ -94,6 +99,13 @@ public class FileController {
             }
         }
 
+        // form 파일에 담겨진 정보를 dto 파일에 저장한다.
+        FileDto fileDto = FileDto.builder()
+                .form(form)
+                .build();
+
+        // 파일에 들어있는 정보를 DB에 입력하는 작업을 진행한다.
+        fileService.saveFileInfo(fileDto);
 
         return "file/upload";
     }
