@@ -23,9 +23,7 @@ public class FileUpload {
     @DateTimeFormat(pattern = "yyyy년 MM월 dd일 HH시 mm분 ss초")
     @GeneratedValue
     private Long id; // 파일 업로드 id
-
     private String filename; // 파일 명
-
     private LocalDateTime uploadDateTime; // 파일 업로드 시간
 
     @Builder

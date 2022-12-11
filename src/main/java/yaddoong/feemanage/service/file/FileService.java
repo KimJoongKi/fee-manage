@@ -5,8 +5,11 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import yaddoong.feemanage.domain.fee.FeeFileLog;
 import yaddoong.feemanage.domain.file.FileUpload;
 import yaddoong.feemanage.domain.file.FileUploadRepository;
 import yaddoong.feemanage.domain.transactionHistory.TransactionHistory;
@@ -136,6 +139,15 @@ public class FileService {
                                 .map(uploadFileMap)
                                 .build())
                 .getId();
+    }
+
+    /**
+     * 파일 업로드 로그 가져오기
+     * @param pageable
+     * @return
+     */
+    public Page<FileUpload> selectFileUploadLog(Pageable pageable) {
+        return fileUploadRepository.findAll(pageable);
     }
 
 }

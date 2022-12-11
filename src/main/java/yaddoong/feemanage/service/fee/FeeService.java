@@ -264,11 +264,10 @@ public class FeeService {
         return feeLogDto;
     }
 
-
-    public Page<FeeFileLog> findFeeFileLogAll(Pageable pageable) {
-        return feeFileLogRepository.findAll(pageable);
-    }
-
+    /**
+     * 회원 별 미납내역 쿼리 호출
+     * @return
+     */
     public List<FeeLogProjection> findGroupByName() {
         return feeLogRepository.findGroupByName();
     }
