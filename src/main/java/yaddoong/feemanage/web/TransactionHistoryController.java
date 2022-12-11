@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import yaddoong.feemanage.domain.transactionHistory.TransactionHistory;
 import yaddoong.feemanage.service.transactionhistory.TransactionHistoryService;
@@ -56,5 +57,29 @@ public class TransactionHistoryController {
 
         return "transactionhistory/list";
     }
+
+    /**
+     * 거래내역 검색 조회 메소드
+     * @param form
+     * @param model
+     * @return
+     */
+    @PostMapping
+    public String getTransactionHistory(TransactionHistorySearchForm form, Model model) {
+
+        TransactionHistoryQueryDto dto = TransactionHistoryQueryDto.builder()
+                .form(form)
+                .build();
+        List<TransactionHistory> transactionHistoryList =
+                transactionHistoryService.getTransactionHistoryList(dto);
+
+        model.addAttribute("transactionHistoryList", transactionHistoryList);
+        model.addAttribute("form", form);
+
+        // TODO: 2022/03/06 로그인 한 모임 기준 데이터 불러오기 추가
+        return "transactionhistory/list";
+
+    }
+
 
 }
