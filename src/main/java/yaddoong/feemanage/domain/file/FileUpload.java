@@ -26,9 +26,16 @@ public class FileUpload {
     private String filename; // 파일 명
     private LocalDateTime uploadDateTime; // 파일 업로드 시간
 
+    private String historyStartDate; // 거래내역 시작일자
+
+    private String historyEndDate; // 거래내역 종료일자
+
     @Builder
     public FileUpload(Map<String, Object> map) {
         this.filename = map.get("filename").toString();
         this.uploadDateTime = (LocalDateTime) map.get("uploadDateTime");
+        this.historyStartDate = map.get("historyStartDate").toString();
+        this.historyEndDate = map.get("historyEndDate").toString();
     }
 }
+

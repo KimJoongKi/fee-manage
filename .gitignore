@@ -3,6 +3,7 @@ HELP.md
 build/
 *.xlsx
 *real.sql
+*LocalTest.java
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/

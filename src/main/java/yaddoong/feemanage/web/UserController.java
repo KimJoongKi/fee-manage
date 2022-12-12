@@ -55,7 +55,6 @@ public class UserController {
 
     /**
      * 회원별 회비 납부내역 조회 메소드
-     *
      * @param model
      * @return
      */
@@ -64,18 +63,7 @@ public class UserController {
         // 페이징 처리
         Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "filename"));
 
-        Page<FileUpload> all = fileService.selectFileUploadLog(pageable);
-        // 파일 업로드 기록이 없을 경우
-        if (all.getContent().size() == 0) {
-            model.addAttribute("lastUpdateData", "업데이트 기록 없음");
-            return "user/userFeeList";
-        }
-        // 파일 업로드 기록이 있을 때 가장 마지막일자 기준 메시지를 나타낸다.
-        model.addAttribute
-                ("lastUpdateData", "(" + messageSource.getMessage("class.start.date", null, null) + ") " + all.getContent()
-                        .get(0)
-                        .getFilename()
-                        .replaceAll(".xlsx", "") + " 까지 기준");
+        // 회원별 납부,미납 내역 조회
         List<FeeLogProjection> list = feeService.findGroupByName();
         List<UserFeeForm> feeFormList = new ArrayList<>();
         for (FeeLogProjection feeLogProjection : list) {

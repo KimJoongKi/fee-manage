@@ -14,6 +14,7 @@ import yaddoong.feemanage.domain.file.FileUpload;
 import yaddoong.feemanage.domain.file.FileUploadRepository;
 import yaddoong.feemanage.domain.transactionHistory.TransactionHistory;
 import yaddoong.feemanage.domain.transactionHistory.TransactionHistoryRepository;
+import yaddoong.feemanage.utils.NumberConstant;
 import yaddoong.feemanage.web.file.dto.FileDto;
 
 import java.io.IOException;
@@ -42,9 +43,10 @@ public class FileService {
 
     /**
      * 파일의 엑셀정보를 입력하는 메소드
+     *
      * @param fileDto
      */
-    public void saveFileInfo(FileDto fileDto) {
+    public void saveFileInfo(FileDto fileDto) throws Exception {
         for (MultipartFile multipartFile : fileDto.getFileList()) {
             insertExcelData(multipartFile, insertExcelUploadFileData(multipartFile));
         }
@@ -129,11 +131,18 @@ public class FileService {
      * @param file
      * @return
      */
-    private Long insertExcelUploadFileData(MultipartFile file) {
+    private Long insertExcelUploadFileData(MultipartFile file) throws Exception {
 
         Map<String, Object> uploadFileMap = new HashMap<>();
         uploadFileMap.put("filename", file.getOriginalFilename()); // 파일명
         uploadFileMap.put("uploadDateTime", LocalDateTime.now()); // 업로드 시간
+
+        // 거래내역의 시작일자와 종료일자를 조회하는 메소드
+        String[] historyDate = null;
+        historyDate = getHistoryDateArr(file);
+        uploadFileMap.put("historyStartDate", historyDate[0]);
+        uploadFileMap.put("historyEndDate", historyDate[1]);
+
         return fileUploadRepository.save(
                         FileUpload.builder()
                                 .map(uploadFileMap)
@@ -142,12 +151,20 @@ public class FileService {
     }
 
     /**
-     * 파일 업로드 로그 가져오기
-     * @param pageable
+     * 거래내역 조회기간 가져오는 메소드
+     * @param file
      * @return
+     * @throws Exception
      */
-    public Page<FileUpload> selectFileUploadLog(Pageable pageable) {
-        return fileUploadRepository.findAll(pageable);
+    private String[] getHistoryDateArr(MultipartFile file) throws Exception {
+
+        XSSFWorkbook excel = new XSSFWorkbook(file.getInputStream());
+        XSSFSheet sheetAt = excel.getSheetAt(NumberConstant.KAKAO_HISTORY_SHEET_NUMBER);
+        XSSFRow row = sheetAt.getRow(NumberConstant.EXCEL_HISTORY_DATE_ROW_NUMBER);
+
+        return row.getCell(NumberConstant.EXCEL_HISTORY_DATE_CELL_NUMBER)
+                .getStringCellValue().split("-");
+        
     }
 
 }
