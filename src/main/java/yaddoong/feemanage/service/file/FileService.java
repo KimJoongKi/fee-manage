@@ -167,4 +167,11 @@ public class FileService {
         
     }
 
+    /**
+     * 파일 업로드 내역 조회 메소드
+     */
+    public List<FileUpload> getFileUploadHistory() throws Exception {
+        return fileUploadRepository.findAll();
+    }
+
 }

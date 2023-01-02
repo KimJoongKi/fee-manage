@@ -9,18 +9,20 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import yaddoong.feemanage.domain.file.FileUpload;
 import yaddoong.feemanage.service.file.FileService;
 import yaddoong.feemanage.web.file.dto.FileDto;
 import yaddoong.feemanage.web.file.form.FileForm;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
- * @RequiredArgsConstructor
- * final필드나 @NonNull이 붙은 필드에 대해 생성자를 생성해줍니다.
+ * @RequiredArgsConstructor final필드나 @NonNull이 붙은 필드에 대해 생성자를 생성해줍니다.
  */
 @RequiredArgsConstructor
 @RequestMapping(value = "/file")
@@ -35,6 +37,7 @@ public class FileController {
 
     /**
      * 파일업로드 화면 이동
+     *
      * @return
      */
     @GetMapping(value = "/upload")
@@ -44,6 +47,7 @@ public class FileController {
 
     /**
      * 파일 업로드
+     *
      * @param form
      * @param bindingResult
      * @return
@@ -63,9 +67,9 @@ public class FileController {
 
             // xlsx 파일이 아니면 알림 메시지를 보낸다.
             if (!messageSource.getMessage(
-                    "upload.file.extention",
-                    null,
-                    null)
+                            "upload.file.extention",
+                            null,
+                            null)
                     .equals(extension)) {
                 bindingResult.reject("upload.file.xlsx.notice", null);
                 return "file/upload";
@@ -85,7 +89,7 @@ public class FileController {
 
                 // 카카오뱅크 거래내역 문자로 카카오뱅크 거래내역 파일인지 확인
                 if (!(sheetName.equals(
-                        messageSource.getMessage("kakaobank.transaction.history",null, null)
+                        messageSource.getMessage("kakaobank.transaction.history", null, null)
                 ) && cell.toString().equals(
                         messageSource.getMessage("kakaobank.transaction.history", null, null)
                 ))) {
@@ -110,5 +114,14 @@ public class FileController {
         return "file/upload";
     }
 
-    // TODO: 2022-12-12 파일 업로드 내역 조회 화면 만들기
+    /**
+     * 파일 업로드 내역 메소드
+     * @return
+     */
+    @GetMapping("/list")
+    public String list(Model model) throws Exception {
+        List<FileUpload> fileUploadHistory = fileService.getFileUploadHistory();
+        model.addAttribute("transactionHistoryList", fileUploadHistory);
+        return "file/list";
+    }
 }
