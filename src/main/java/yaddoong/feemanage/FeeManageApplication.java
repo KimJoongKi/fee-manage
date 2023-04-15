@@ -11,6 +11,4 @@ public class FeeManageApplication {
         SpringApplication.run(FeeManageApplication.class, args);
     }
 
-
-
 }

@@ -30,7 +30,7 @@ public class FeeLog {
     private String memo;
 
     @Builder
-    public FeeLog(LocalDateTime date, String contents, String division, int price, int afterBalance, String memo, User user) {
+    public FeeLog(LocalDateTime date, String contents, String division, int price, int afterBalance, String memo) {
         this.date = date;
         this.contents = contents;
         this.division = division;

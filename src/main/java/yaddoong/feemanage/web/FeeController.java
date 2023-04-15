@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import yaddoong.feemanage.domain.fee.*;
 import yaddoong.feemanage.service.fee.FeeService;
 import yaddoong.feemanage.web.dto.FeeCodeStatisticsDto;
+import yaddoong.feemanage.web.dto.FeeLogDto;
 import yaddoong.feemanage.web.form.FeeCodeUpdateForm;
 import yaddoong.feemanage.web.form.FeeLogEtcUpdateForm;
 import yaddoong.feemanage.web.form.FeeLogForm;
@@ -72,7 +73,7 @@ public class FeeController {
      * @throws ParseException
      */
     @GetMapping("/list")
-    public String listView(Model model) throws IOException, ParseException {
+    public String listView(Model model) {
 
         LocalDateTime startDate = LocalDate.now().minusMonths(6).atTime(LocalTime.MIN);
         LocalDateTime endDate = LocalDate.now().atTime(LocalTime.MAX);

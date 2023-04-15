@@ -91,8 +91,8 @@ public class FeeService {
 
                     // 파일업로드 디렉토리 하위 파일을 모두 지운다.
                     try {
-                    File deleteFolder = new File(tmpPath);
-                    File[] deleteFiles = deleteFolder.listFiles();
+                        File deleteFolder = new File(tmpPath);
+                        File[] deleteFiles = deleteFolder.listFiles();
                     for (File deleteFile : deleteFiles) {
                         deleteFile.delete();
                     }
@@ -108,7 +108,6 @@ public class FeeService {
 
                     // TODO: 2021-01-23 업로드 된 파일이 존재하지 않을 때 메시지 추가
                     if (files.length == 0) {
-                        System.out.println("파일이 첨부되지 않았을 때 메시지 추가");
                         return;
                     }
 
@@ -265,7 +264,10 @@ public class FeeService {
         LocalDate today = LocalDate.now();
         LocalDate startDay = LocalDate.parse(startDateStr);
         int todayMonth = today.getMonthValue();
-        int startMonth = startDay.getMonthValue()+1;
+        /**
+         * todo : 가입일자가 정확하게 입력되면 수치에 오류가 있음 우선은 15일 전에 가입하면 그 전달 15일에 가입 한 걸로 입력하는중
+         */
+        int startMonth = startDay.getMonthValue() + 1;
         int todayDay = today.getDayOfMonth();
         int todayYear = today.getYear();
         int startYear = startDay.getYear();
