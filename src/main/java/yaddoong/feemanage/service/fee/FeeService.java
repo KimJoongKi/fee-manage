@@ -264,10 +264,7 @@ public class FeeService {
         LocalDate today = LocalDate.now();
         LocalDate startDay = LocalDate.parse(startDateStr);
         int todayMonth = today.getMonthValue();
-        /**
-         * todo : 가입일자가 정확하게 입력되면 수치에 오류가 있음 우선은 15일 전에 가입하면 그 전달 15일에 가입 한 걸로 입력하는중
-         */
-        int startMonth = startDay.getMonthValue() + 1;
+        int startMonth = startDay.getMonthValue()+1;
         int todayDay = today.getDayOfMonth();
         int todayYear = today.getYear();
         int startYear = startDay.getYear();

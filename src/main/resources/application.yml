@@ -17,6 +17,9 @@ spring:
   h2:
     console:
       enabled: true
+  # 메시지 파일 등록
+  messages:
+    basename: messages,errors
 
 logging:
   level:

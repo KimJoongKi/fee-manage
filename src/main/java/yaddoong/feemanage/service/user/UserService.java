@@ -59,7 +59,7 @@ public class UserService {
                 LocalDate
                         .parse(secessionDate)
                         .plusDays(1)
-                        .atTime(0,0,0));
+                        .atTime(0, 0, 0));
 
         List<SecessionFeeLog> list = new ArrayList<>();
 
@@ -105,7 +105,7 @@ public class UserService {
                         .getName(),
                 LocalDate.parse(rejoinDate)
                         .plusDays(1)
-                        .atTime(0,0,0)
+                        .atTime(0, 0, 0)
         );
 
         // 이전 회비 내역 탈퇴 회비 내역 테이블로 이동
@@ -131,7 +131,7 @@ public class UserService {
                 LocalDate
                         .parse(rejoinDate)
                         .plusDays(1)
-                        .atTime(0,0,0));
+                        .atTime(0, 0, 0));
 
         // 탈퇴일자 및 가입일자, 미납금액 초기화 (미납금액 회비를 모두 납부해야 재가입 가능)
         findUser.get().updateSecessionDate(null);
@@ -150,7 +150,7 @@ public class UserService {
     public int feePriceCalc(String startDateStr, LocalDate endDay) {
         LocalDate startDay = LocalDate.parse(startDateStr);
         int todayMonth = endDay.getMonthValue();
-        int startMonth = startDay.getMonthValue()+1;
+        int startMonth = startDay.getMonthValue() + 1;
         int todayDay = endDay.getDayOfMonth();
         int todayYear = endDay.getYear();
         int startYear = startDay.getYear();

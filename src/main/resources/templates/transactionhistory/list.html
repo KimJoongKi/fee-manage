@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header :: header" />
+<body>
+<div class="container">
+  <div th:replace="fragments/bodyHeader :: bodyHeader" />
+  <div>
+    모임통장 입출금 내역
+  </div>
+  <div>
+    <form role="form" th:object="${form}" action="/transactionhistory" method="post">
+      <div class="row g-3">
+        <div class="col">
+          <input class="form-control" type="date" th:field="*{startDateTime}">
+        </div>
+        <div class="col">
+          <input class="form-control" type="date" th:field="*{endDateTime}">
+        </div>
+        <div class="col">
+          <input type="text" class="form-control" placeholder="내용" th:field="*{contents}">
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-primary">검색</button>
+        </div>
+      </div>
+    </form>
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>입금일자</th>
+        <th>내용</th>
+        <th>잔액</th>
+        <th>구분</th>
+        <th>비고</th>
+        <th>금액</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="transactionHistory: ${transactionHistoryList}">
+        <td th:text="${#temporals.format(transactionHistory.date, 'yyyy년MM월dd일 HH시mm분ss초')}"></td>
+        <td th:text="${transactionHistory.contents}"></td>
+        <td th:text="${#numbers.formatCurrency(transactionHistory.afterBalance)}"></td>
+        <td th:text="${transactionHistory.division}"></td>
+        <td th:text="${transactionHistory.memo}"></td>
+        <td th:text="${#numbers.formatCurrency(transactionHistory.price)}"></td>
+      </tr>
+      <!--tr th:each="member : ${}">
+          <td th:text="${}"></td>
+          <td th:text="${}"></td>
+          <td th:text="${}"></td>
+          <td th:text="${}"></td>
+          <td th:text="${}"></td>
+      </tr-->
+      </tbody>
+    </table>
+  </div>
+  <div th:replace="fragments/footer :: footer" />
+</div> <!-- /container -->
+</body>
+</html>

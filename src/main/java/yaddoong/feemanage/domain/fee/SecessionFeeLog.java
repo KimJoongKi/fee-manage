@@ -18,7 +18,8 @@ import java.time.LocalDateTime;
 @Entity
 public class SecessionFeeLog {
 
-    @Id @DateTimeFormat(pattern = "yyyy년 MM월 dd일 HH시 mm분 ss초")
+    @Id
+    @DateTimeFormat(pattern = "yyyy년 MM월 dd일 HH시 mm분 ss초")
     private LocalDateTime date;
     @Id
     private String contents;

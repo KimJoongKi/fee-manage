@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @Entity
 public class FeeDetailGubun {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "fee_id")
     private Long id;
 

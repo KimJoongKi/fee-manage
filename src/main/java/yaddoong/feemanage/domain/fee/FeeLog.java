@@ -20,7 +20,8 @@ import java.util.List;
 @Entity
 public class FeeLog {
 
-    @Id @DateTimeFormat(pattern = "yyyy년 MM월 dd일 HH시 mm분 ss초")
+    @Id
+    @DateTimeFormat(pattern = "yyyy년 MM월 dd일 HH시 mm분 ss초")
     private LocalDateTime date;
     @Id
     private String contents;
