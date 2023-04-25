@@ -39,6 +39,16 @@ public class UserController {
     @Autowired
     MessageSource messageSource;
 
+    /**
+     * 사용자 등록 화면 이동 메소드
+     * @return
+     */
+    @GetMapping("/user")
+    public String insertUse() {
+        // TODO: 2023/04/25 사용자 등록 화면 이동 기능 추가
+        return "";
+    }
+
     @GetMapping("/list")
     public String findUserList(Model model) {
         List<User> userList = userService.findUserList();
