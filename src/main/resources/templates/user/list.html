@@ -8,7 +8,7 @@
     회원 목록
   </div>
   <div>
-    <form action="/user/secessionUpdate" method="post" name="form">
+    <form action="/member/secessionUpdate" method="post" name="form">
       <input type="hidden" name="id">
       <input type="hidden" name="secessionDate">
     </form>
@@ -22,13 +22,13 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="user: ${userList}">
-        <td th:text="${user.name}"></td>
-        <td th:text="${#temporals.format(user.birth, 'yyyy년MM월dd일')}"></td>
-        <td th:text="${#temporals.format(user.joinDate, 'yyyy년MM월dd일')}"></td>
+      <tr th:each="member: ${memberList}">
+        <td th:text="${member.name}"></td>
+        <td th:text="${#temporals.format(member.birth, 'yyyy년MM월dd일')}"></td>
+        <td th:text="${#temporals.format(member.joinDate, 'yyyy년MM월dd일')}"></td>
         <td>
           <input th:type="date" th:id="'dateId'+${userStat.index}"  />
-          <input th:type="hidden" th:id="'userId'+${userStat.index}" th:value="${user.id}"  />
+          <input th:type="hidden" th:id="'userId'+${userStat.index}" th:value="${member.id}"  />
           <button class="btn btn-primary" th:attr="onclick=|secessionBtnClick('${userStat.index}')|">수정</button>
         </td>
       </tr>

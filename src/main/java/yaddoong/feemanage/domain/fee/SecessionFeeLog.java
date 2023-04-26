@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import yaddoong.feemanage.domain.user.User;
+import yaddoong.feemanage.domain.user.Member;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -29,7 +29,7 @@ public class SecessionFeeLog {
     private String memo;
 
     @Builder
-    public SecessionFeeLog(LocalDateTime date, String contents, String division, int price, int afterBalance, String memo, User user) {
+    public SecessionFeeLog(LocalDateTime date, String contents, String division, int price, int afterBalance, String memo, Member member) {
         this.date = date;
         this.contents = contents;
         this.division = division;

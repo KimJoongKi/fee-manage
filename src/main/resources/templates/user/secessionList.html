@@ -8,7 +8,7 @@
     회원 목록
   </div>
   <div>
-    <form action="/user/rejoin" method="post" name="form">
+    <form action="/member/rejoin" method="post" name="form">
       <input type="hidden" name="id">
       <input type="hidden" name="rejoinDate">
     </form>
@@ -22,13 +22,13 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="user: ${userList}">
-        <td th:text="${user.name}"></td>
-        <td th:text="${#temporals.format(user.secessionDate, 'yyyy년MM월dd일')}"></td>
-        <td th:text="${#numbers.formatCurrency(user.unpaid)}">
+      <tr th:each="member: ${memberList}">
+        <td th:text="${member.name}"></td>
+        <td th:text="${#temporals.format(member.secessionDate, 'yyyy년MM월dd일')}"></td>
+        <td th:text="${#numbers.formatCurrency(member.unpaid)}">
         <td>
           <input th:type="date" th:id="'dateId'+${userStat.index}"  />
-          <input th:type="hidden" th:id="'userId'+${userStat.index}" th:value="${user.id}"  />
+          <input th:type="hidden" th:id="'userId'+${userStat.index}" th:value="${member.id}"  />
           <button class="btn btn-primary" th:attr="onclick=|rejoinBtnClick('${userStat.index}')|">수정</button>
         </td>
       </tr>

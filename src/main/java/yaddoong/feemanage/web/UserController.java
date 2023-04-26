@@ -3,7 +3,6 @@ package yaddoong.feemanage.web;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -12,10 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import yaddoong.feemanage.domain.fee.FeeFileLog;
 import yaddoong.feemanage.domain.fee.FeeLogProjection;
-import yaddoong.feemanage.domain.file.FileUpload;
-import yaddoong.feemanage.domain.user.User;
+import yaddoong.feemanage.domain.user.Member;
 import yaddoong.feemanage.service.fee.FeeService;
 import yaddoong.feemanage.service.file.FileService;
 import yaddoong.feemanage.service.user.UserService;
@@ -44,22 +41,22 @@ public class UserController {
      * @return
      */
     @GetMapping("/user")
-    public String insertUse() {
+    public String insertUser() {
         // TODO: 2023/04/25 사용자 등록 화면 이동 기능 추가
         return "";
     }
 
     @GetMapping("/list")
     public String findUserList(Model model) {
-        List<User> userList = userService.findUserList();
-        model.addAttribute("userList", userList);
+        List<Member> memberList = userService.findUserList();
+        model.addAttribute("userList", memberList);
         return "user/list";
     }
 
     @GetMapping("/secessionList")
     public String findSecessionList(Model model) {
-        List<User> secessionUserList = userService.findSecessionUserList();
-        model.addAttribute("userList", secessionUserList);
+        List<Member> secessionMemberList = userService.findSecessionUserList();
+        model.addAttribute("userList", secessionMemberList);
         return "user/secessionList";
     }
 

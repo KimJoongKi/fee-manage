@@ -55,7 +55,7 @@ select
        name, 
        nvl(sum(price),0), 
        unpaid
-  from user u left outer join fee_log as f on u.name = f.contents
+  from member u left outer join fee_log as f on u.name = f.contents
 where u.secession_date is null
   and f.memo = ''
 group by contents

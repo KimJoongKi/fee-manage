@@ -3,14 +3,11 @@ package yaddoong.feemanage.domain.fee;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import yaddoong.feemanage.domain.user.User;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Getter
 @NoArgsConstructor

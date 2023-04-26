@@ -8,14 +8,11 @@ import yaddoong.feemanage.domain.fee.FeeLog;
 import yaddoong.feemanage.domain.fee.FeeLogRepository;
 import yaddoong.feemanage.domain.fee.SecessionFeeLog;
 import yaddoong.feemanage.domain.fee.SecessionFeeLogRepository;
-import yaddoong.feemanage.domain.user.User;
+import yaddoong.feemanage.domain.user.Member;
 import yaddoong.feemanage.domain.user.UserRepository;
-import yaddoong.feemanage.service.fee.FeeService;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -38,18 +35,18 @@ public class UserService {
         return userRepository.findUsersNames();
     }
 
-    public List<User> findUserList() {
+    public List<Member> findUserList() {
         return userRepository.findAllBySecessionDateIsNull();
     }
 
-    public List<User> findSecessionUserList() {
+    public List<Member> findSecessionUserList() {
         return userRepository.findAllBySecessionDateIsNotNull();
     }
 
     @Transactional
     public void secession(Long id, String secessionDate) {
         // 탈퇴 회원 조회
-        Optional<User> findUser = userRepository.findById(id);
+        Optional<Member> findUser = userRepository.findById(id);
 
         // 탈퇴 회원 회비 입금내역 조회 (탈퇴일 포함 이전 입금 내역)
         List<FeeLog> allByContents = feeLogRepository.findAllByContentsAndDateLessThan(
@@ -96,7 +93,7 @@ public class UserService {
     public void rejoin(Long id, String rejoinDate) {
 
         // 재가입 회원 조회
-        Optional<User> findUser = userRepository.findById(id);
+        Optional<Member> findUser = userRepository.findById(id);
 
         // 탈퇴 후 재가입 전까지 입금한 금액 조회
         List<FeeLog> allByContents = feeLogRepository.findAllByContentsAndDateLessThan(
@@ -140,7 +137,7 @@ public class UserService {
     }
 
     // 탈퇴시 미납 금액 계산 로직
-    private int secessionUnpaidCalc(Optional<User> findUser, String secessionDateStr) {
+    private int secessionUnpaidCalc(Optional<Member> findUser, String secessionDateStr) {
         LocalDate secessionLocalDate = LocalDate.parse(secessionDateStr);
         int standardFeePrice = feePriceCalc(findUser.get().getJoinDate().toString(), secessionLocalDate);
         int depositFeePrice = feeLogRepository.findFeePrice(findUser.get().getName());

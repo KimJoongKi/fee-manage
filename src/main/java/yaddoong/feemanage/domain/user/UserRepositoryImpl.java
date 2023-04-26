@@ -6,7 +6,7 @@ import yaddoong.feemanage.domain.fee.FeeLogEtc;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static yaddoong.feemanage.domain.user.QUser.user;
+import static yaddoong.feemanage.domain.user.QMember.member;
 
 public class UserRepositoryImpl implements UserRepositoryCustom {
 
@@ -19,8 +19,8 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     @Override
     public List<String> findUsersNames() {
 
-        List<String> results = queryFactory.select(user.name)
-                .from(user)
+        List<String> results = queryFactory.select(member.name)
+                .from(member)
                 .fetch();
 
         return results;
