@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
-@RequestMapping(value = "/user")
+@RequestMapping(value = "/member")
 @Controller
 public class UserController {
 
@@ -40,10 +40,10 @@ public class UserController {
      * 사용자 등록 화면 이동 메소드
      * @return
      */
-    @GetMapping("/user")
+    @GetMapping("/new")
     public String insertUser() {
         // TODO: 2023/04/25 사용자 등록 화면 이동 기능 추가
-        return "";
+        return "members/createMemberForm";
     }
 
     @GetMapping("/list")

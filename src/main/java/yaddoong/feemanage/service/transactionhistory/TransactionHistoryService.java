@@ -35,4 +35,6 @@ public class TransactionHistoryService {
     public List<TransactionHistoryProjection> findGroupByName() {
         return transactionHistoryRepository.findGroupByName();
     }
+
+    // TODO: 2023/05/08 내역구분 서비스 이쪽으로 옮기기 
 }

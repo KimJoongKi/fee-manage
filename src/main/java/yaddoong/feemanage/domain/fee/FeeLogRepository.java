@@ -26,7 +26,7 @@ public interface FeeLogRepository extends JpaRepository<FeeLog, Long>, FeeLogRep
 
     void deleteFeeLogByContentsAndDateLessThan(String contents, LocalDateTime date);
 
-    @Query(value = "select u.name, COALESCE(sum(f.price),0) AS price, u.unpaid, join_date AS joinDate from user as u left outer join transaction_history as f on u.name = f.contents " +
+    @Query(value = "select u.name, COALESCE(sum(f.price),0) AS price, u.unpaid, join_date AS joinDate from member as u left outer join transaction_history as f on u.name = f.contents " +
             "where u.secession_date is null and (f.memo = '' or f.memo is null) group by u.name order by u.name"
             , nativeQuery = true)
     List<FeeLogProjection> findGroupByName();
