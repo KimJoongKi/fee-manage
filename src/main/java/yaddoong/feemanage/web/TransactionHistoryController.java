@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import yaddoong.feemanage.domain.transactionHistory.TransactionHistory;
-import yaddoong.feemanage.service.transactionhistory.TransactionHistoryService;
+import yaddoong.feemanage.domain.transactionHistory.TransactionHistoryEtc;
+import yaddoong.feemanage.service.transactionHistory.TransactionHistoryService;
 import yaddoong.feemanage.utils.CommonUtils;
-import yaddoong.feemanage.web.transactionhistory.dto.TransactionHistoryQueryDto;
-import yaddoong.feemanage.web.transactionhistory.form.TransactionHistorySearchForm;
+import yaddoong.feemanage.web.transactionHistory.dto.TransactionHistoryQueryDto;
+import yaddoong.feemanage.web.transactionHistory.form.TransactionHistoryEtcUpdateForm;
+import yaddoong.feemanage.web.transactionHistory.form.TransactionHistorySearchForm;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +23,7 @@ import java.util.Map;
  */
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/transactionhistory")
+@RequestMapping("/transactionHistory")
 public class TransactionHistoryController {
 
     private final TransactionHistoryService transactionHistoryService;
@@ -30,6 +32,7 @@ public class TransactionHistoryController {
 
     /**
      * 거래내역 조회 메뉴 이동 메소드
+     *
      * @param model
      * @return
      */
@@ -42,7 +45,7 @@ public class TransactionHistoryController {
         map.put("startDateTime", commonUtils.dayCalcLocalDateTime(60));
         map.put("endDateTime", commonUtils.dayCalcLocalDateTime(0));
         map.put("contents", "");
-        
+
         // 검색 조건에 맞는 거래내역 조회
         TransactionHistorySearchForm form =
                 new TransactionHistorySearchForm(map);
@@ -55,11 +58,12 @@ public class TransactionHistoryController {
         model.addAttribute("transactionHistoryList", transactionHistoryList);
         model.addAttribute("form", form);
 
-        return "transactionhistory/list";
+        return "transaction-history/list";
     }
 
     /**
      * 거래내역 검색 조회 메소드
+     *
      * @param form
      * @param model
      * @return
@@ -77,9 +81,35 @@ public class TransactionHistoryController {
         model.addAttribute("form", form);
 
         // TODO: 2022/03/06 로그인 한 모임 기준 데이터 불러오기 추가
-        return "transactionhistory/list";
+        return "transaction-history/list";
 
     }
 
+    /**
+     * 기타내역을 조회하는 메서드
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping("/etcList")
+    public String etcList(Model model) {
+        List<TransactionHistoryEtc> transactionHistories =
+                transactionHistoryService.findTransactionHistoryEtcAll();
 
+        model.addAttribute("transactionHistoryEtcs", transactionHistories);
+        model.addAttribute("form", new TransactionHistoryEtcUpdateForm());
+
+        return "transaction-history/etcList";
+    }
+
+    @PostMapping("transactionHistoryEtcUpdate")
+    public String transactionHistoryAllUpdate() {
+        return "redirect:/transactionHistory/etcList";
+    }
+
+    @GetMapping("/transactionHistoryEtcAllUpdate")
+    public String transactionHistoryEtcAllUpdate() {
+        transactionHistoryService.transactionHistoryEtcAllUpdate();
+        return "redirect:/transactionHistory/etcList";
+    }
 }

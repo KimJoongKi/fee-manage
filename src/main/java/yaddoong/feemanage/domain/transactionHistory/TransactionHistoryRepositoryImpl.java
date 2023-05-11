@@ -7,11 +7,11 @@ import java.util.List;
 
 import static yaddoong.feemanage.domain.transactionHistory.QTransactionHistory.transactionHistory;
 
-public class TransactiobnHistoryRepositoryImpl implements TransactiobnHistoryRepositoryCustom {
+public class TransactionHistoryRepositoryImpl implements TransactionHistoryRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public TransactiobnHistoryRepositoryImpl(EntityManager em) {
+    public TransactionHistoryRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 

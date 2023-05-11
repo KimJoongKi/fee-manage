@@ -1,4 +1,4 @@
-package yaddoong.feemanage.web.transactionhistory.form;
+package yaddoong.feemanage.web.transactionHistory.form;
 
 import lombok.Builder;
 import lombok.Getter;

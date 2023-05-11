@@ -8,7 +8,7 @@
     모임통장 입출금 내역
   </div>
   <div>
-    <form role="form" th:object="${form}" action="/transactionhistory" method="post">
+    <form role="form" th:object="${form}" action="/transactionHistory" method="post">
       <div class="row g-3">
         <div class="col">
           <input class="form-control" type="date" th:field="*{startDateTime}">

@@ -1,9 +1,9 @@
-package yaddoong.feemanage.web.transactionhistory.dto;
+package yaddoong.feemanage.web.transactionHistory.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import yaddoong.feemanage.web.transactionhistory.form.TransactionHistorySearchForm;
+import yaddoong.feemanage.web.transactionHistory.form.TransactionHistorySearchForm;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
