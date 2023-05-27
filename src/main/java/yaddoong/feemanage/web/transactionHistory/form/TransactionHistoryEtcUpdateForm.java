@@ -10,6 +10,6 @@ import lombok.Setter;
 @Setter
 public class TransactionHistoryEtcUpdateForm {
     private Long id;
-    private String name;
+    private String memo;
 
 }

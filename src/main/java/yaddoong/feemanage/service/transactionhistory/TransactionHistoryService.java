@@ -2,17 +2,16 @@ package yaddoong.feemanage.service.transactionHistory;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.h2.engine.Mode;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import yaddoong.feemanage.domain.transactionHistory.*;
 import yaddoong.feemanage.service.user.UserService;
 import yaddoong.feemanage.web.transactionHistory.dto.TransactionHistoryQueryDto;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 거래내역 서비스 class
@@ -100,4 +99,22 @@ public class TransactionHistoryService {
         return transactionHistoryEtcRepository.findTransactionHistoryEtc(userNames);
     }
 
+    /**
+     * 특정 기타내역 조회 메서드
+     */
+    public Optional<TransactionHistoryEtc> findTransactionHistoryEtcById(Long id) {
+        return transactionHistoryEtcRepository.findById(id);
+    }
+
+    @Transactional
+    public void transactionHistoryEtcSave(TransactionHistoryEtc transactionHistoryEtc) {
+        LocalDateTime date = transactionHistoryEtc.getDate();
+        String contents = transactionHistoryEtc.getContents();
+        transactionHistoryEtcRepository.save(transactionHistoryEtc);
+        
+        findTransactionHistory()
+    }
+
+    private Optional<TransactionHistory> findTransactionHistory() {
+    }
 }

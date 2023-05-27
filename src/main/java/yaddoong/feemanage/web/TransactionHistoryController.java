@@ -17,6 +17,7 @@ import yaddoong.feemanage.web.transactionHistory.form.TransactionHistorySearchFo
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 거래내역 controller class
@@ -103,7 +104,11 @@ public class TransactionHistoryController {
     }
 
     @PostMapping("transactionHistoryEtcUpdate")
-    public String transactionHistoryAllUpdate() {
+    public String transactionHistoryAllUpdate(TransactionHistoryEtcUpdateForm form) {
+        Optional<TransactionHistoryEtc> transactionHistoryEtc =
+                transactionHistoryService.findTransactionHistoryEtcById(form.getId());
+        transactionHistoryEtc.get().updateMemo(form.getMemo());
+        transactionHistoryService.transactionHistoryEtcSave(transactionHistoryEtc.get());
         return "redirect:/transactionHistory/etcList";
     }
 
