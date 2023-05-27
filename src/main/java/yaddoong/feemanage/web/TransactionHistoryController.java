@@ -103,12 +103,19 @@ public class TransactionHistoryController {
         return "transaction-history/etcList";
     }
 
-    @PostMapping("transactionHistoryEtcUpdate")
+    /**
+     * 기타 내역 개별 변경 메서드
+     * @param form
+     * @return
+     */
+    @PostMapping("/transactionHistoryEtcUpdate")
     public String transactionHistoryAllUpdate(TransactionHistoryEtcUpdateForm form) {
+
         Optional<TransactionHistoryEtc> transactionHistoryEtc =
                 transactionHistoryService.findTransactionHistoryEtcById(form.getId());
         transactionHistoryEtc.get().updateMemo(form.getMemo());
         transactionHistoryService.transactionHistoryEtcSave(transactionHistoryEtc.get());
+
         return "redirect:/transactionHistory/etcList";
     }
 

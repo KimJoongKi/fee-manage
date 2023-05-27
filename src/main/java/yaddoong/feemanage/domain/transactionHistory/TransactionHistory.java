@@ -44,4 +44,8 @@ public class TransactionHistory {
         this.normal = (boolean) map.get("normal");
         this.fileUploadId = Long.parseLong(map.get("fileUploadId").toString());
     }
+
+    public void updateMemo(String memo) {
+        this.memo = memo;
+    }
 }

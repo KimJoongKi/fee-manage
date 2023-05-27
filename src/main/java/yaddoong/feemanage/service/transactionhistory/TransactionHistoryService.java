@@ -111,10 +111,18 @@ public class TransactionHistoryService {
         LocalDateTime date = transactionHistoryEtc.getDate();
         String contents = transactionHistoryEtc.getContents();
         transactionHistoryEtcRepository.save(transactionHistoryEtc);
-        
-        findTransactionHistory()
+
+        Optional<TransactionHistory> transactionHistory = findTransactionHistory(contents, date);
+        transactionHistory.get().updateMemo(transactionHistoryEtc.getMemo());
     }
 
-    private Optional<TransactionHistory> findTransactionHistory() {
+    /**
+     *
+     * @param contents
+     * @param date
+     * @return
+     */
+    private Optional<TransactionHistory> findTransactionHistory(String contents, LocalDateTime date) {
+        return transactionHistoryRepository.findTransactionHistoryByContentsAndDate(contents, date);
     }
 }
