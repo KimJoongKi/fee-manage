@@ -1,14 +1,14 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/fee # 운영
+    url: jdbc:h2:tcp://localhost/~/fee_local # 개발
     username: sa
     password:
     driver-class-name: org.h2.Driver
-    initialization-mode: never # 운영
+    initialization-mode: always # 개발
     data: classpath*:data_real.sql # 파일명 변경 후 사용
   jpa:
     hibernate:
-      ddl-auto: update # 운영
+      ddl-auto: create # 개발
     properties:
       hibernate:
         #        show_sql: true
