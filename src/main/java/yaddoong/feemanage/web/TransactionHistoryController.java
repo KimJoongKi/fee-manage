@@ -81,7 +81,7 @@ public class TransactionHistoryController {
         model.addAttribute("transactionHistoryList", transactionHistoryList);
         model.addAttribute("form", form);
 
-        // TODO: 2022/03/06 로그인 한 모임 기준 데이터 불러오기 추가
+        // TODO: 2022/03/06 로그인 한 모임 기준 데이터 불러오기 추가 로직 구현
         return "transaction-history/list";
 
     }

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import yaddoong.feemanage.domain.fee.FeeLogProjection;
-import yaddoong.feemanage.domain.user.Member;
+import yaddoong.feemanage.domain.member.Member;
 import yaddoong.feemanage.service.fee.FeeService;
 import yaddoong.feemanage.service.file.FileService;
 import yaddoong.feemanage.service.user.UserService;
@@ -48,9 +48,9 @@ public class UserController {
 
     @GetMapping("/list")
     public String findUserList(Model model) {
-        List<Member> memberList = userService.findUserList();
-        model.addAttribute("userList", memberList);
-        return "user/list";
+        List<Member> memberList = userService.findUserList(); // 현재 회원 목록 조회
+        model.addAttribute("memberList", memberList);
+        return "member/list";
     }
 
     @GetMapping("/secessionList")
@@ -70,9 +70,9 @@ public class UserController {
         // 페이징 처리
         Pageable pageable = PageRequest.of(0, 1, Sort.by(Sort.Direction.DESC, "filename"));
 
-        // 회원별 납부,미납 내역 조회
-        List<FeeLogProjection> list = feeService.findGroupByName();
-        List<UserFeeForm> feeFormList = new ArrayList<>();
+
+        List<FeeLogProjection> list = getFeeLogProjections(); // 회원별 납부,미납 내역 조회
+        List<UserFeeForm> feeFormList = getUserFeeForms();
         for (FeeLogProjection feeLogProjection : list) {
             UserFeeForm form = new UserFeeForm();
             form.setName(feeLogProjection.getName());
@@ -84,7 +84,20 @@ public class UserController {
         }
         model.addAttribute("fees", feeFormList);
 
-        return "user/userFeeList";
+        return "member/userFeeList";
+    }
+
+    private static List<UserFeeForm> getUserFeeForms() {
+        List<UserFeeForm> feeFormList = new ArrayList<>();
+        return feeFormList;
+    }
+
+    /**
+     * 회원별 납부내역 조회하기
+     * @return
+     */
+    private List<FeeLogProjection> getFeeLogProjections() {
+        return feeService.findGroupByName();
     }
 
     @PostMapping("/rejoin")

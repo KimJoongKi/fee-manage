@@ -69,7 +69,7 @@ public class FeeService {
                     // 파일명
                     String filename = file.getOriginalFilename();
 
-                    // TODO: 2021/02/27 서버 반영시 삭제
+                    // TODO: 2021/02/27 서버 반영시 삭제 로직 구현
                     String osName = System.getProperty("os.name").toUpperCase();
                     String tmpPath = System.getProperty("user.dir") + "/tmp";
                     String filePath = tmpPath + "/" + filename;
@@ -106,12 +106,12 @@ public class FeeService {
                     // 해당 디렉토리에 있는 파일을 모두 가져온다.
                     File[] files = dir.listFiles();
 
-                    // TODO: 2021-01-23 업로드 된 파일이 존재하지 않을 때 메시지 추가
+                    // TODO: 2021-01-23 업로드 된 파일이 존재하지 않을 때 메시지 추가 구현
                     if (files.length == 0) {
                         return;
                     }
 
-                    // TODO: 2021/02/27 파일명이 존재할 때 이미 존재하는 파일입니다. 추가
+                    // TODO: 2021/02/27 파일명이 존재할 때 이미 존재하는 파일입니다. 추가 로직 구현
                     uploadFileInsertDb(files);
                     // 기타내역 입력
                     feeLogEtcsSaveAll();
@@ -339,7 +339,7 @@ public class FeeService {
                     if (code.isPresent())
                         findFeeCode = code.get();
 
-                    // todo 2021 06 21 데이터 중복 입력 수정
+                    // todo 2021 06 21 데이터 중복 입력 수정 로직 구현
 
                     FeeDetailGubun feeDetailGubun = FeeDetailGubun.builder()
                             .date(log.getDate())

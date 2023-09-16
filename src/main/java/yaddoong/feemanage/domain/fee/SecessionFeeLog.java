@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import yaddoong.feemanage.domain.user.Member;
+import yaddoong.feemanage.domain.member.Member;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

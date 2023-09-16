@@ -1,32 +1,26 @@
-package yaddoong.feemanage.domain.user;
+package yaddoong.feemanage.domain.member;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import yaddoong.feemanage.domain.fee.FeeLogEtc;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static yaddoong.feemanage.domain.user.QMember.member;
+import static yaddoong.feemanage.domain.member.QMember.member;
 
-public class UserRepositoryImpl implements UserRepositoryCustom {
+public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public UserRepositoryImpl(EntityManager em) {
+    public MemberRepositoryImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
     @Override
-    public List<String> findUsersNames() {
-
+    public List<String> findMembersNames() {
         List<String> results = queryFactory.select(member.name)
                 .from(member)
                 .fetch();
 
         return results;
-
     }
-
-
 }
-

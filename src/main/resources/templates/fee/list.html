@@ -36,9 +36,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="feelog: ${feeLogs}">
-                <td th:text="${#temporals.format(feelog.date, 'yyyy년MM월dd일 HH시mm분ss초')}"></td>
-                <td th:text="${feelog.contents}"></td>
+            <tr th:each="user: ${userList}">
+                <td th:text="${#temporals.format(user.date, 'yyyy년MM월dd일 HH시mm분ss초')}"></td>
+                <td th:text="${user.contents}"></td>
                 <td th:text="${#numbers.formatCurrency(feelog.afterBalance)}"></td>
                 <td th:text="${feelog.division}"></td>
                 <td th:text="${feelog.memo}"></td>

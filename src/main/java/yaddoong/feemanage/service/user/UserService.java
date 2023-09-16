@@ -8,8 +8,8 @@ import yaddoong.feemanage.domain.fee.FeeLog;
 import yaddoong.feemanage.domain.fee.FeeLogRepository;
 import yaddoong.feemanage.domain.fee.SecessionFeeLog;
 import yaddoong.feemanage.domain.fee.SecessionFeeLogRepository;
-import yaddoong.feemanage.domain.user.Member;
-import yaddoong.feemanage.domain.user.UserRepository;
+import yaddoong.feemanage.domain.member.Member;
+import yaddoong.feemanage.domain.member.MemberRepository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     private final FeeLogRepository feeLogRepository;
 
@@ -32,21 +32,21 @@ public class UserService {
     int feePrice;
 
     public List<String> findUserNames() {
-        return userRepository.findUsersNames();
+        return memberRepository.findMembersNames();
     }
 
     public List<Member> findUserList() {
-        return userRepository.findAllBySecessionDateIsNull();
+        return memberRepository.findAllBySecessionDateIsNotNull();
     }
 
     public List<Member> findSecessionUserList() {
-        return userRepository.findAllBySecessionDateIsNotNull();
+        return memberRepository.findAllBySecessionDateIsNotNull();
     }
 
     @Transactional
     public void secession(Long id, String secessionDate) {
         // 탈퇴 회원 조회
-        Optional<Member> findUser = userRepository.findById(id);
+        Optional<Member> findUser = memberRepository.findById(id);
 
         // 탈퇴 회원 회비 입금내역 조회 (탈퇴일 포함 이전 입금 내역)
         List<FeeLog> allByContents = feeLogRepository.findAllByContentsAndDateLessThan(
@@ -93,7 +93,7 @@ public class UserService {
     public void rejoin(Long id, String rejoinDate) {
 
         // 재가입 회원 조회
-        Optional<Member> findUser = userRepository.findById(id);
+        Optional<Member> findUser = memberRepository.findById(id);
 
         // 탈퇴 후 재가입 전까지 입금한 금액 조회
         List<FeeLog> allByContents = feeLogRepository.findAllByContentsAndDateLessThan(

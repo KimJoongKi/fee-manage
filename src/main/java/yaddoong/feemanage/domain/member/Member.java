@@ -1,9 +1,10 @@
-package yaddoong.feemanage.domain.user;
+package yaddoong.feemanage.domain.member;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import yaddoong.feemanage.domain.base.BaseTimeEntity;
+import yaddoong.feemanage.domain.member.Role;
 
 import javax.persistence.*;
 import java.time.LocalDate;
